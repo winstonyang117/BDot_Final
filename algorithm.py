@@ -51,7 +51,7 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order):
 # OnBed function
 
 def checkOnBedCR(signal,time):
-        return 10
+        return str(10)
 
 # Movement fuction
 def checkMovement(signal, movementThreshold, time, movementShowDelay):
