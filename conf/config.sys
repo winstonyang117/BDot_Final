@@ -1,0 +1,87 @@
+[main]
+
+#Parameters for OnBed Component
+#seconds
+onBedTimeWindow = 3
+lowCut = 0.7
+highCut = 8
+order = 4
+onBedThreshold = 9000
+timeCheckingOnBed = 1
+# 1.5
+ratioThreshold = 1.5
+#0.5   
+sdThreshold = 0.5
+#35
+#secondsForOn = 12
+secondsForOn = 44
+#50
+secondForOff = 55
+thccMean = 12
+mpdEnv = 20
+
+#Parameters for Movement
+#seconds
+movementTimeWindow = 1
+timeCheckingMovement = 1
+movementThreshold = 400000
+
+#Parameters Hearth Rate
+#seconds
+hrTimeWindow = 30
+timeCheckingHR = 3
+
+#Parameters for Posture Change
+#seconds
+postureChangeTimeWindow = 5
+
+[messages]
+companyemail = debdotsus@gmail.com
+
+#"6787906501@mypixmessages.com","jclementes@gmail.com", "4049351466@tmomail.net", "4049351222@tmomail.net", "4053173938@mms.att.net"
+recipients = ["ugasensorweb@gmail.com"]
+
+personname = China4
+enablesmson = False
+subjecton = Notice detected at
+messon = got in bed... \n\nThanks for using BedDot
+
+enablesmsoff = False
+subjectoff = Alert detected at
+messoff = got out of bed... \n\nThanks for using BedDot
+
+enablesmsmovement = False
+subjectmovement = Notice detected at
+messmovement = \n\nA lot of movement are detected on bed... \n\nThanks for using BedDot
+
+
+[general]
+debug = False
+unitid = b8:27:eb:dc:80:5c
+dbraw = shake
+dbresults = healthresult
+dbstatus = status
+
+# true or false no capitals
+saveRemoteRaw = true
+saveRemoteResult = true
+
+#seconds
+buffersize = 30
+samplingrate = 100
+
+[localdb]
+lip = 18.222.223.195
+luser = Jose
+lpass = sensorweb
+
+[remotedb]
+rip = 18.222.223.195
+ruser = Jose
+rpass = sensorweb
+
+[system]
+memory = 150
+cpu = 150
+disk = 90
+daystoremove = 0.1

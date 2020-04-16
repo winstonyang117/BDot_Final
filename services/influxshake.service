@@ -1,0 +1,14 @@
+[Unit]
+Description=StoringInflux
+After=syslog.target network.target
+[Service]
+Type=simple
+ExecStart=/opt/helena/componets/influxservice.sh
+RemainAfterExit=no
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+
+

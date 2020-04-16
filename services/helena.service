@@ -1,0 +1,12 @@
+[Unit]
+Description=helenaMaindervice
+After=syslog.target network.target
+[Service]
+Type=simple
+ExecStart=/opt/helena/helenaservice.sh
+RemainAfterExit=no
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
