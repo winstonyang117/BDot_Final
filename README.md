@@ -132,9 +132,7 @@ cp main ../
 cp key ../
 ```
 
-Steps B1 and B2 are in this script: [Download](https://github.com/jclementes/helena/blob/master/scripts/compHelena.sh)
-
-(We highly recommend to check carefully the installation for user’s inputs or running the commands directly by yourself instead the script)
+They are under scripts/compHelena.sh
 
 
 ### Run the released execution file 
@@ -150,6 +148,7 @@ sudo ./main
 ```
 helena 
     |- main.py #the main program for data processing and write processing result to local and remote database.
+    |- algorithm.py # the data processing algorithms
     |- helenaservice.sh # call /opt/helena/main.py 
     |- detect_peaks.py # main.py use it by including "from detect_peaks import detect_peaks"
     |- components
