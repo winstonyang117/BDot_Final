@@ -142,6 +142,15 @@ cd ~
 cd helena
 sudo ./main
 ```
+## Database structures
+
+Influxdb database design of BedDot: select serie where location, value, timestamp
+```
+dbraw = shake # this database includes z (Raw data)
+dbresults = healthresult # this database includes hr, rr, bedstatus, etc
+dbstatus = status # this database collects information about the hard disk, 
+                  # memory status for monitoring and reliability framework.
+```
 
 ## Code directory structures
 
