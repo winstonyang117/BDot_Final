@@ -10,7 +10,7 @@ from operator import attrgetter
 import numpy
 import subprocess
 import random
-import random import randint
+from random import randint
 import time
 import operator
 import ConfigParser
@@ -51,11 +51,11 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order):
 # OnBed function
 
 def checkOnBedCR(signal,time):
-        return str(10)
+        return randint(5,30)
 
 # Movement fuction
 def checkMovement(signal, movementThreshold, time, movementShowDelay):
-    if (randint(0,10) > 5)
+    if (randint(0,10) > 5):
         return True
     else:
         return False
