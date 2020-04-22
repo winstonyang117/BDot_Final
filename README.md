@@ -1,6 +1,6 @@
 ﻿# BedDot Project
 
-This is the complete guide for installing packages and running BedDot System. All these instructions work on a fresh-installation Raspberry Pi
+This is the complete guide for installing packages and running BedDot System. All these instructions work on a fresh-installation Raspberry Pi. 
 
 ## Setup Wifi
 
