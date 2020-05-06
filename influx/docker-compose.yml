@@ -1,0 +1,13 @@
+version: "2"
+services:
+   influxdb:
+      image: influxdb:1.8
+      container_name: influxdb
+      restart: always
+      volumes:
+         - ${PWD}/influxdb/data:/var/lib/influxdb
+         - ${PWD}/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      ports:
+         - 8086:8086
+      command: -config /etc/influxdb/influxdb.conf
+
