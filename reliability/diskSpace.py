@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 import psutil
 import subprocess
-import ConfigParser
+import configparser
 import time
 import datetime
 import os
 from influxdb import InfluxDBClient
 
-config = ConfigParser.ConfigParser()
-config.readfp(open(r'../conf/config.sys'))
+config = configparser.ConfigParser()
+config.read_file(open(r'../conf/config.sys'))
 ip    = config.get('localdb', 'lip')
 
 user  = config.get('localdb', 'luser')
@@ -28,7 +28,7 @@ diskp= psutil.disk_usage('/').percent
 diskt= (psutil.disk_usage('/').used)/1027/1024
 
 if(float(diskp) > float(diskth)):
-  print "remove last day"
+  print("remove last day")
   query = 'SELECT "value" FROM Z WHERE ("location" = \''+unit+'\')  ORDER BY time ASC LIMIT 1'
   
   client = InfluxDBClient(ip, "8086", user, passw, db)
@@ -47,13 +47,13 @@ if(float(diskp) > float(diskth)):
   stampEnd = stampEnd + str(millisIni.microsecond) + 'Z'
 
   query = "delete from Z where location='"+unit+"' and time>='"+stampIni+"' and time<='"+stampEnd+"'";
-  print query
+  print(query)
   client.query(query)
 
 currentEpochTime = int(time.time())
 lastWeekEpochTime = currentEpochTime - epochWeek 
 startingTime =  (datetime.datetime.utcfromtimestamp(lastWeekEpochTime).strftime('%Y-%m-%dT%H:%M:%S'))
-print startingTime
+print(startingTime)
 
 query = "delete from Z where time<'"+startingTime+"Z'";
 #print query

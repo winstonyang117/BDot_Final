@@ -71,14 +71,14 @@ buffersize = 30
 samplingrate = 100
 
 [localdb]
-lip = 18.222.223.195
-luser = Jose
-lpass = sensorweb
+lip = 127.0.0.1 
+luser = hmeng 
+lpass = hmeng 
 
 [remotedb]
-rip = 18.222.223.195
-ruser = Jose
-rpass = sensorweb
+rip = 192.168.1.251
+ruser = hmeng 
+rpass = hmeng 
 
 [system]
 memory = 150

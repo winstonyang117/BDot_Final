@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd /opt/helena/
-python main.py
+python3 main.py

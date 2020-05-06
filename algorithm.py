@@ -1,4 +1,4 @@
-from __future__ import division, print_function
+
 import chardet
 import urllib3
 import netifaces
@@ -13,7 +13,7 @@ import random
 from random import randint
 import time
 import operator
-import ConfigParser
+import configparser
 import sys
 import logging
 from scipy.stats import kurtosis
@@ -29,8 +29,7 @@ from dateutil import tz
 import pytz
 import smtplib
 import ast
-import statsmodels.api as sm
-#import netifaces
+#import statsmodels.api as sm
 import json
 import requests
 

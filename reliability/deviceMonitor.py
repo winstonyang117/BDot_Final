@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import psutil
 import subprocess
-import ConfigParser
+import configparser
 import time
 import os
 
@@ -12,8 +12,8 @@ def measure_temp():
 
 #temperature = measure_temp()
 
-config = ConfigParser.ConfigParser()
-config.readfp(open(r'../conf/config.sys'))
+config = configparser.ConfigParser()
+config.read_file(open(r'../conf/config.sys'))
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')
 passw = config.get('localdb', 'lpass')
@@ -35,7 +35,7 @@ diskt= (psutil.disk_usage('/').used)/1027/1024
 temperature = measure_temp()
 
 http_postm = ""
-http_post = "curl -i -XPOST \'http://"+ip+":8086/write?db="+db+"\' -u "+user+":"+passw+" --data-binary \'"
+http_post = "curl -s -XPOST \'http://"+ip+":8086/write?db="+db+"\' -u "+user+":"+passw+" --data-binary \'"
 http_postm = http_postm + " \n memory,location="+unit+" value=" +str(mem)
 http_postm = http_postm + " \n cpu,location="+unit+" value="+ str(cpu)
 http_postm = http_postm + " \n diskusagepercent,location="+unit+" value=" + str(diskp)
@@ -45,7 +45,7 @@ http_post = http_post + http_postm
 subprocess.call(http_post, shell=True)
 
 if(saveRemoteRaw=='true'):
-    http_post2 = "curl -i -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \'"
+    http_post2 = "curl -s -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \'"
     http_post2 = http_post2 + http_postm
     subprocess.call(http_post2, shell=True)
 
@@ -58,15 +58,15 @@ while sw:
    if int(mem) > int(memoryth):
       sw = 1
       mem = psutil.virtual_memory().percent
-      print "system for memory"
+      print("system for memory")
 
    if int(cpu) > int(cputh):
       sw = 1
       cpu = psutil.cpu_percent(interval=1)
-      print "system for cpu"
+      print("system for cpu")
    
    if(tries == 2):
-     print "RESTARTING"
+     print("RESTARTING")
      os.system("sudo systemctl reboot");
  
    time.sleep (5)

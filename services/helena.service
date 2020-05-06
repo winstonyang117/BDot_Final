@@ -1,6 +1,6 @@
 [Unit]
 Description=helenaMaindervice
-After=syslog.target network.target
+After=syslog.target network.target docker.service
 [Service]
 Type=simple
 ExecStart=/opt/helena/helenaservice.sh

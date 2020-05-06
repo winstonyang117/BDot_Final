@@ -6,7 +6,7 @@ format = '%Y-%m-%dT%H:%M:%S.%fZ'
 
 time2 = "2019-05-30T18:20:46.995Z"
 d = datetime.strptime(time2, format)
-print d.strftime("%m-%d %I:%M %p")
+print(d.strftime("%m-%d %I:%M %p"))
 
 
 from_zone = tz.tzutc()
@@ -24,4 +24,4 @@ central = utc.astimezone(to_zone)
 
 d = central.strftime("%m-%d %I:%M %p")
 
-print d
+print(d)
