@@ -1,4 +1,3 @@
-import chardet
 import urllib3
 import netifaces
 from scipy.signal import butter, lfilter
@@ -11,7 +10,7 @@ import subprocess
 import random
 import time
 import operator
-import ConfigParser
+import configparser
 import sys
 import logging
 from algorithm import *
@@ -28,8 +27,7 @@ from dateutil import tz
 import pytz
 import smtplib
 import ast
-import statsmodels.api as sm
-#import netifaces
+#import statsmodels.api as sm
 import json
 import requests
 
@@ -59,9 +57,9 @@ def send_email(user, pwd, recipient, subject, body):
         server.login(user, pwd)
         server.sendmail(FROM, TO, message)
         server.close()
-        print 'successfully sent the mail'
+        print('successfully sent the mail')
     except:
-        print "failed to send mail"
+        print("failed to send mail")
 
 ##### removed algorithms from here  ####
 
@@ -92,7 +90,7 @@ def status():
     serial = subprocess.check_output('cat /proc/cpuinfo | grep Serial | awk \'{print($3)}\'', shell=True)[:-1]
     macEth        = mac_address()
 #    url = 'http://beddots.local/checkStatus/'+macEth+'/'+serial+'/'+word
-    url = 'http://www.homedots.us/beddot/public/checkStatus/'+macEth+'/'+serial+'/'+word
+    url = 'http://www.homedots.us/beddot/public/checkStatus/'+macEth+'/'+str(serial, 'utf-8')+'/'+word
 #    print url
 
     try:
@@ -143,8 +141,8 @@ def main():
  from_zone = tz.tzutc()
  to_zone = pytz.timezone("America/New_York")
  # Parameters from Config file
- config = ConfigParser.ConfigParser()
- config.readfp(open(r'./conf/config.sys'))
+ config = configparser.ConfigParser()
+ config.read_file(open(r'./conf/config.sys'))
 
  debug = config.get('general', 'debug')
  debug = parseBoolString(debug)
@@ -243,7 +241,7 @@ def main():
 
 
  #Values fro HR calcullation
- start = time.clock()
+ start = time.process_time()
  N = elementsNumberHR
  nfft = np.power( 2, int(np.ceil(np.log2(N))) )
  NW = 46 #50
@@ -251,7 +249,7 @@ def main():
  keep = eigs > 0.9
  dpss = dpss[keep]; eigs = eigs[keep]
  fm = int( np.round(float(200) * nfft / N) )
- print time.clock() - start
+ print(time.process_time() - start)
 
 # Getting the system current time
  current = datetime.utcnow()
@@ -276,19 +274,19 @@ def main():
 
  # Infinite Loop
  while True:
-    if(debug): print "*****************************************"+str(statusKey)
+    if(debug): print("*****************************************"+str(statusKey))
     stampIni = (datetime.utcfromtimestamp(epoch1).strftime('%Y-%m-%dT%H:%M:%S.000Z'))
     stampEnd = (datetime.utcfromtimestamp(epoch2).strftime('%Y-%m-%dT%H:%M:%S.000Z'))
 
-    print stampIni
-    print stampEnd
+    if(debug): print(stampIni)
+    if(debug): print(stampEnd)
     query = 'SELECT "value" FROM Z WHERE ("location" = \''+unit+'\')  and time >= \''+stampIni+'\' and time <= \''+stampEnd+'\'   '
 
     result = client.query(query)
     points = list(result.get_points())
 
-    values =  map(operator.itemgetter('value'), points)
-    times  =  map(operator.itemgetter('time'),  points)
+    values =  list(map(operator.itemgetter('value'), points))
+    times  =  list(map(operator.itemgetter('time'),  points))
 
     tt = str( values )
     tt = tt.replace(' ', '')
@@ -303,9 +301,9 @@ def main():
        del buffertime[0:difSize]
 
     if(buffLen>0):
-       if(debug): print "Buffer Time:    " + str(buffertime[0]) + "  -   " + str(buffertime[len(buffertime)-1])
+       if(debug): print("Buffer Time:    " + str(buffertime[0]) + "  -   " + str(buffertime[len(buffertime)-1]))
 
-    print buffLen
+    if(debug): print(buffLen)
     #################################################################
     #OnBed
     #################################################################
@@ -344,7 +342,7 @@ def main():
              counteroff = counteroff - 50
           counteron = 0
        if(debug):
-         if(debug): print " Peaks:", peaksCR, " Mean:", ccMean, " On:", counteron, " Off:", counteroff
+         if(debug): print(" Peaks:", peaksCR, " Mean:", ccMean, " On:", counteron, " Off:", counteroff)
        if(counteron > thon):
           #saveON
           if(enablesmson and onBed == False):
@@ -401,15 +399,15 @@ def main():
        if (movement or movementShowDelay>100000):
           movementShowDelay = 0
           hrSignalNoNoise   = 0
-       if(debug): print 'movement:',movement, ' Counter',counterTime
+       if(debug): print('movement:',movement, ' Counter',counterTime)
 
 
     #################################################################
     #Hearthbeat Rate
     #################################################################
-     if(debug): print 'Counter of Not Noise ',hrSignalNoNoise
+     if(debug): print('Counter of Not Noise ',hrSignalNoNoise)
      if(onBed and counteroff<25 and buffLen>=elementsNumberHR and counterTime%timeCheckingHR == 0 and hrSignalNoNoise>= hrTimeWindow ):
-        if(debug): print "Calculating HBR"
+        if(debug): print("Calculating HBR")
         # If we can calculate the HBR is because someone is OnBed
 #        saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-1])
         signalToHBR = buffer[buffLen-elementsNumberHR:buffLen]
@@ -468,10 +466,10 @@ def main():
 
 	    # Updating parameters every 5 minutes
     if(counterTime%30 == 0):
-       print "-----------------------------------------------------------------------"
-       config = ConfigParser.ConfigParser()
+       if(debug): print("-----------------------------------------------------------------------")
+       config = configparser.ConfigParser()
        openCF = open(r'./conf/config.sys')
-       config.readfp(openCF)
+       config.read_file(openCF)
 
        personname        = config.get('messages', 'personname')
        recipients        = ast.literal_eval(config.get('messages', 'recipients'))
@@ -480,8 +478,8 @@ def main():
        enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
        thccMean          = float(config.get('main', 'thccMean'))
        mpdEnv            = int(config.get('main', 'mpdEnv'))
-       print thccMean
-       print mpdEnv
+       if(debug): print(thccMean)
+       if(debug): print(mpdEnv)
        messmovement = "\n\nOn "+personname+"'s BED" + messmovementPre
        messon            = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messon')+"'")
        messoff           = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messoff')+"'")
@@ -495,7 +493,7 @@ def main():
    # time.sleep(1)
     if ( (current-epoch2) < 1):
         time.sleep(1)
-        if(debug): print "*********"
+        if(debug): print("*********")
 
 #    log = "otro.log"
 #    logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')

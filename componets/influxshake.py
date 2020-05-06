@@ -1,18 +1,18 @@
 import socket as s
 from decimal import Decimal
 import subprocess
-import ConfigParser
+import configparser
 
 
 # Parameter from configuation File
-config = ConfigParser.ConfigParser()
-config.readfp(open(r'../conf/config.sys'))
+config = configparser.ConfigParser()
+config.read_file(open(r'../conf/config.sys'))
 
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')
 passw = config.get('localdb', 'lpass')
 
-print ip
+print(ip)
 rip    = config.get('remotedb', 'rip')
 ruser  = config.get('remotedb', 'ruser')
 rpassw = config.get('remotedb', 'rpass')
@@ -27,26 +27,26 @@ file = open(hostipF, 'r')
 host = file.read().strip()
 file.close()
 
-print saveRemoteRaw
+print(saveRemoteRaw)
 HP = host + ":" + str(port)
-print "  Opening socket on (HOST:PORT)", HP
+print("  Opening socket on (HOST:PORT)", HP)
 
 sock = s.socket(s.AF_INET, s.SOCK_DGRAM | s.SO_REUSEADDR)
 sock.bind((host, port))
 
-print "Waiting for data on (HOST:PORT) ", HP
+print("Waiting for data on (HOST:PORT) ", HP)
 
 
 a,b,c,d = host.split(".")
-http_post  = "curl -i -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
+http_post  = "curl -s -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
 http_post += "\n address,location="+unit+" ip2="+str(b)
 http_post += "\n address,location="+unit+" ip3="+str(c)
 http_post += "\n address,location="+unit+" ip4="+str(d)
 http_post += "\'  &"
-print http_post
+print(http_post)
 subprocess.call(http_post, shell=True)
 
-http_post  = "curl -i -XPOST \'http://"+ rip+":8086/write?db="+db+"\' -u "+ ruser+":"+ rpassw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
+http_post  = "curl -s -XPOST \'http://"+ rip+":8086/write?db="+db+"\' -u "+ ruser+":"+ rpassw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
 http_post += "\n address,location="+unit+" ip2="+str(b)
 http_post += "\n address,location="+unit+" ip3="+str(c)
 http_post += "\n address,location="+unit+" ip4="+str(d)
@@ -60,13 +60,13 @@ subprocess.call(http_post, shell=True)
 while 1:								# loop forever
     data, addr = sock.recvfrom(1024)	# wait to receive data
 #    print data
-    data = data.replace("}", "")
-    data2 = data.split(",")							
-    timestampi =  Decimal(data2[1])
+    data = data.replace(b'}', b'')
+    data2 = data.split(b',')							
+    timestampi =  Decimal(data2[1].decode())
     timeIni = timestampi * 1000
     count = 0;
-    http_post  = "curl -i -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
-    http_post2 = "curl -i -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
+    http_post  = "curl -s -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
+    http_post2 = "curl -s -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
 
     for f in data2:
        count  = count + 1

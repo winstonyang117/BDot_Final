@@ -4,7 +4,7 @@ import netifaces
 import subprocess
 import sys
 import time
-import ConfigParser
+import configparser
 import ast
 from configobj import ConfigObj
 
@@ -14,12 +14,12 @@ def startHelena():
   result = subprocess.check_output(check, shell=True)
   try:
     x = result.index('/bin/bash')
-    print "runnig"
+    print("runnig")
   except Exception:
     result = subprocess.check_output('sudo systemctl start helena', shell=True)
-    print "NO"
+    print("NO")
 
-  print result
+  print(result)
 
 def mac_address():
     macEth = "gg:gg:gg:gg:gg:gg"
@@ -41,7 +41,7 @@ def status():
 # url = 'http://beddots.local/unitStatus/'+macEth+'/'+serial+'/abc'
  url = 'http://www.homedots.us/beddot/public/unitStatus/'+macEth+'/'+serial+'/abc'
 
- print url
+ print(url)
  
  while( 6 > 5 ): 
   sw = 0
@@ -56,7 +56,7 @@ def status():
     continue
    
   packSize =  len(res.text)
-  print res
+  print(res)
   #Validating for know if we get data
   if(packSize>5):
     try:
@@ -70,17 +70,17 @@ def status():
 
     status  = int(info["status"])
     key     = info["key"]
-    print "------------"
-    print status
-    print key
+    print("------------")
+    print(status)
+    print(key)
     str2 = 'sudo echo "'+str(key)+'" > key2'
     cmp_serial = subprocess.check_output(str2, shell=True)
     subprocess.check_output("sudo cp key2 ../key", shell=True)    
     cmp_serial = subprocess.check_output('sudo openssl enc -a -d -aes-256-cbc -pass pass:sensorweb987 -in key2',shell=True)   
-    print cmp_serial
+    print(cmp_serial)
 
     if status == 1 or status == 2:
-       print "DONE"
+       print("DONE")
        if status == 1:
           cmp_serial = subprocess.check_output("sudo cp key2 ../key", shell=True)
           startHelena()
@@ -88,7 +88,7 @@ def status():
        else:
 	  time.sleep(3)
     else:
-       print "Waiting"
+       print("Waiting")
        time.sleep(3)
        
  

@@ -1,5 +1,5 @@
 import subprocess
-import ConfigParser
+import configparser
 import sys
 import logging
 from datetime import datetime
@@ -14,16 +14,16 @@ value = arg[3]
 time  = arg[4]
 
 time = time[0:19]
-print time
-print len(time)
+print(time)
+print(len(time))
 utc_time = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S")
 epoch_time = int((utc_time - datetime(1970, 1, 1)).total_seconds())
 
-print serie, field, value, time
+print(serie, field, value, time)
 
 # Parameter from configuation File
-config = ConfigParser.ConfigParser()
-config.readfp(open(r'conf/config.sys'))
+config = configparser.ConfigParser()
+config.read_file(open(r'conf/config.sys'))
 
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')
@@ -38,12 +38,12 @@ unit  = config.get('general', 'unitid')
 
 saveRemoteResult = config.get('general', 'saveRemoteResult')
 
-http_post  = "curl -i -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
+http_post  = "curl -s -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
 http_post += "\n"+serie+",location="+unit+" "+field+"="+value+" "+str(epoch_time)+"000000000"  
 http_post += "\'  &"
 
 if(saveRemoteResult=='true'):
-   http_post2 = "curl -i -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
+   http_post2 = "curl -s -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
    http_post2 += "\n"+serie+",location="+unit+" "+field+"="+value+" "+str(epoch_time)+"000000000"
    http_post2 += "\'  &"
 

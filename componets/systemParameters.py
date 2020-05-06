@@ -3,14 +3,14 @@ import requests
 import netifaces
 import subprocess
 import time
-import ConfigParser
+import configparser
 import ast
 from configobj import ConfigObj
 
 
 
 #config = ConfigParser.ConfigParser()
-#config.readfp(open(r'./../conf/config.sys'))
+#config.read_file(open(r'./../conf/config.sys'))
 
 #unit  = config.get('general', 'unitid')
 
@@ -33,8 +33,8 @@ def parseIntToBool(theInt):
 
 def alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
    sw = 0
-   config = ConfigParser.ConfigParser()
-   config.readfp(open(r'./../conf/config.sys'))
+   config = configparser.ConfigParser()
+   config.read_file(open(r'./../conf/config.sys'))
 
    personname            = config.get('messages', 'personname')
    recipients            = config.get('messages', 'recipients')
@@ -52,22 +52,22 @@ def alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thre
    if(len(envelopeMpd)>0 and float(envelopeMpd)!=envelopeMpdFile):
       sw = 1
       config['main']['mpdEnv'] = envelopeMpd
-      print "Change MDP Envelope"
+      print("Change MDP Envelope")
 
    if(len(thresholdOnBed)>0 and float(thresholdOnBed)!= thresholdOnBedFlie):
       sw = 1
       config['main']['thccMean'] = thresholdOnBed
-      print "On/Off th"
+      print("On/Off th")
 
    if(personname!=nameClient):
       sw = 1
       config['messages']['personname'] = nameClient 
-      print "Change Name"
+      print("Change Name")
 
    if(recipients!=mailClient):
       sw = 1
       config['messages']['recipients'] = mailClient 
-      print "Change Email..."
+      print("Change Email...")
    
 
    pos = 0
@@ -76,10 +76,10 @@ def alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thre
      if(alarmt=='1'):
        if(enablesmson!=int(alarmStatus[pos])):
           sw = 1
-          print parseIntToBool(int(alarmStatus[pos]))
+          print(parseIntToBool(int(alarmStatus[pos])))
           config['messages']['enablesmson'] = parseIntToBool(int(alarmStatus[pos])) 
 #          print str(enablesmson)+"  ---  "+alarmStatus[pos]
-          print "Change OnBed"
+          print("Change OnBed")
 
      #offBed
      if(alarmt=='2'):
@@ -87,7 +87,7 @@ def alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thre
           sw = 1
           config['messages']['enablesmsoff'] = parseIntToBool(int(alarmStatus[pos]))
 #          print str(enablesmsoff)+"  ---  "+alarmStatus[pos]
-          print "Change OffBed"
+          print("Change OffBed")
 
      #Movement
      if(alarmt=='3'):
@@ -95,7 +95,7 @@ def alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thre
           sw = 1
           config['messages']['enablesmsmovement'] = parseIntToBool(int(alarmStatus[pos]))
 #          print str(enablesmsmovement)+"  ---  "+alarmStatus[pos]
-          print "Change Movement"
+          print("Change Movement")
 
      pos = pos + 1
 
@@ -110,8 +110,8 @@ def alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thre
 
 
 def current_unitid():
-   config = ConfigParser.ConfigParser()
-   config.readfp(open(r'./../conf/config.sys'))
+   config = configparser.ConfigParser()
+   config.read_file(open(r'./../conf/config.sys'))
 
    unit  = config.get('general', 'unitid')
    return unit
@@ -136,14 +136,14 @@ file = open(hostipF, 'r')
 host = file.read().strip()
 file.close()
 
-print host
+print(host)
 
-print currentUnitId  
+print(currentUnitId)  
 
 
 # Checking the current UnitId for the MacAddr if these are differnt
 if(currentUnitId!=macEth):
-   print "Changing UnitId"
+   print("Changing UnitId")
    config = ConfigObj('./../conf/config.sys')
    config['general']['unitid'] = macEth
    config.write()
@@ -151,7 +151,7 @@ if(currentUnitId!=macEth):
 
 #Getting parameters from Cloud
 url = 'http://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
-print url
+print(url)
 res = requests.get(url)
 
 packSize =  len(res.text)
@@ -178,21 +178,21 @@ if(packSize>5):
    extra2         = info["extra2"]
 
  
-   print ssid
-   print nameClient
-   print unitName
-   print mac
-   print phoneClient
-   print idUnit
-   print idClient
-   print password
-   print alarmStatus
-   print alarmType
-   print mailClient
-   print envelopeMpd
-   print thresholdOnBed
-   print extra1
-   print extra2
+   print(ssid)
+   print(nameClient)
+   print(unitName)
+   print(mac)
+   print(phoneClient)
+   print(idUnit)
+   print(idClient)
+   print(password)
+   print(alarmStatus)
+   print(alarmType)
+   print(mailClient)
+   print(envelopeMpd)
+   print(thresholdOnBed)
+   print(extra1)
+   print(extra2)
 
 
    #Checking current SSID connection name
@@ -200,13 +200,13 @@ if(packSize>5):
    if(ord(ssidLocal[len(ssidLocal)-1])==10):
      ssidLocal = ssidLocal[0:len(ssidLocal)-1]
 
-   print ssidLocal
+   print(ssidLocal)
    
    #Switching WiFi connection
    if(ssid==ssidLocal):
-      print "Same WiFi SSID!!!"
+      print("Same WiFi SSID!!!")
    else:
-      print "Different WiFi SSID!!!"
+      print("Different WiFi SSID!!!")
       fn = "wpa_supplicant.conf"
       f = open(fn, 'w')
       f.write('network={\n    ssid="'+ssid+'"\n    scan_ssid=1\n    priority=2\n    psk="'+password+'"\n} \n\n')
@@ -224,6 +224,6 @@ if(packSize>5):
    alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
 
 else:
-   print "No DATA"
+   print("No DATA")
 
 

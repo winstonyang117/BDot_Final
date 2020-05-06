@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 from configobj import ConfigObj
 from datetime import datetime
 from dateutil import tz
@@ -12,7 +12,7 @@ import pytz
 
 def utcToLocalTime(time2, formatt, from_zone, to_zone):
     if(len(time2)<21):
-      print "OTRO FORMATO"
+      print("OTRO FORMATO")
       formatt = '%Y-%m-%dT%H:%M:%SZ'
     utc = datetime.strptime(time2, formatt)
     utc = utc.replace(tzinfo=from_zone)
@@ -27,11 +27,11 @@ from_zone = tz.tzutc()
 to_zone = pytz.timezone("America/New_York")
 
 time2 = '2019-07-25T18:07:57Z'; 
-print utcToLocalTime(time2, formatt, from_zone, to_zone)
+print(utcToLocalTime(time2, formatt, from_zone, to_zone))
 
 
 #config = ConfigParser.ConfigParser()
-#config.readfp(open(r'./conf/config.sys'))
+#config.read_file(open(r'./conf/config.sys'))
 
 
 #unit  = config.get('general', 'unitid')
