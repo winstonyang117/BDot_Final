@@ -1,13 +1,13 @@
 version: "2"
 services:
    influxdb:
-      image: influxdb:1.8
-      container_name: influxdb
-      restart: always
+      image: influxdb:https
+      container_name: influxdb-https
+      restart: unless-stopped
       volumes:
-         - /opt/helena/influx/influxdb/data:/var/lib/influxdb
-         - /opt/helena/influx/influxdb/ssl:/etc/influxdb/ssl
-         - /opt/helena/influx/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+         - ${PWD}/influxdb/data:/var/lib/influxdb
+         - ${PWD}/influxdb/ssl:/etc/influxdb/ssl
+         - ${PWD}/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
       ports:
          - 8086:8086
       environment:
@@ -20,3 +20,13 @@ services:
 
       command: -config /etc/influxdb/influxdb.conf
 
+   grafana:
+     image: grafana/grafana:6.7.3
+     container_name: grafana
+     restart: unless-stopped
+     volumes:
+        - ${PWD}/grafana/data:/var/lib/grafana
+     ports:
+        - 3000:3000
+     depends_on:
+        - influxdb
