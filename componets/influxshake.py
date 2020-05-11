@@ -38,7 +38,7 @@ print("Waiting for data on (HOST:PORT) ", HP)
 
 
 a,b,c,d = host.split(".")
-http_post  = "curl -s -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
+http_post  = "curl -s POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
 http_post += "\n address,location="+unit+" ip2="+str(b)
 http_post += "\n address,location="+unit+" ip3="+str(c)
 http_post += "\n address,location="+unit+" ip4="+str(d)
@@ -46,7 +46,7 @@ http_post += "\'  &"
 print(http_post)
 subprocess.call(http_post, shell=True)
 
-http_post  = "curl -s -XPOST \'http://"+ rip+":8086/write?db="+db+"\' -u "+ ruser+":"+ rpassw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
+http_post  = "curl -s --insecure POST \'https://"+ rip+":8086/write?db="+db+"\' -u "+ ruser+":"+ rpassw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
 http_post += "\n address,location="+unit+" ip2="+str(b)
 http_post += "\n address,location="+unit+" ip3="+str(c)
 http_post += "\n address,location="+unit+" ip4="+str(d)
@@ -65,8 +65,8 @@ while 1:								# loop forever
     timestampi =  Decimal(data2[1].decode())
     timeIni = timestampi * 1000
     count = 0;
-    http_post  = "curl -s -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
-    http_post2 = "curl -s -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
+    http_post  = "curl -s -POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
+    http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
 
     for f in data2:
        count  = count + 1
