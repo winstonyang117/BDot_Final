@@ -1,8 +1,9 @@
 import socket as s
 from decimal import Decimal
-import subprocess
 import configparser
-
+from influxdb import InfluxDBClient
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Parameter from configuation File
 config = configparser.ConfigParser()
@@ -36,56 +37,40 @@ sock.bind((host, port))
 
 print("Waiting for data on (HOST:PORT) ", HP)
 
+local_db_conn = InfluxDBClient(host=ip, port="8086", username=user, password=passw, database=db)
+remote_db_conn = InfluxDBClient(host=rip, port="8086", username=ruser, password=rpassw, database=db,ssl=True,verify_ssl=False)
 
 a,b,c,d = host.split(".")
-http_post  = "curl -s POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
-http_post += "\n address,location="+unit+" ip2="+str(b)
-http_post += "\n address,location="+unit+" ip3="+str(c)
-http_post += "\n address,location="+unit+" ip4="+str(d)
-http_post += "\'  &"
-print(http_post)
-subprocess.call(http_post, shell=True)
+addr_data  = "address,location={0} ip1={1},ip2={2},ip3={3},ip4={4}" \
+                  .format(unit, str(a), str(b), str(c), str(d))
 
-http_post  = "curl -s --insecure POST \'https://"+ rip+":8086/write?db="+db+"\' -u "+ ruser+":"+ rpassw+" --data-binary \' " + "\n address,location="+unit+" ip1="+str(a)
-http_post += "\n address,location="+unit+" ip2="+str(b)
-http_post += "\n address,location="+unit+" ip3="+str(c)
-http_post += "\n address,location="+unit+" ip4="+str(d)
-http_post += "\'  &"
-#print http_post
-subprocess.call(http_post, shell=True)
-
-
+print(addr_data)
+local_db_conn.write_points(addr_data, protocol='line')
+remote_db_conn.write_points(addr_data, protocol='line')
 
 
 while 1:								# loop forever
     data, addr = sock.recvfrom(1024)	# wait to receive data
-#    print data
+#   multiple dataset with same timestamp 
     data = data.replace(b'}', b'')
     data2 = data.split(b',')							
     timestampi =  Decimal(data2[1].decode())
     timeIni = timestampi * 1000
-    count = 0;
-    http_post  = "curl -s -POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
-    http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
 
+    count = 0;
+    data_set = []
     for f in data2:
        count  = count + 1
        if(count>2):    
 #          print int(f)
 #          print timeIni
-          http_post  += "\nZ,location="+unit+" value=" 
-          http_post  += str(int(f)) + " " + str(int(timeIni*1000000))
-          if(saveRemoteRaw=='true'):
-             http_post2 += "\nZ,location="+unit+" value="
-             http_post2 += str(int(f)) + " " + str(int(timeIni*1000000))
-
+          data_set.append("Z,location={0} value={1} {2}" \
+                           .format(unit, str(int(f)), str(int(timeIni*1000000))))
+          
           timeIni = timeIni + 10
     
-    http_post += "\'  &"
-    http_post2 += "\'  &"
-    
- #   print http_post
-    subprocess.call(http_post, shell=True)
+    local_db_conn.write_points(data_set, protocol='line')
     if(saveRemoteRaw=='true'):
-       subprocess.call(http_post2, shell=True)
+       remote_db_conn.write_points(data_set, protocol='line')
+
 
