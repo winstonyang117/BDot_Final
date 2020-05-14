@@ -30,7 +30,7 @@ import ast
 #import statsmodels.api as sm
 import json
 import requests
-
+from componets import crypto_utils
 
 
 ######################################### Functions #################################################################
@@ -140,21 +140,24 @@ def main():
  formatt = '%Y-%m-%dT%H:%M:%S.%fZ'
  from_zone = tz.tzutc()
  to_zone = pytz.timezone("America/New_York")
+
  # Parameters from Config file
  config = configparser.ConfigParser()
+ cfgdata = crypto_utils.decrypt_file('./conf/config.sec', crypto_utils.config_key)
+ config.read_string(cfgdata.decode())
  config.read_file(open(r'./conf/config.sys'))
 
- debug = config.get('general', 'debug')
- debug = parseBoolString(debug)
  ip    = config.get('localdb', 'lip')
  user  = config.get('localdb', 'luser')
  passw = config.get('localdb', 'lpass')
 
+ debug = config.get('general', 'debug')
+ debug = parseBoolString(debug)
+ 
  db           = config.get('general', 'dbraw')
  unit         = config.get('general', 'unitid')
  buffersize   = config.get('general', 'buffersize')
  samplingrate = int(config.get('general', 'samplingrate'))
-
 
  # Parameters for Component 1 --> OnBed
  onBedTimeWindow   = int(config.get('main', 'onBedTimeWindow'))

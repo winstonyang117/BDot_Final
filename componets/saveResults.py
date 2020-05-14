@@ -23,6 +23,8 @@ print(serie, field, value, time)
 
 # Parameter from configuation File
 config = configparser.ConfigParser()
+cfgdata = crypto_utils.decrypt_file('../conf/config.sec', crypto_utils.config_key)
+config.read_string(cfgdata.decode())
 config.read_file(open(r'conf/config.sys'))
 
 ip    = config.get('localdb', 'lip')

@@ -70,16 +70,6 @@ saveRemoteResult = true
 buffersize = 30
 samplingrate = 100
 
-[localdb]
-lip = 127.0.0.1 
-luser = hmeng 
-lpass = hmeng 
-
-[remotedb]
-rip = 192.168.1.251
-ruser = hmeng 
-rpass = hmeng 
-
 [system]
 memory = 150
 cpu = 150

@@ -2,11 +2,15 @@ import socket as s
 from decimal import Decimal
 import configparser
 from influxdb import InfluxDBClient
+import crypto_utils
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# Parameter from configuation File
+# Parameter from configuation Files
+
 config = configparser.ConfigParser()
+cfgdata = crypto_utils.decrypt_file('../conf/config.sec', crypto_utils.config_key)
+config.read_string(cfgdata.decode())
 config.read_file(open(r'../conf/config.sys'))
 
 ip    = config.get('localdb', 'lip')
