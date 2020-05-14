@@ -3,6 +3,8 @@ import configparser
 import sys
 import logging
 from datetime import datetime
+import crypto_utils
+
 
 # Parameters from sys
 
@@ -25,7 +27,7 @@ print(serie, field, value, time)
 config = configparser.ConfigParser()
 cfgdata = crypto_utils.decrypt_file('../conf/config.sec', crypto_utils.config_key)
 config.read_string(cfgdata.decode())
-config.read_file(open(r'conf/config.sys'))
+config.read_file(open(r'../conf/config.sys'))
 
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')
@@ -40,12 +42,12 @@ unit  = config.get('general', 'unitid')
 
 saveRemoteResult = config.get('general', 'saveRemoteResult')
 
-http_post  = "curl -s -XPOST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
+http_post  = "curl -s -POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
 http_post += "\n"+serie+",location="+unit+" "+field+"="+value+" "+str(epoch_time)+"000000000"  
 http_post += "\'  &"
 
 if(saveRemoteResult=='true'):
-   http_post2 = "curl -s -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
+   http_post2 = "curl -s -POST --insecure \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
    http_post2 += "\n"+serie+",location="+unit+" "+field+"="+value+" "+str(epoch_time)+"000000000"
    http_post2 += "\'  &"
 
