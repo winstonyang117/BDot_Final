@@ -18,7 +18,7 @@ def measure_temp():
 config = configparser.ConfigParser()
 cfgdata = crypto_utils.decrypt_file('../conf/config.sec', crypto_utils.config_key)
 config.read_string(cfgdata.decode())
-config.read_file(open(r'./conf/config.sys'))
+config.read_file(open(r'../conf/config.sys'))
 
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')
@@ -41,7 +41,7 @@ diskt= (psutil.disk_usage('/').used)/1027/1024
 temperature = measure_temp()
 
 http_postm = ""
-http_post = "curl -s -XPOST \'http://"+ip+":8086/write?db="+db+"\' -u "+user+":"+passw+" --data-binary \'"
+http_post = "curl -s -POST \'http://"+ip+":8086/write?db="+db+"\' -u "+user+":"+passw+" --data-binary \'"
 http_postm = http_postm + " \n memory,location="+unit+" value=" +str(mem)
 http_postm = http_postm + " \n cpu,location="+unit+" value="+ str(cpu)
 http_postm = http_postm + " \n diskusagepercent,location="+unit+" value=" + str(diskp)
@@ -51,7 +51,7 @@ http_post = http_post + http_postm
 subprocess.call(http_post, shell=True)
 
 if(saveRemoteRaw=='true'):
-    http_post2 = "curl -s -XPOST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \'"
+    http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \'"
     http_post2 = http_post2 + http_postm
     subprocess.call(http_post2, shell=True)
 
