@@ -3,7 +3,10 @@ import psutil
 import subprocess
 import configparser
 import time
-import os
+import os, sys
+
+sys.path.insert(0, os.path.abspath('..'))
+from componets import crypto_utils
 
 def measure_temp():
         temp = os.popen("vcgencmd measure_temp").readline()
@@ -13,7 +16,10 @@ def measure_temp():
 #temperature = measure_temp()
 
 config = configparser.ConfigParser()
-config.read_file(open(r'../conf/config.sys'))
+cfgdata = crypto_utils.decrypt_file('../conf/config.sec', crypto_utils.config_key)
+config.read_string(cfgdata.decode())
+config.read_file(open(r'./conf/config.sys'))
+
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')
 passw = config.get('localdb', 'lpass')

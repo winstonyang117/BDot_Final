@@ -8,5 +8,5 @@ apt install python3-numpy
 pip3 uninstall scipy  # remove previously installed version
 apt install python3-scipy
 
-sudo pip3 install influxdb nitime pandas netifaces configobj
+sudo pip3 install influxdb nitime pandas netifaces configobj psutil cryptography
 
