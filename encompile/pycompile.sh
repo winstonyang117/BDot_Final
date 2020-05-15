@@ -11,9 +11,9 @@ then
 fi
 
 # if pyinstaller is not installed
-if [ -z "`pip list 2>/dev/null | grep PyInstaller`" ]
+if [ -z "`pip3 list 2>/dev/null | grep PyInstaller`" ]
 then
-    pip install --user pyinstaller
+    pip3 install --user pyinstaller
 fi
 
 if [ $# -lt 1 ]
