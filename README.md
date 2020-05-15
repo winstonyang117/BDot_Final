@@ -108,10 +108,7 @@ sudo pip install PyCrypto
 B1. To compile the code, install the following libraries
 
 ```
-cd  ~
-mv helena/compiling . 
-cd compiling
-chmod +x pycompile.sh
+cd ~/helena/encompile 
 sudo ./pycompile.sh ~/helena main.py
 ```
 
@@ -119,16 +116,15 @@ The executable file will be here: helena/dist
 
 B2. Generate the key
 ```
-~/helena/generate.sh
+cd ~/helena/
+encompile/generate.sh
 rm ~/helena/generate.sh
 ```
 
 B3. Copy main and key to helena root directory: 
 
 ```
-cd ~
-cd helena/dist
-cp main ../
+cp ~/helena/dist/main ~/helena
 cp key ../
 ```
 
@@ -176,12 +172,11 @@ helena
     |- reliability # functions to clean logs and monitor device resource usages
         |- devicemonitor.py
         |- cleanlogs.py
-    |- keygen
-        |- genkey.sh # generate the key for authentication
-    |- compiling
+    |- encompile
         |- precompile.sh # it combines auth.py and main.py with new entry starts with auth.py, 
                          # then compiles with pyinstaller and adds authentication based on a key file 
         |- auth.py # authentication code
+        |- genkey.sh # generate the key for authentication
     |- scripts
         |- helena.sh # install library dependencies
         |- compHelena.sh # compile and encryption
