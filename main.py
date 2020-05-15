@@ -110,10 +110,10 @@ def status():
 #        print key
         import hashlib
         m = hashlib.md5()
-        m.update("abc")
+        m.update(b"abc")
         out = m.hexdigest()
         x = hashlib.md5()
-        x.update(out)
+        x.update(out.encode('utf-8'))
         wordp = x.hexdigest()
 #        print wordp
 #        print key
