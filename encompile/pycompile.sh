@@ -67,7 +67,7 @@ fi
 cat /proc/cpuinfo | grep Serial | awk '{print($3)}' > temp
 echo "--------" >> temp
 
-openssl enc -a -e -salt -aes-256-cbc -pass pass:$key -in temp -out temp.enc
+openssl enc -a -e -pbkdf2 -salt -aes-256-cbc -pass pass:$key -in temp -out temp.enc
 
 mv temp.enc key
 rm temp
