@@ -1,12 +1,9 @@
-import urllib3
-import netifaces
 from scipy.signal import butter, lfilter
 from scipy import signal
 from datetime import datetime, date
 from influxdb import InfluxDBClient
 from operator import attrgetter
 import numpy
-import subprocess
 import random
 import time
 import operator
@@ -27,10 +24,8 @@ from dateutil import tz
 import pytz
 import smtplib
 import ast
-#import statsmodels.api as sm
-import json
-import requests
-from componets import crypto_utils
+import componets.license as license
+import componets.crypto as crypto
 
 
 ######################################### Functions #################################################################
@@ -70,80 +65,21 @@ def utcToLocalTime(time2, formatt, from_zone, to_zone):
     timeDetected = central.strftime("%m-%d %I:%M %p")
     return timeDetected
 
-def mac_address():
-    macEth = "gg:gg:gg:gg:gg:gg"
-    data = netifaces.interfaces()
-    for i in data:
-      if i == 'eth0':
-         interface = netifaces.ifaddresses('eth0')
-         info = interface[netifaces.AF_LINK]
-         if info:
-            macEth = interface[netifaces.AF_LINK][0]["addr"]
-    return macEth
-
-
-def status():
-    statusK = 0
-    packSize = -1
-    sw = 0
-    word = "abc"
-    serial = subprocess.check_output('cat /proc/cpuinfo | grep Serial | awk \'{print($3)}\'', shell=True)[:-1]
-    macEth        = mac_address()
-#    url = 'http://beddots.local/checkStatus/'+macEth+'/'+serial+'/'+word
-    url = 'http://www.homedots.us/beddot/public/checkStatus/'+macEth+'/'+str(serial, 'utf-8')+'/'+word
-#    print url
-
-    try:
-       res = requests.get(url)
-       packSize =  len(res.text)
-    except Exception:
-       packSize = 0
-
-    #Validating for know if we get data
-    if(packSize>5):
-      try:
-        array = json.dumps(res.json())
-        info = json.loads(array)
-        status  = info["status"]
-        key     = info["keyp"]
-#        print status
-#        print key
-        import hashlib
-        m = hashlib.md5()
-        m.update(b"abc")
-        out = m.hexdigest()
-        x = hashlib.md5()
-        x.update(out.encode('utf-8'))
-        wordp = x.hexdigest()
-#        print wordp
-#        print key
-        if(wordp == key and int(status) == 1):
-          statusK = 1
-#          print "The Same!!!"
-      except Exception:
-        statusK = 0
-        sw = 1
-
-#    print '-----------'
-#    print sw
-    return int(statusK)
-
-#########################################################################################################################
-
 def saveResults(serie, field, value, time):
     p1 = subprocess.Popen(['python', 'componets/saveResults.py', serie, field , value, time],
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.STDOUT)
 
+########### main entrance ########
 def main():
- statusKey  = status()
+ statusKey  = license.status()
  formatt = '%Y-%m-%dT%H:%M:%S.%fZ'
  from_zone = tz.tzutc()
  to_zone = pytz.timezone("America/New_York")
 
  # Parameters from Config file
  config = configparser.ConfigParser()
- cfgdata = crypto_utils.decrypt_file('./conf/config.sec', crypto_utils.config_key)
+ cfgdata = crypto.decrypt_file('./conf/config.sec', crypto.config_key)
  config.read_string(cfgdata.decode())
  config.read_file(open(r'./conf/config.sys'))
 
@@ -488,7 +424,7 @@ def main():
        messoff           = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messoff')+"'")
 
        openCF.close()
-       statusKey  = status()
+       statusKey  = license.status()
 
     if(counterTime > 100000):
        counterTime = counterTime - 100000

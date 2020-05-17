@@ -150,7 +150,7 @@ if(currentUnitId!=macEth):
    subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
 
 #Getting parameters from Cloud
-url = 'http://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
+url = 'https://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
 print(url)
 res = requests.get(url)
 

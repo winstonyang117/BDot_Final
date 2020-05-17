@@ -3,8 +3,10 @@ import configparser
 import sys
 import logging
 from datetime import datetime
-import crypto_utils
-
+if __name__ == "__main__":
+    import crypto
+else:
+    import componets.crypto
 
 # Parameters from sys
 
@@ -25,7 +27,7 @@ print(serie, field, value, time)
 
 # Parameter from configuation File
 config = configparser.ConfigParser()
-cfgdata = crypto_utils.decrypt_file('../conf/config.sec', crypto_utils.config_key)
+cfgdata = crypto.decrypt_file('../conf/config.sec', crypto.config_key)
 config.read_string(cfgdata.decode())
 config.read_file(open(r'../conf/config.sys'))
 

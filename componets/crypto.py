@@ -19,19 +19,26 @@ def encrypt_file(fn_in, key, fn_out=None):
         with open(fn_out, 'wb') as file_out:
             file_out.write(token)
 
-def decrypt_file(fn_in, key):
+def decrypt_file(fn_in, key, fn_out=None):
     with open(fn_in, 'rb') as file_in:
         buf = file_in.read()
-        return decrypt_data(buf, key)
+        data = decrypt_data(buf, key)
 
+        if fn_out:
+            with open(fn_out, 'wb') as file_out:
+                file_out.write(data)
+
+        return data
 
 config_key = b'W__MSG7tzKO9Tah5-WoExXhylLEUK7UBkAPEvzZBno0='
+
 
 ### tests
 # key = Fernet.generate_key()
 # key = b'W__MSG7tzKO9Tah5-WoExXhylLEUK7UBkAPEvzZBno0='   
 # encrypt_file('../conf/config.sys', key, '../conf/config.sec')
-# data = decrypt_file('../conf/config.sec', key)
+#data = decrypt_file('../conf/config.sec', config_key)
+#decrypt_file(b'../conf/config.sec', config_key, b'../conf/config.sec.sys')
 
 """
 lip = encrypt_data(b'127.0.0.1', config_key)

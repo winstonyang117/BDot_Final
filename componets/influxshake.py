@@ -2,14 +2,25 @@ import socket as s
 from decimal import Decimal
 import configparser
 from influxdb import InfluxDBClient
-import crypto_utils
+
+if __name__ == "__main__":
+    import crypto
+    import license
+else:
+    import componets.crypto as crypto
+    import componets.license as license
+
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+if license.status() ==0:
+    return;
 
 # Parameter from configuation Files
 
 config = configparser.ConfigParser()
-cfgdata = crypto_utils.decrypt_file('../conf/config.sec', crypto_utils.config_key)
+cfgdata = crypto.decrypt_file('../conf/config.sec', crypto.config_key)
 config.read_string(cfgdata.decode())
 config.read_file(open(r'../conf/config.sys'))
 
