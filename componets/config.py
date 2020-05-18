@@ -1,6 +1,6 @@
 import configparser
 import sys, os
-
+import shutil
 sys.path.insert(0, os.path.abspath('..'))
 import componets.crypto as crypto
 
@@ -24,4 +24,21 @@ class Config:
       return self._dbconfig.get(section, key)
     else:
       return self._config.get(section, key)
+
+  def set(self, section, key, val):
+    if section == "localdb" or section == "remotedb":
+      return self._dbconfig.set(section, key, val)
+    else:
+      return self._config.set(section, key, val)
+
+  def updatedb(self):
+    old = db_cfg_fn + '.old'
+    shutil.copy(db_cfg_fn, old)
+
+    cfg_new = db_cfg_fn + '.new'
+    with open(cfg_new, 'w') as configfile:
+      self._dbconfig.write(configfile)
+
+    crypto.encrypt_file(cfg_new, license_key, db_cfg_fn)
+
 

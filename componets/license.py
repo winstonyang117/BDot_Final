@@ -8,7 +8,14 @@ import sys,os
 sys.path.insert(0, os.path.abspath('..'))
 import componets.crypto as crypto
 from componets.config import Config
-    
+
+def updateconfig(config, info, force = False):
+    if config.get('remotedb', 'rpass') != info['keyp']:
+        config.set('remotedb', 'rpass', info['keyp'])
+        config.updatedb()
+
+    return 1
+
 def status(config):
     statusK = 0
     packSize = -1
@@ -39,13 +46,14 @@ def status(config):
         if status ==0:  # invalid token
             statusK = 0
         elif status ==1: # normal case, good same token 
-            # update token
-            statusK = 1
+            # update token            
+            statusK = updateconfig(config, info, False)
         elif status ==2: # case, token changed 
-            statusK = 1
+            statusK = updateconfig(config, info, True)
         else:           # unknown case
             statusK = 0
 
+        ## todo, rm below code
         m = hashlib.md5()
         m.update(b"abc")
         out = m.hexdigest()
@@ -76,3 +84,4 @@ def mac_address():
     return macEth
 
 #status()
+

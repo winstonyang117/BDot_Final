@@ -7,7 +7,6 @@ import numpy
 import random
 import time
 import operator
-import configparser
 import sys, os
 import logging
 from algorithm import *
@@ -405,9 +404,7 @@ def main():
 	    # Updating parameters every 5 minutes
     if(counterTime%30 == 0):
        if(debug): print("-----------------------------------------------------------------------")
-       config = configparser.ConfigParser()
-       openCF = open(r'./conf/config.sys')
-       config.read_file(openCF)
+       config = Config()
 
        personname        = config.get('messages', 'personname')
        recipients        = ast.literal_eval(config.get('messages', 'recipients'))
@@ -422,7 +419,6 @@ def main():
        messon            = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messon')+"'")
        messoff           = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messoff')+"'")
 
-       openCF.close()
        statusKey  = license.status(config)
 
     if(counterTime > 100000):
