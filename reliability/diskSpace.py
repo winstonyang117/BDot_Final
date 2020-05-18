@@ -1,19 +1,15 @@
 #!/usr/bin/env python
 import psutil
 import subprocess
-import configparser
 import time
 import datetime
 from influxdb import InfluxDBClient
 import os, sys
 
 sys.path.insert(0, os.path.abspath('..'))
-from componets import crypto_utils
+from componets.config import Config
 
-config = configparser.ConfigParser()
-cfgdata = crypto_utils.decrypt_file('../conf/config.sec', crypto_utils.config_key)
-config.read_string(cfgdata.decode())
-config.read_file(open(r'../conf/config.sys'))
+config = Config()
 
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')

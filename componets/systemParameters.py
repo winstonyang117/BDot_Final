@@ -150,7 +150,7 @@ if(currentUnitId!=macEth):
    subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
 
 #Getting parameters from Cloud
-url = 'http://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
+url = 'https://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
 print(url)
 res = requests.get(url)
 
@@ -196,7 +196,7 @@ if(packSize>5):
 
 
    #Checking current SSID connection name
-   ssidLocal = subprocess.check_output("iwgetid -r", shell = True)
+   ssidLocal = subprocess.check_output("iwgetid -r", shell = True).decode()
    if(ord(ssidLocal[len(ssidLocal)-1])==10):
      ssidLocal = ssidLocal[0:len(ssidLocal)-1]
 
