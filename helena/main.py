@@ -74,6 +74,10 @@ def saveResults(serie, field, value, time):
 ########### main entrance ########
 def main():
  config = Config()
+
+ while license.status(config) ==0:
+   time.sleep(10);
+
  statusKey  = license.status(config)
  formatt = '%Y-%m-%dT%H:%M:%S.%fZ'
  from_zone = tz.tzutc()

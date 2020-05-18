@@ -23,9 +23,8 @@ def status(config):
     word = "abc"
     serial = subprocess.check_output('cat /proc/cpuinfo | grep Serial | awk \'{print($3)}\'', shell=True)[:-1]
     macEth        = mac_address()
-#    url = 'http://beddots.local/checkStatus/'+macEth+'/'+serial+'/'+word
     url = 'https://www.homedots.us/beddot/public/checkStatus/'+macEth+'/'+str(serial, 'utf-8')+'/'+word
-#    print url
+#    print (url)
 
     try:
        res = requests.get(url)
@@ -40,8 +39,8 @@ def status(config):
         info = json.loads(array)
         status  = info["status"]
         key     = info["keyp"]
-#        print status
-#        print key
+#        print (status)
+#        print (key)
         # uncomment to update
         if status ==0:  # invalid token
             statusK = 0
