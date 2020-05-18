@@ -23,6 +23,7 @@ from dateutil import tz
 import pytz
 import smtplib
 import ast
+import subprocess
 
 sys.path.insert(0, os.path.abspath('..'))
 import componets.license as license
@@ -75,10 +76,8 @@ def saveResults(serie, field, value, time):
 def main():
  config = Config()
 
- while license.status(config) ==0:
-   time.sleep(10);
-
- statusKey  = license.status(config)
+ statusKey = license.wait_for_license(config) is 0
+ 
  formatt = '%Y-%m-%dT%H:%M:%S.%fZ'
  from_zone = tz.tzutc()
  to_zone = pytz.timezone("America/New_York")
@@ -253,7 +252,7 @@ def main():
 
 
 # On/Off correlation
-    if(statusKey==1):
+    if(statusKey):
      if(buffLen>=elementsNumberOnBed and counterTime%timeCheckingOnBed == 0 ):
        signalToOnBed = buffer[buffLen-elementsNumberOnBed:buffLen]
 
@@ -405,7 +404,7 @@ def main():
     counterTime = counterTime + 1
 
 
-	    # Updating parameters every 5 minutes
+    # Updating parameters every 5 minutes
     if(counterTime%30 == 0):
        if(debug): print("-----------------------------------------------------------------------")
        config = Config()
@@ -423,7 +422,7 @@ def main():
        messon            = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messon')+"'")
        messoff           = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messoff')+"'")
 
-       statusKey  = license.status(config)
+       statusKey = license.wait_for_license(config) is 0
 
     if(counterTime > 100000):
        counterTime = counterTime - 100000

@@ -4,6 +4,7 @@ import hashlib
 import netifaces
 import json
 import sys,os
+import time
 
 sys.path.insert(0, os.path.abspath('..'))
 import componets.crypto as crypto
@@ -46,9 +47,11 @@ def status(config):
             statusK = 0
         elif status ==1: # normal case, good same token 
             # update token            
-            statusK = updateconfig(config, info, False)
+            # statusK = updateconfig(config, info, False)
+            statusK = 1
         elif status ==2: # case, token changed 
-            statusK = updateconfig(config, info, True)
+            # statusK = updateconfig(config, info, True)
+            statusK = 1
         else:           # unknown case
             statusK = 0
 
@@ -82,5 +85,15 @@ def mac_address():
             macEth = interface[netifaces.AF_LINK][0]["addr"]
     return macEth
 
+def wait_for_license(config, tomeout=0):
+   sec = 0
+   while status(config) ==0:
+      time.sleep(10);
+      if timeout>0:
+         sec += 10
+         if sec >timeout:
+            return -1
+   return 0
+ 
 #status()
 

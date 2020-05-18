@@ -18,8 +18,7 @@ config = Config()
 
 ################################
 
-while license.status(config) ==0:
-   time.sleep(10);
+license.wait_for_license(config)
 
 # Parameter from configuation Files
 
@@ -50,17 +49,22 @@ sock.bind((host, port))
 
 print("Waiting for data on (HOST:PORT) ", HP)
 
-local_db_conn = InfluxDBClient(host=ip, port="8086", username=user, password=passw, database=db)
-remote_db_conn = InfluxDBClient(host=rip, port="8086", username=ruser, password=rpassw, database=db,ssl=True,verify_ssl=False)
-
 a,b,c,d = host.split(".")
 addr_data  = "address,location={0} ip1={1},ip2={2},ip3={3},ip4={4}" \
                   .format(unit, str(a), str(b), str(c), str(d))
 
 print(addr_data)
-local_db_conn.write_points(addr_data, protocol='line')
-remote_db_conn.write_points(addr_data, protocol='line')
 
+try:
+   local_db_conn = InfluxDBClient(host=ip, port="8086", username=user, password=passw, database=db)
+   remote_db_conn = InfluxDBClient(host=rip, port="8086", username=ruser, password=rpassw, database=db,ssl=True,verify_ssl=False)
+
+   local_db_conn.write_points(addr_data, protocol='line')
+   remote_db_conn.write_points(addr_data, protocol='line')
+except Exception as e:
+   print("DB access error:")
+   print(e)
+   license.wait_for_license(config)   
 
 while 1:								# loop forever
     data, addr = sock.recvfrom(1024)	# wait to receive data
