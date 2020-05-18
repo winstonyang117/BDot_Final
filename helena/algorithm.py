@@ -5,33 +5,15 @@ import netifaces
 from scipy.signal import butter, lfilter
 from scipy import signal
 from datetime import datetime, date
-from influxdb import InfluxDBClient
-from operator import attrgetter
-import numpy
-import subprocess
-import random
 from random import randint
 import time
 import operator
-import configparser
 import sys
 import logging
-from scipy.stats import kurtosis
-from scipy import stats
-import nitime.algorithms as nt_alg
-import nitime.utils as nt_ut
 import numpy as np
-from numpy import array
 import scipy as sp
-import threading
-from datetime import datetime
-from dateutil import tz
-import pytz
-import smtplib
 import ast
-#import statsmodels.api as sm
 import json
-import requests
 
 
 # Bandpass filter functions

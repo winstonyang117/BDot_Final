@@ -5,9 +5,9 @@ services:
       container_name: influxdb
       restart: always
       volumes:
-         - /opt/helena/influx/influxdb/data:/var/lib/influxdb
-         - /opt/helena/influx/influxdb/ssl:/etc/influxdb/ssl
-         - /opt/helena/influx/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+         - /opt/influx/influxdb/data:/var/lib/influxdb
+         - /opt/influx/influxdb/ssl:/etc/influxdb/ssl
+         - /opt/influx/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
       ports:
          - 8086:8086
       environment:
