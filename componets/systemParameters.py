@@ -196,7 +196,7 @@ if(packSize>5):
 
 
    #Checking current SSID connection name
-   ssidLocal = subprocess.check_output("iwgetid -r", shell = True)
+   ssidLocal = subprocess.check_output("iwgetid -r", shell = True).decode()
    if(ord(ssidLocal[len(ssidLocal)-1])==10):
      ssidLocal = ssidLocal[0:len(ssidLocal)-1]
 

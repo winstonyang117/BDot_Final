@@ -8,7 +8,7 @@ import random
 import time
 import operator
 import configparser
-import sys
+import sys, os
 import logging
 from algorithm import *
 from scipy.stats import kurtosis
@@ -24,8 +24,10 @@ from dateutil import tz
 import pytz
 import smtplib
 import ast
+
+sys.path.insert(0, os.path.abspath('..'))
 import componets.license as license
-import componets.crypto as crypto
+from componets.config import Config
 
 
 ######################################### Functions #################################################################
@@ -72,17 +74,14 @@ def saveResults(serie, field, value, time):
 
 ########### main entrance ########
 def main():
- statusKey  = license.status()
+ config = Config()
+ statusKey  = license.status(config)
  formatt = '%Y-%m-%dT%H:%M:%S.%fZ'
  from_zone = tz.tzutc()
  to_zone = pytz.timezone("America/New_York")
 
  # Parameters from Config file
- config = configparser.ConfigParser()
- cfgdata = crypto.decrypt_file('./conf/config.sec', crypto.config_key)
- config.read_string(cfgdata.decode())
- config.read_file(open(r'./conf/config.sys'))
-
+ 
  ip    = config.get('localdb', 'lip')
  user  = config.get('localdb', 'luser')
  passw = config.get('localdb', 'lpass')
@@ -424,7 +423,7 @@ def main():
        messoff           = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messoff')+"'")
 
        openCF.close()
-       statusKey  = license.status()
+       statusKey  = license.status(config)
 
     if(counterTime > 100000):
        counterTime = counterTime - 100000

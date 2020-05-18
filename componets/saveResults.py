@@ -1,12 +1,10 @@
 import subprocess
-import configparser
-import sys
+import sys, os
 import logging
 from datetime import datetime
-if __name__ == "__main__":
-    import crypto
-else:
-    import componets.crypto
+
+sys.path.insert(0, os.path.abspath('..'))
+from componets.config import Config
 
 # Parameters from sys
 
@@ -26,10 +24,8 @@ epoch_time = int((utc_time - datetime(1970, 1, 1)).total_seconds())
 print(serie, field, value, time)
 
 # Parameter from configuation File
-config = configparser.ConfigParser()
-cfgdata = crypto.decrypt_file('../conf/config.sec', crypto.config_key)
-config.read_string(cfgdata.decode())
-config.read_file(open(r'../conf/config.sys'))
+# this could be optimized 
+config = Config()
 
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')

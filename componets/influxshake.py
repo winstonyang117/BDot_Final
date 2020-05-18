@@ -1,34 +1,32 @@
 import socket as s
 from decimal import Decimal
 import configparser
+import time
 from influxdb import InfluxDBClient
-
-if __name__ == "__main__":
-    import crypto
-    import license
-else:
-    import componets.crypto as crypto
-    import componets.license as license
-
 import urllib3
+import sys, os
+sys.path.insert(0, os.path.abspath('..'))
+import componets.crypto as crypto
+import componets.license as license
+from componets.config import Config
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+##### Global veriables #########
 
-if license.status() ==0:
-    return;
+config = Config()
+
+################################
+
+while license.status(config) ==0:
+   time.sleep(10);
 
 # Parameter from configuation Files
-
-config = configparser.ConfigParser()
-cfgdata = crypto.decrypt_file('../conf/config.sec', crypto.config_key)
-config.read_string(cfgdata.decode())
-config.read_file(open(r'../conf/config.sys'))
 
 ip    = config.get('localdb', 'lip')
 user  = config.get('localdb', 'luser')
 passw = config.get('localdb', 'lpass')
 
-print(ip)
 rip    = config.get('remotedb', 'rip')
 ruser  = config.get('remotedb', 'ruser')
 rpassw = config.get('remotedb', 'rpass')

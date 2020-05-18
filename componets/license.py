@@ -3,15 +3,15 @@ import requests
 import hashlib
 import netifaces
 import json
-if __name__ == "__main__":
-    import crypto
-else:
-    import componets.crypto
+import sys,os
+
+sys.path.insert(0, os.path.abspath('..'))
+import componets.crypto as crypto
+from componets.config import Config
     
-def status():
+def status(config):
     statusK = 0
     packSize = -1
-    sw = 0
     # word = crypto.config_key
     word = "abc"
     serial = subprocess.check_output('cat /proc/cpuinfo | grep Serial | awk \'{print($3)}\'', shell=True)[:-1]
@@ -35,7 +35,17 @@ def status():
         key     = info["keyp"]
 #        print status
 #        print key
-        
+        # uncomment to update
+        if status ==0:  # invalid token
+            statusK = 0
+        elif status ==1: # normal case, good same token 
+            # update token
+            statusK = 1
+        elif status ==2: # case, token changed 
+            statusK = 1
+        else:           # unknown case
+            statusK = 0
+
         m = hashlib.md5()
         m.update(b"abc")
         out = m.hexdigest()
@@ -49,7 +59,6 @@ def status():
 #          print "The Same!!!"
       except Exception:
         statusK = 0
-        sw = 1
 
 #    print '-----------'
 #    print sw

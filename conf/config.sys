@@ -57,7 +57,7 @@ messmovement = \n\nA lot of movement are detected on bed... \n\nThanks for using
 
 [general]
 debug = False
-unitid = b8:27:eb:dc:80:5c
+unitid = b8:27:eb:83:7e:87
 dbraw = shake
 dbresults = healthresult
 dbstatus = status
