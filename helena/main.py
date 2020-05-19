@@ -24,6 +24,7 @@ import pytz
 import smtplib
 import ast
 import subprocess
+import requests
 
 sys.path.insert(0, os.path.abspath('..'))
 import componets.license as license
@@ -36,27 +37,14 @@ def parseBoolString(theString):
   return theString[0].upper()=='T'
 
 # Sending Alerts
-def send_email(user, pwd, recipient, subject, body):
+def send_alert(url, alert_type, user=None, pwd=None):
+   http = url + "/" + license.mac_address() + "/" +str(alert_type)
 
-#    print recipient
-    FROM = user
-    TO = recipient if isinstance(recipient, list) else [recipient]
-    SUBJECT = subject
-    TEXT = body
-
-    # Prepare actual message
-    message = """From: %s\nTo: %s\nSubject: %s\n\n%s
-    """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.ehlo()
-        server.starttls()
-        server.login(user, pwd)
-        server.sendmail(FROM, TO, message)
-        server.close()
-        print('successfully sent the mail')
-    except:
-        print("failed to send mail")
+   try:
+      requests.get(http)
+   except Exception as e:
+      print(e)
+   
 
 ##### removed algorithms from here  ####
 
@@ -125,25 +113,11 @@ def main():
  postureChangeTimeWindow = int(config.get('main', 'postureChangeTimeWindow'))
 
  # Messages
-
- companyemail    = config.get('messages', 'companyemail')
- mailpass        = "S3nsorweb"
- personname      = config.get('messages', 'personname')
- recipients      = ast.literal_eval(config.get('messages', 'recipients'))
-
- subjecton       = config.get('messages', 'subjecton') + " "
- subjectoff      = config.get('messages', 'subjectoff') + " "
- subjectmovement = config.get('messages', 'subjectmovement') + " "
-
+ alert_url    = config.get('messages', 'alert_url')
  enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
  enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
  enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
 
- messon            = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messon')+"'")
- messoff           = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messoff')+"'")
- messmovementPre      = ast.literal_eval("'"+config.get('messages', 'messmovement')+"'")
-
- messmovement = "\n\nOn "+personname+"'s BED" + messmovementPre
 # print messmovement
  # Constant Calculations
  maxbuffersize               = int(buffersize) * int(samplingrate)
@@ -287,8 +261,7 @@ def main():
           #saveON
           if(enablesmson and onBed == False):
              timeDetected = utcToLocalTime(buffertime[len(buffertime)-thon], formatt, from_zone, to_zone)
-             subject = subjecton + timeDetected;
-             sendEmailT = threading.Thread(target=send_email, args=(companyemail,mailpass,recipients,subject,messon))
+             sendEmailT = threading.Thread(target=send_alert, args=(alert_url, 1))
              sendEmailT.start()
           saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-thon])
           onBed = True
@@ -296,8 +269,7 @@ def main():
        elif(counteroff > thoff):
           if(enablesmsoff and onBed == True):
              timeDetected = utcToLocalTime(buffertime[len(buffertime)-thoff], formatt, from_zone, to_zone)
-             subject = subjectoff + timeDetected;
-             sendEmailT = threading.Thread(target=send_email, args=(companyemail,mailpass,recipients,subject,messoff))
+             sendEmailT = threading.Thread(target=send_alert, args=(alert_url, 2))
              sendEmailT.start()
           #saveOFF
           saveResults('bedStatus', 'bs' ,'0', buffertime[len(buffertime)-thoff])
@@ -328,8 +300,8 @@ def main():
           sumMovements = sum(preMovements)
           if(enablesmsmovement and sumMovements > 15):
              timeDetected = utcToLocalTime(buffertime[len(buffertime)-1], formatt, from_zone, to_zone)
-             subject = subjectmovement + timeDetected;
-             sendEmailT = threading.Thread(target=send_email, args=(companyemail,mailpass,recipients,subject,messmovement))
+             sendEmailT = threading.Thread(target=send_alert, args=(alert_url, 3))
+             #sendEmailT = threading.Thread(target=send_email, args=(companyemail,mailpass,recipients,subject,messmovement))
              sendEmailT.start()
              preMovements = []
 
@@ -409,8 +381,6 @@ def main():
        if(debug): print("-----------------------------------------------------------------------")
        config = Config()
 
-       personname        = config.get('messages', 'personname')
-       recipients        = ast.literal_eval(config.get('messages', 'recipients'))
        enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
        enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
        enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
@@ -418,9 +388,6 @@ def main():
        mpdEnv            = int(config.get('main', 'mpdEnv'))
        if(debug): print(thccMean)
        if(debug): print(mpdEnv)
-       messmovement = "\n\nOn "+personname+"'s BED" + messmovementPre
-       messon            = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messon')+"'")
-       messoff           = "\n\n" + personname + " " + ast.literal_eval("'"+config.get('messages', 'messoff')+"'")
 
        statusKey = license.wait_for_license(config) is 0
 
