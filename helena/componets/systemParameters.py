@@ -31,13 +31,11 @@ def parseIntToBool(theInt):
     return 'False'
 
 
-def alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
+def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
    sw = 0
    config = configparser.ConfigParser()
    config.read_file(open(r'./../conf/config.sys'))
 
-   personname            = config.get('messages', 'personname')
-   recipients            = config.get('messages', 'recipients')
    enablesmson           = parseBoolStringToInt(config.get('messages', 'enablesmson'))
    enablesmsoff          = parseBoolStringToInt(config.get('messages', 'enablesmsoff'))
    enablesmsmovement     = parseBoolStringToInt(config.get('messages', 'enablesmsmovement'))
@@ -47,28 +45,15 @@ def alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thre
 
    config = ConfigObj('./../conf/config.sys')
    
-   mailClient = "[\""+mailClient+"\"]"
-
-   if(len(envelopeMpd)>0 and float(envelopeMpd)!=envelopeMpdFile):
+   if(envelopeMpd !=None  and float(envelopeMpd)!=envelopeMpdFile):
       sw = 1
       config['main']['mpdEnv'] = envelopeMpd
       print("Change MDP Envelope")
 
-   if(len(thresholdOnBed)>0 and float(thresholdOnBed)!= thresholdOnBedFlie):
+   if(thresholdOnBed != None and float(thresholdOnBed)!= thresholdOnBedFlie):
       sw = 1
       config['main']['thccMean'] = thresholdOnBed
       print("On/Off th")
-
-   if(personname!=nameClient):
-      sw = 1
-      config['messages']['personname'] = nameClient 
-      print("Change Name")
-
-   if(recipients!=mailClient):
-      sw = 1
-      config['messages']['recipients'] = mailClient 
-      print("Change Email...")
-   
 
    pos = 0
    for alarmt in alarmType: 
@@ -161,67 +146,32 @@ if(packSize>5):
    array = json.dumps(res.json())
    info = json.loads(array)
 
-   ssid           = info["ssid"]
-   nameClient     = info["nameClient"]
    unitName       = info["unitName"]
    mac            = info["mac"]
    phoneClient    = info["phoneClient"]
    idUnit         = info["idUnit"]
    idClient       = info["idClient"]
-   password       = info["password"]
    alarmStatus    = info["alarmStatus"]
    alarmType      = info["alarmType"]
-   mailClient     = info["mailClient"]
    envelopeMpd    = info["envelopeMpd"]
    thresholdOnBed = info["thresholdOnBed"]
    extra1         = info["extra1"]
    extra2         = info["extra2"]
 
- 
-   print(ssid)
-   print(nameClient)
    print(unitName)
    print(mac)
    print(phoneClient)
    print(idUnit)
    print(idClient)
-   print(password)
    print(alarmStatus)
    print(alarmType)
-   print(mailClient)
    print(envelopeMpd)
    print(thresholdOnBed)
    print(extra1)
    print(extra2)
 
-
-   #Checking current SSID connection name
-   ssidLocal = subprocess.check_output("iwgetid -r", shell = True).decode()
-   if(ord(ssidLocal[len(ssidLocal)-1])==10):
-     ssidLocal = ssidLocal[0:len(ssidLocal)-1]
-
-   print(ssidLocal)
-   
-   #Switching WiFi connection
-   if(ssid==ssidLocal):
-      print("Same WiFi SSID!!!")
-   else:
-      print("Different WiFi SSID!!!")
-      fn = "wpa_supplicant.conf"
-      f = open(fn, 'w')
-      f.write('network={\n    ssid="'+ssid+'"\n    scan_ssid=1\n    priority=2\n    psk="'+password+'"\n} \n\n')
-      f.write('network={\n    ssid="homedots"\n    scan_ssid=1\n    psk="beddot12"\n} \n\n')
-      #f.write('network={\n    ssid="JosePhone"\n    scan_ssid=1\n    priority=1\n     psk="Pochembe130"\n} \n\n')
-   
-      f.close()
-
-      subprocess.call("cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf", shell=True)  
-      time.sleep(5) 
-      subprocess.call("sudo reboot", shell=True)
-
-
    #For alarms parameters
-   alarmParameters(nameClient,mailClient,alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
+   alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
 
 else:
    print("No DATA")

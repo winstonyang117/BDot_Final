@@ -36,24 +36,11 @@ timeCheckingHR = 3
 postureChangeTimeWindow = 5
 
 [messages]
-companyemail = debdotsus@gmail.com
+alert_url = https://homedots.us/beddot/public/sendEmail
 
-#"6787906501@mypixmessages.com","jclementes@gmail.com", "4049351466@tmomail.net", "4049351222@tmomail.net", "4053173938@mms.att.net"
-recipients = ["ugasensorweb@gmail.com"]
-
-personname = China4
 enablesmson = False
-subjecton = Notice detected at
-messon = got in bed... \n\nThanks for using BedDot
-
 enablesmsoff = False
-subjectoff = Alert detected at
-messoff = got out of bed... \n\nThanks for using BedDot
-
 enablesmsmovement = False
-subjectmovement = Notice detected at
-messmovement = \n\nA lot of movement are detected on bed... \n\nThanks for using BedDot
-
 
 [general]
 debug = False
