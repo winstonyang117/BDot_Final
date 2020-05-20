@@ -4,7 +4,7 @@ This is the complete guide for installing packages and running BedDot System. Al
 
 ## Setup Wifi
 
-See document [here] (docs/RaspiWifi.md)
+See document [here] (https://github.com/wsonguga/BedDotV3/blob/master/docs/RaspiWifi.md)
 
 ## Check out helena repository
 ```
