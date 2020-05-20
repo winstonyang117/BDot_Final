@@ -17,9 +17,11 @@ print()
 print()
 entered_ssid = input("Would you like to specify an SSID you'd like to use \nfor Host/Configuration mode? [default: RaspiWiFi Setup]: ")
 print()
-wpa_enabled_choice = input("Would you like WPA encryption enabled on the hotspot \nwhile in Configuration Mode? [y/N]:")
+wpa_enabled_choice = "N"
+#wpa_enabled_choice = input("Would you like WPA encryption enabled on the hotspot \nwhile in Configuration Mode? [y/N]:")
 print()
-wpa_entered_key = input("What password would you like to for WPA hotspot \naccess (if enabled above, \nMust be at least 8 characters) [default: NO PASSWORD]:")
+wpa_entered_key = "NO PASSWORD"
+#wpa_entered_key = input("What password would you like to for WPA hotspot \naccess (if enabled above, \nMust be at least 8 characters) [default: NO PASSWORD]:")
 print()
 auto_config_choice = input("Would you like to enable \nauto-reconfiguration mode [y/N]?: ")
 print()
@@ -27,7 +29,8 @@ auto_config_delay = input("How long of a delay would you like without an active 
 print()
 server_port_choice = input("Which port would you like to use for the Configuration Page? [default: 12345]: ")
 print()
-ssl_enabled_choice = input("Would you like to enable SSL during configuration mode \n(NOTICE: you will get a certificate ID error \nwhen connecting, but traffic will be encrypted) [y/N]?: ")
+ssl_enabled_choice = "N"
+# ssl_enabled_choice = input("Would you like to enable SSL during configuration mode \n(NOTICE: you will get a certificate ID error \nwhen connecting, but traffic will be encrypted) [y/N]?: ")
 os.system('clear')
 print()
 print()

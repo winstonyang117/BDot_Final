@@ -86,9 +86,9 @@ def reset_to_host_mode():
 		os.system('rm -f /etc/cron.raspiwifi/apclient_bootstrapper')
 		os.system('cp /usr/lib/raspiwifi/reset_device/static_files/aphost_bootstrapper /etc/cron.raspiwifi/')
 		os.system('chmod +x /etc/cron.raspiwifi/aphost_bootstrapper')
-		os.system('mv /etc/dhcpcd.conf /etc/dhcpcd.conf.original')
+		os.system('rm -f /etc/dhcpcd.conf 2>/dev/null')
 		os.system('cp /usr/lib/raspiwifi/reset_device/static_files/dhcpcd.conf /etc/')
-		os.system('mv /etc/dnsmasq.conf /etc/dnsmasq.conf.original')
+		os.system('rm -f /etc/dnsmasq.conf 2>/dev/null')
 		os.system('cp /usr/lib/raspiwifi/reset_device/static_files/dnsmasq.conf /etc/')
 		# /etc/hostapd/hostapd.conf no need to reset
 		os.system('touch /etc/raspiwifi/host_mode')
@@ -96,3 +96,4 @@ def reset_to_host_mode():
 		time.sleep(2)
 		
 	os.system('reboot')
+
