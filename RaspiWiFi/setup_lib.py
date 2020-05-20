@@ -26,12 +26,12 @@ def copy_configs(wpa_enabled_choice):
 		os.system('mkdir /usr/lib/raspiwifi')
 		os.system('mkdir /etc/cron.raspiwifi')
 
-		os.system('mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.original')
-		os.system('mv /etc/dnsmasq.conf /etc/dnsmasq.conf.original')
-		os.system('mv /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf.original')
-		os.system('mv /etc/dhcpcd.conf /etc/dhcpcd.conf.original')
-		os.system('touch /etc/raspiwifi/host_mode')
-	
+		os.system('mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.original 2>/dev/null')
+		os.system('mv /etc/dnsmasq.conf /etc/dnsmasq.conf.original 2>/dev/null')
+		os.system('mv /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf.original 2>/dev/null')
+		os.system('mv /etc/dhcpcd.conf /etc/dhcpcd.conf.original 2>/dev/null')
+		
+	os.system('touch /etc/raspiwifi/host_mode')
 	os.system('rm -f ./tmp/*')
 	os.system('cp -a libs/* /usr/lib/raspiwifi/')
 	# wpa_supplicant is updated later
@@ -50,7 +50,7 @@ def copy_configs(wpa_enabled_choice):
 			crontab.write("# RaspiWiFi Startup\n")
 			crontab.write("@reboot root run-parts /etc/cron.raspiwifi/\n") 
 
-	os.system('mv /usr/lib/raspiwifi/reset_device/static_files/raspiwifi.conf /etc/raspiwifi')
+	os.system('cp /usr/lib/raspiwifi/reset_device/static_files/raspiwifi.conf /etc/raspiwifi')
 	
 
 def update_main_config_file(entered_ssid, auto_config_choice, auto_config_delay, ssl_enabled_choice, server_port_choice, wpa_enabled_choice, wpa_entered_key):
@@ -67,3 +67,4 @@ def update_main_config_file(entered_ssid, auto_config_choice, auto_config_delay,
 		os.system('sed -i \'s/ssl_enabled=0/ssl_enabled=1/\' /etc/raspiwifi/raspiwifi.conf')
 	if server_port_choice != "":
 		os.system('sed -i \'s/server_port=12345/server_port=' + server_port_choice + '/\' /etc/raspiwifi/raspiwifi.conf')
+

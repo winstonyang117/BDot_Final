@@ -18,17 +18,17 @@ if (uninstall_answer.lower() == "y"):
     os.system('cp ' + os.path.dirname(os.path.realpath(__file__)) + '/reset_device/static_files/wpa_supplicant.conf.default /etc/wpa_supplicant/wpa_supplicant.conf')
     os.system('chmod 600 /etc/wpa_supplicant/wpa_supplicant.conf')
     os.system('mv /etc/wpa_supplicant/wpa_supplicant.conf.original /etc/wpa_supplicant/wpa_supplicant.conf 2>/dev/null')
-    os.system('rm -rf /etc/raspiwifi')
-    os.system('rm -rf /usr/lib/raspiwifi')
-    os.system('rm -rf /etc/cron.raspiwifi')
+    os.system('rm -rf /etc/raspiwifi 2>/dev/null')
+    os.system('rm -rf /usr/lib/raspiwifi 2>/dev/null')
+    os.system('rm -rf /etc/cron.raspiwifi 2>/dev/null')
 
     os.system('rm /etc/dnsmasq.conf')
     os.system('mv /etc/dnsmasq.conf.original /etc/dnsmasq.conf 2>/dev/null')
 
-    os.system('rm /etc/hostapd/hostapd.conf')
+    os.system('rm /etc/hostapd/hostapd.conf 2>/dev/null')
     os.system('mv /etc/hostapd/hostapd.conf.original /etc/hostapd/hostapd.conf 2>/dev/null')
 
-    os.system('rm /etc/dhcpcd.conf')
+    os.system('rm /etc/dhcpcd.conf 2>/dev/null')
     os.system('mv /etc/dhcpcd.conf.original /etc/dhcpcd.conf 2>/dev/null')
     
     os.system('sed -i \'s/# RaspiWiFi Startup//\' /etc/crontab')

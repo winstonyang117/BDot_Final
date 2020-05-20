@@ -111,10 +111,10 @@ def set_ap_client_mode():
         os.system('rm -f /etc/cron.raspiwifi/aphost_bootstrapper')
         os.system('cp /usr/lib/raspiwifi/reset_device/static_files/apclient_bootstrapper /etc/cron.raspiwifi/')
         os.system('chmod +x /etc/cron.raspiwifi/apclient_bootstrapper')
-        os.system('rm -f /etc/dnsmasq.conf')
-        os.system('mv /etc/dnsmasq.conf.original /etc/dnsmasq.conf')
-        os.system('rm -f /etc/dhcpcd.conf')
-        os.system('mv /etc/dhcpcd.conf.original /etc/dhcpcd.conf')
+        os.system('rm -f /etc/dnsmasq.conf 2>/dev/null')
+        os.system('cp /etc/dnsmasq.conf.original /etc/dnsmasq.conf')
+        os.system('rm -f /etc/dhcpcd.conf 2>/dev/null')
+        os.system('cp /etc/dhcpcd.conf.original /etc/dhcpcd.conf')
         syslog.syslog('raspiwifi - set_ap_client_mode')
 
     os.system('reboot')
@@ -155,3 +155,4 @@ if __name__ == '__main__':
         app.run(host = '0.0.0.0', port = int(config_hash['server_port']), ssl_context='adhoc')
     else:
         app.run(host = '0.0.0.0', port = int(config_hash['server_port']))
+
