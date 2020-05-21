@@ -2,8 +2,9 @@
 
 Instructions on installation and configuration of WiFi on BetDot based off a forked version of open source software [RaspiWiFi](https://github.com/jasbur/RaspiWiFi)
 
->  **AP (Host) Mode** - device serves as WiFi Access Point to which other wifi-enabled devices (in client mode) can connect.
->  **Client Mode** - device in normal operation mode will be able to connect to a WiFi AP.
+**AP (Host) Mode** - device serves as WiFi Access Point to which other wifi-enabled devices (in client mode) can connect.
+
+**Client Mode** - device in normal operation mode will be able to connect to a WiFi AP.
 
 ##  Installation
 On Github repository, RaspiWiFi software is located at `BedDot->RaspiWiFi` directory.
