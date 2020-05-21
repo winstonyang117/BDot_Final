@@ -121,9 +121,9 @@ file = open(hostipF, 'r')
 host = file.read().strip()
 file.close()
 
-print(host)
+#print(host)
 
-print(currentUnitId)  
+#print(currentUnitId)  
 
 
 # Checking the current UnitId for the MacAddr if these are differnt
@@ -136,7 +136,7 @@ if(currentUnitId!=macEth):
 
 #Getting parameters from Cloud
 url = 'https://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
-print(url)
+#print(url)
 res = requests.get(url)
 
 packSize =  len(res.text)
@@ -157,7 +157,7 @@ if(packSize>5):
    thresholdOnBed = info["thresholdOnBed"]
    extra1         = info["extra1"]
    extra2         = info["extra2"]
-
+"""
    print(unitName)
    print(mac)
    print(phoneClient)
@@ -169,7 +169,7 @@ if(packSize>5):
    print(thresholdOnBed)
    print(extra1)
    print(extra2)
-
+"""
    #For alarms parameters
    alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
 

@@ -4,18 +4,10 @@ This is the complete guide for installing packages and running BedDot System. Al
 
 ## Setup Wifi
 
-```
-sudo nano /etc/wpa-supplicant/wpa-supplicant.conf
-```
-Add the follows by replacing testing and testingPassword with your wifi SSID and password
+See document [here](docs/RaspiWiFi.md)
 
-```
-network={
-    ssid="testing"
-    psk="testingPassword"
-}
-```
-More details are at https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
+## Setup influxdb and grafana
+See document [here](docs/influxdb-grafana.md)
 
 ## Check out helena repository
 ```

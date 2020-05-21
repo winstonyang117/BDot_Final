@@ -69,9 +69,9 @@ def status(config):
 #          print "The Same!!!"
       except Exception:
         statusK = 0
+    else:
+        statusK = 0
 
-#    print '-----------'
-#    print sw
     return int(statusK)
 
 def mac_address():
