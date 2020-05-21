@@ -157,19 +157,7 @@ if(packSize>5):
    thresholdOnBed = info["thresholdOnBed"]
    extra1         = info["extra1"]
    extra2         = info["extra2"]
-"""
-   print(unitName)
-   print(mac)
-   print(phoneClient)
-   print(idUnit)
-   print(idClient)
-   print(alarmStatus)
-   print(alarmType)
-   print(envelopeMpd)
-   print(thresholdOnBed)
-   print(extra1)
-   print(extra2)
-"""
+
    #For alarms parameters
    alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
 
