@@ -6,8 +6,13 @@ import componets.crypto as crypto
 
 license_key = b'W__MSG7tzKO9Tah5-WoExXhylLEUK7UBkAPEvzZBno0='
 
-cfg_fn = os.path.dirname(__file__) + r'/../conf/config.sys'
-db_cfg_fn = os.path.dirname(__file__) + r'/../conf/config.sec'
+if getattr(sys, 'frozen', False):
+   dir = sys._MEIPASS
+else:
+   dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),'../') 
+
+cfg_fn =  os.path.join(dir, 'conf/config.sys')
+db_cfg_fn = os.path.join(dir, 'conf/config.sec')
 
 class Config:
  

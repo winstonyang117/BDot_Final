@@ -8,7 +8,7 @@ key = 'sensorweb987'
 serial = subprocess.check_output('cat /proc/cpuinfo | grep Serial | awk \'{print($3)}\'', shell=True)[:-1]
 
 try:
-    cmp_serial = subprocess.check_output('openssl enc -d -a -pbkdf2 -aes-256-cbc -pass pass:%s -in key 2>/dev/null' % (key), shell=True).split('\n')[0]
+    cmp_serial = subprocess.check_output('openssl enc -d -a -pbkdf2 -aes-256-cbc -pass pass:%s -in key 2>/dev/null' % (key), shell=True).split(b'\n')[0]
 except:
     print ('Permission denied.')
     sys.exit() 

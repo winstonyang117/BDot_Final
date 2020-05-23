@@ -131,7 +131,13 @@ def main():
  elementsNumberPostureChange =  postureChangeTimeWindow * samplingrate
 
  # DB Conection
- client = InfluxDBClient(ip, "8086", user, passw, db)
+ try: 
+   client = InfluxDBClient(ip, "8086", user, passw, db)
+ except Exception as e:
+   print("main(), DB access error:")
+   print(e)
+   license.wait_for_license(config)
+
  # Buffers for time and
  buffer      = []
  buffertime  = []
