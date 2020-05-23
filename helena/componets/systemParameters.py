@@ -5,18 +5,14 @@ import subprocess
 import time
 import configparser
 import ast
+import sys, os
 from configobj import ConfigObj
 
+if getattr(sys, 'frozen', False):
+   cfg_fn = os.path.join(sys._MEIPASS, 'conf/config.sys')
+else:
+   cfg_fn = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../', 'conf/config.sys')
 
-
-#config = ConfigParser.ConfigParser()
-#config.read_file(open(r'./../conf/config.sys'))
-
-#unit  = config.get('general', 'unitid')
-
-#config = ConfigObj('./conf/config.sys')
-#config['general']['unitid'] = 'helena10'
-#config.write()
 
 def parseBoolStringToInt(theString):
   if(theString[0].upper()=='T'):
@@ -34,7 +30,7 @@ def parseIntToBool(theInt):
 def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
    sw = 0
    config = configparser.ConfigParser()
-   config.read_file(open(r'./../conf/config.sys'))
+   config.read_file(open(cfg_fn))
 
    enablesmson           = parseBoolStringToInt(config.get('messages', 'enablesmson'))
    enablesmsoff          = parseBoolStringToInt(config.get('messages', 'enablesmsoff'))
@@ -43,7 +39,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
    thresholdOnBedFlie    = float(config.get('main', 'thccMean'))
 
 
-   config = ConfigObj('./../conf/config.sys')
+   config = ConfigObj(cfg_fn)
    
    if(envelopeMpd !=None  and float(envelopeMpd)!=envelopeMpdFile):
       sw = 1
@@ -86,7 +82,6 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
 
 
    if(sw==1):
-#     config = ConfigObj('./conf/config.sys')
      config.write()
    
    unit  = config.get('general', 'unitid')
@@ -96,7 +91,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
 
 def current_unitid():
    config = configparser.ConfigParser()
-   config.read_file(open(r'./../conf/config.sys'))
+   config.read_file(open(cfg_fn))
 
    unit  = config.get('general', 'unitid')
    return unit
@@ -113,55 +108,59 @@ def mac_address():
             macEth = interface[netifaces.AF_LINK][0]["addr"]
     return macEth
 
-macEth        = mac_address()
-currentUnitId = current_unitid()
+def start():
 
-hostipF = "/opt/settings/sys/ip.txt"
-file = open(hostipF, 'r')
-host = file.read().strip()
-file.close()
+   macEth        = mac_address()
+   currentUnitId = current_unitid()
 
-#print(host)
+   hostipF = "/opt/settings/sys/ip.txt"
+   file = open(hostipF, 'r')
+   host = file.read().strip()
+   file.close()
 
-#print(currentUnitId)  
+   #print(host)
+
+   #print(currentUnitId)  
 
 
-# Checking the current UnitId for the MacAddr if these are differnt
-if(currentUnitId!=macEth):
-   print("Changing UnitId")
-   config = ConfigObj('./../conf/config.sys')
-   config['general']['unitid'] = macEth
-   config.write()
-   subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
+   # Checking the current UnitId for the MacAddr if these are differnt
+   if(currentUnitId!=macEth):
+      print("Changing UnitId")
+      config = ConfigObj(cfg_fn)
+      config['general']['unitid'] = macEth
+      config.write()
+      subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
 
-#Getting parameters from Cloud
-url = 'https://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
-#print(url)
-res = requests.get(url)
+   #Getting parameters from Cloud
+   url = 'https://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
+   #print(url)
+   res = requests.get(url)
 
-packSize =  len(res.text)
+   packSize =  len(res.text)
 
-#Validating for know if we get data
-if(packSize>5):
-   array = json.dumps(res.json())
-   info = json.loads(array)
+   #Validating for know if we get data
+   if(packSize>5):
+      array = json.dumps(res.json())
+      info = json.loads(array)
 
-   unitName       = info["unitName"]
-   mac            = info["mac"]
-   phoneClient    = info["phoneClient"]
-   idUnit         = info["idUnit"]
-   idClient       = info["idClient"]
-   alarmStatus    = info["alarmStatus"]
-   alarmType      = info["alarmType"]
-   envelopeMpd    = info["envelopeMpd"]
-   thresholdOnBed = info["thresholdOnBed"]
-   extra1         = info["extra1"]
-   extra2         = info["extra2"]
+      unitName       = info["unitName"]
+      mac            = info["mac"]
+      phoneClient    = info["phoneClient"]
+      idUnit         = info["idUnit"]
+      idClient       = info["idClient"]
+      alarmStatus    = info["alarmStatus"]
+      alarmType      = info["alarmType"]
+      envelopeMpd    = info["envelopeMpd"]
+      thresholdOnBed = info["thresholdOnBed"]
+      extra1         = info["extra1"]
+      extra2         = info["extra2"]
 
-   #For alarms parameters
-   alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
+      #For alarms parameters
+      alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
 
-else:
-   print("No DATA")
+   else:
+      print("No DATA")
 
+if __name__ == '__main__':
+   start()
 

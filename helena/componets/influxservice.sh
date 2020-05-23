@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /opt/helena/componets/
-sudo ifup wlan0
+cd /opt/helena/
+sudo ifup wlan0 2>/dev/null
 sleep 5
-python3 influxshake.py
+./helena_app influxshake

@@ -42,11 +42,11 @@ def decrypt_file(fn_in, key, fn_out=None):
 key = b'W__MSG7tzKO9Tah5-WoExXhylLEUK7UBkAPEvzZBno0='
 
 lip = encrypt_data(b'127.0.0.1', key)
-lusr = encrypt_data(b'hmeng', key)
-lpass = encrypt_data(b'hmeng', key)
+lusr = encrypt_data(b'helena', key)
+lpass = encrypt_data(b'helena', key)
 rip = encrypt_data(b'192.168.1.251', key)
-rusr = encrypt_data(b'hmeng', key)
-rpass = encrypt_data(b'hmeng', key)
+rusr = encrypt_data(b'helena', key)
+rpass = encrypt_data(b'helena', key)
 
 print(lip.decode())
 print(lusr.decode())

@@ -14,64 +14,69 @@ def measure_temp():
 
 #temperature = measure_temp()
 
-config = Config()
+def start():
 
-ip    = config.get('localdb', 'lip')
-user  = config.get('localdb', 'luser')
-passw = config.get('localdb', 'lpass')
-db    = config.get('general', 'dbstatus')
-unit  = config.get('general', 'unitid')
-memoryth  = config.get('system', 'memory')
-cputh     = config.get('system', 'cpu')
+   config = Config()
 
-rip    = config.get('remotedb', 'rip')
-ruser  = config.get('remotedb', 'ruser')
-rpassw = config.get('remotedb', 'rpass')
+   ip    = config.get('localdb', 'lip')
+   user  = config.get('localdb', 'luser')
+   passw = config.get('localdb', 'lpass')
+   db    = config.get('general', 'dbstatus')
+   unit  = config.get('general', 'unitid')
+   memoryth  = config.get('system', 'memory')
+   cputh     = config.get('system', 'cpu')
 
-saveRemoteRaw= config.get('general', 'saveRemoteRaw')
+   rip    = config.get('remotedb', 'rip')
+   ruser  = config.get('remotedb', 'ruser')
+   rpassw = config.get('remotedb', 'rpass')
 
-cpu = psutil.cpu_percent(interval=1)
-mem = psutil.virtual_memory().percent
-diskp= psutil.disk_usage('/').percent
-diskt= (psutil.disk_usage('/').used)/1027/1024
-temperature = measure_temp()
+   saveRemoteRaw= config.get('general', 'saveRemoteRaw')
 
-http_postm = ""
-http_post = "curl -s -POST \'http://"+ip+":8086/write?db="+db+"\' -u "+user+":"+passw+" --data-binary \'"
-http_postm = http_postm + " \n memory,location="+unit+" value=" +str(mem)
-http_postm = http_postm + " \n cpu,location="+unit+" value="+ str(cpu)
-http_postm = http_postm + " \n diskusagepercent,location="+unit+" value=" + str(diskp)
-http_postm = http_postm + " \n temperature,location="+unit+" value=" + temperature
-http_postm = http_postm + " \n diskusedsize,location="+unit+" value="+ str(diskt) + " \'  "
-http_post = http_post + http_postm
-subprocess.call(http_post, shell=True)
+   cpu = psutil.cpu_percent(interval=1)
+   mem = psutil.virtual_memory().percent
+   diskp= psutil.disk_usage('/').percent
+   diskt= (psutil.disk_usage('/').used)/1027/1024
+   temperature = measure_temp()
 
-if(saveRemoteRaw=='true'):
-    http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \'"
-    http_post2 = http_post2 + http_postm
-    subprocess.call(http_post2, shell=True)
+   http_postm = ""
+   http_post = "curl -s -POST \'http://"+ip+":8086/write?db="+db+"\' -u "+user+":"+passw+" --data-binary \'"
+   http_postm = http_postm + " \n memory,location="+unit+" value=" +str(mem)
+   http_postm = http_postm + " \n cpu,location="+unit+" value="+ str(cpu)
+   http_postm = http_postm + " \n diskusagepercent,location="+unit+" value=" + str(diskp)
+   http_postm = http_postm + " \n temperature,location="+unit+" value=" + temperature
+   http_postm = http_postm + " \n diskusedsize,location="+unit+" value="+ str(diskt) + " \'  "
+   http_post = http_post + http_postm
+   subprocess.call(http_post, shell=True)
+
+   if(saveRemoteRaw=='true'):
+      http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \'"
+      http_post2 = http_post2 + http_postm
+      subprocess.call(http_post2, shell=True)
 
 
-sw    = 1
-tries = 0
-while sw:
-   sw = 0
-   tries = tries + 1
-   if int(mem) > int(memoryth):
-      sw = 1
-      mem = psutil.virtual_memory().percent
-      print("system for memory")
+   sw    = 1
+   tries = 0
+   while sw:
+      sw = 0
+      tries = tries + 1
+      if int(mem) > int(memoryth):
+         sw = 1
+         mem = psutil.virtual_memory().percent
+         print("system for memory")
 
-   if int(cpu) > int(cputh):
-      sw = 1
-      cpu = psutil.cpu_percent(interval=1)
-      print("system for cpu")
+      if int(cpu) > int(cputh):
+         sw = 1
+         cpu = psutil.cpu_percent(interval=1)
+         print("system for cpu")
+      
+      if(tries == 2):
+         print("RESTARTING")
+         os.system("sudo systemctl reboot");
    
-   if(tries == 2):
-     print("RESTARTING")
-     os.system("sudo systemctl reboot");
- 
-   time.sleep (5)
-   
+      time.sleep (5)
+      
+
+if __name__ == '__main__':
+   start()
 
 
