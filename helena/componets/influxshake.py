@@ -57,8 +57,8 @@ def start():
    print(addr_data)
 
    try:
-      local_db_conn = InfluxDBClient(host=ip, port="8086", username=user, password=passw, database=db)
-      remote_db_conn = InfluxDBClient(host=rip, port="8086", username=ruser, password=rpassw, database=db,ssl=True,verify_ssl=False)
+      local_db_conn = InfluxDBClient(host=ip, port="8086", username=user, password=passw, database=db, timeout=5)
+      remote_db_conn = InfluxDBClient(host=rip, port="8086", username=ruser, password=rpassw, database=db,ssl=True,verify_ssl=False, timeout=5)
 
       local_db_conn.write_points(addr_data, protocol='line')
       remote_db_conn.write_points(addr_data, protocol='line')
@@ -86,10 +86,16 @@ def start():
                               .format(unit, str(int(f)), str(int(timeIni*1000000))))
             
             timeIni = timeIni + 10
-      
-      local_db_conn.write_points(data_set, protocol='line')
-      if(saveRemoteRaw=='true'):
-         remote_db_conn.write_points(data_set, protocol='line')
+
+      try: 
+         local_db_conn.write_points(data_set, protocol='line')
+         if(saveRemoteRaw=='true'):
+            remote_db_conn.write_points(data_set, protocol='line')
+
+      except Exception as e:
+         print("DB write error:")
+         print(e)
+
 
 if __name__ == '__main__':
    start()

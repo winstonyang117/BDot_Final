@@ -5,13 +5,13 @@ set -e
 
 cd helena 
 
-pyinstaller helena_app.py --onefile --add-data "conf:conf"
+pyinstaller helena_app.py --clean --onefile --add-data "conf:conf"
 
-mv dist/helena_app ../
+mv dist/helena_app ./
 
 cd ..
 
-tar cvzf beddot.tar.gz  helena_app \
+tar cvzf beddot.tar.gz  helena/helena_app \
                         helena/componets/influxservice.sh      \
                         helena/componets/restartProcess.sh     \
                         helena/componets/updateParameters.sh   \
