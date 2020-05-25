@@ -1,12 +1,19 @@
 #!/bin/bash
-cd ~
+
+set -x
+set -e
+
 sudo apt-get update
-sudo apt-get install build-essential 
+sudo apt-get install build-essential -y
 
-pip3 uninstall numpy  # remove previously installed version
-apt install python3-numpy
-pip3 uninstall scipy  # remove previously installed version
-apt install python3-scipy
+# uninstall pip3 version of numpy/scipy and install rpi specific packages 
+sudo pip3 uninstall numpy  
+sudo apt install python3-numpy -y
+sudo pip3 uninstall scipy  
+sudo apt install python3-scipy -y
 
-sudo pip3 install influxdb nitime pandas netifaces configobj psutil cryptography
+# for config and start/stop influxdb docker container
+sudo apt install docker-compose -y
+
+sudo pip3 install influxdb nitime pandas netifaces configobj psutil cryptography pyinstaller
 
