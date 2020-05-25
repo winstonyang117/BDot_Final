@@ -50,6 +50,9 @@ def copy_configs(wpa_enabled_choice):
 			crontab.write("# RaspiWiFi Startup\n")
 			crontab.write("@reboot root run-parts /etc/cron.raspiwifi/\n") 
 
+	os.system('systemctl enable dnsmasq.service')
+	os.system('systemctl unmask hostapd.service')
+	os.system('systemctl enable hostapd.service')
 	os.system('cp /usr/lib/raspiwifi/reset_device/static_files/raspiwifi.conf /etc/raspiwifi')
 	
 

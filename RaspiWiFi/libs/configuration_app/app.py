@@ -115,6 +115,8 @@ def set_ap_client_mode():
         os.system('cp /etc/dnsmasq.conf.original /etc/dnsmasq.conf')
         os.system('rm -f /etc/dhcpcd.conf 2>/dev/null')
         os.system('cp /etc/dhcpcd.conf.original /etc/dhcpcd.conf')
+        os.system('systemctl disable dnsmasq.service')
+        os.system('systemctl disable hostapd.service')
         syslog.syslog('raspiwifi - set_ap_client_mode')
 
     os.system('reboot')

@@ -92,6 +92,8 @@ def reset_to_host_mode():
 		os.system('cp /usr/lib/raspiwifi/reset_device/static_files/dnsmasq.conf /etc/')
 		# /etc/hostapd/hostapd.conf no need to reset
 		os.system('touch /etc/raspiwifi/host_mode')
+		os.system('systemctl enable dnsmasq.service')
+		os.system('systemctl enable hostapd.service')
 		syslog.syslog('raspiwifi - reset_to_host_mode')
 		time.sleep(2)
 		
