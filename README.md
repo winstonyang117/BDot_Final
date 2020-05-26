@@ -1,4 +1,5 @@
-﻿# BedDot development Start
+__TOC___
+# BedDot development Start
 
 The first part of this document is the start guide for **developers** to install packages and work on the BedDot system. 
 
