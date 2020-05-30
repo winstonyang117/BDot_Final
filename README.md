@@ -1,12 +1,11 @@
-__TOC___
-# BedDot development Start
+# 1. BedDot development Start
 
 The first part of this document is the start guide for **developers** to install packages and work on the BedDot system. 
 
 The second part focuses on the **deployment** of BetDot software on a Raspberry Pi (3B) with raspberryshake image v18 installed. 
 
 
-## Install prerequisites 
+## 1.1 Install prerequisites 
 
 The prerequisited packages have changed significantly with py2 to py3 upgrade. 
 
@@ -14,7 +13,7 @@ See the installation script [here](helena/scripts/helena.sh)
 
 (We highly recommend to check carefully the installation for user’s inputs or running the commands directly by yourself instead the script)
 
-## Clone BedDot repository
+## 1.2 Clone BedDot repository
 ```
 cd ~
 apt-get install git-core
@@ -22,7 +21,7 @@ git clone https://github.com/wsonguga/BedDotV3.git
 ```
 The repo is cloned to ~/BedDotV3 directory, which will be the top working directory. 
 
-## Directory/File structure
+## 1.3 Directory/File structure
 
 The top working directory is ~/BedDotV3 for development. For production, the top directory is /opt.
 
@@ -89,16 +88,16 @@ The top working directory is ~/BedDotV3 for development. For production, the top
 │   └── README.md
 ```
 
-## Setup Wifi
+## 1.4 Setup Wifi
 
 See document [here](docs/RaspiWiFi.md)
 
-## Setup influxdb and grafana
+## 1.5 Setup influxdb and grafana
 See document [here](docs/influxdb-grafana.md)
 
 *Note that the current selected version is inluxdb:1.8. The lates version 2.0 has changed significantly, be careful if ever  upgrade of influxdb is being considered.*
 
-## Configure the unit
+## 1.6 Configure the unit
 
 - helena/conf/config.sys
 change unitid = < mac of eth0 >
@@ -156,7 +155,7 @@ curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DAT
 ```
 Note that the default local DB access credential: `user/password = helena/helena`
 
-## Run helena components python code
+## 1.6 Run helena components python code
 Running helena components python code is very helpful for debug purpose. 
 
 ```
@@ -183,7 +182,7 @@ Refer [helena/helena_app.py](helena/helena_app.py) for details.
 
 The python debug tool `pdb3` (`pdb` for default python version) could also be used to step through the python code.
 
-## Run helena components as services
+## 1.7 Run helena components as services
 To enable the helena and influxshake as services:
 ```
 sudo cp helena/services/influxshake.service /lib/systemd/system/
@@ -212,7 +211,7 @@ To see what service is running, enter
 systemctl list-unit-files |grep enabled
 ```
 
-## BedDot software packaging
+## 1.8 BedDot software packaging
 To pack the BedDot software into one single tar ball,
 ```
 cd ~/BedDotV3
@@ -228,10 +227,10 @@ where value of arg could be one of following: main, influxshake, systemParameter
 
 The beddot.tar.gz file is a final production software to be deployed. It includes the `install.sh`, `helena/helena_app`, `influx`, `RaspiWiFi`, some config files and help scripts.
 
-# Deployment preparation
+# 2. Deployment preparation
 There are two way to prepare a ready-to-go microSD card for deployment:
 
-## Use tar file
+## 2.1 Use tar file
 - Download the raspishake-release.zip from raspberryShake. The current version is V18.  
 ```
 wget https://gitlab.com/raspberryShake-public/raspshake-sd-img/-/blob/master/raspishake-release.zip
@@ -252,7 +251,7 @@ cd /opt
 - answer a few questions regarding wifi AP setup.
 - commit the changes and allow the device to reboot. The microSD after the reboot is in WiFi AP mode, and is ready to go.
 
-## Disk image duplicates
+## 2.2 Disk image duplicates
 
 - take the microSD card from previous steps.
 - follow instructions [here](https://magpi.raspberrypi.org/articles/back-up-raspberry-pi) to copy the SD card image.
