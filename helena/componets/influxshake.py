@@ -57,44 +57,43 @@ def start():
    print(addr_data)
 
    try:
-      local_db_conn = InfluxDBClient(host=ip, port="8086", username=user, password=passw, database=db, timeout=5)
-      remote_db_conn = InfluxDBClient(host=rip, port="8086", username=ruser, password=rpassw, database=db,ssl=True,verify_ssl=False, timeout=5)
+      local_db_conn = InfluxDBClient(host=ip, port="8086", username=user, password=passw, database=db)
+      remote_db_conn = InfluxDBClient(host=rip, port="8086", username=ruser, password=rpassw, database=db,ssl=False,verify_ssl=False)
 
       local_db_conn.write_points(addr_data, protocol='line')
       remote_db_conn.write_points(addr_data, protocol='line')
    except Exception as e:
       print("DB access error:")
       print(e)
-      license.wait_for_license(config)   
+      sys.exit() 
 
-   while 1:								# loop forever
-      data, addr = sock.recvfrom(1024)	# wait to receive data
+   while 1:		# loop forever
+      data = sock.recv(1024)	# wait to receive data
    #   multiple dataset with same timestamp 
-      data = data.replace(b'}', b'')
-      data2 = data.split(b',')							
-      timestampi =  Decimal(data2[1].decode())
-      timeIni = timestampi * 1000
+   #   t0 = time.monotonic()
+      data = data.rstrip(b'}').split(b',')
+      data.pop(0)
+      timeIni = int(float(data.pop(0)) * 1000000000)
 
-      count = 0;
       data_set = []
-      for f in data2:
-         count  = count + 1
-         if(count>2):    
-   #          print int(f)
-   #          print timeIni
-            data_set.append("Z,location={0} value={1} {2}" \
-                              .format(unit, str(int(f)), str(int(timeIni*1000000))))
+      for f in data:
+   #     print int(f)
+   #     print timeIni
+         data_set.append("Z,location={0} value={1} {2}" \
+                              .format(unit,int(f), timeIni))
             
-            timeIni = timeIni + 10
+         timeIni = timeIni + 10000000
 
-      try: 
-         local_db_conn.write_points(data_set, protocol='line')
-         if(saveRemoteRaw=='true'):
-            remote_db_conn.write_points(data_set, protocol='line')
+   #   try: 
+      local_db_conn.write_points(data_set, protocol='line')
+      if(saveRemoteRaw=='true'):
+         remote_db_conn.write_points(data_set, protocol='line')
 
-      except Exception as e:
-         print("DB write error:")
-         print(e)
+   #   except Exception as e:
+   #      print("DB write error:")
+   #      print(e)
+
+   #   t1 = time.monotonic()
 
 
 if __name__ == '__main__':

@@ -9,10 +9,9 @@ import sys, os
 from configobj import ConfigObj
 
 if getattr(sys, 'frozen', False):
-   cfg_fn = os.path.join(sys._MEIPASS, 'conf/config.sys')
+   cfg_fn = r'/opt/helena/conf/config.sys'
 else:
    cfg_fn = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../', 'conf/config.sys')
-
 
 def parseBoolStringToInt(theString):
   if(theString[0].upper()=='T'):
@@ -143,11 +142,13 @@ def start():
       array = json.dumps(res.json())
       info = json.loads(array)
 
+      ssid           = info["ssid"]
       unitName       = info["unitName"]
       mac            = info["mac"]
       phoneClient    = info["phoneClient"]
       idUnit         = info["idUnit"]
       idClient       = info["idClient"]
+      password       = info["password"]
       alarmStatus    = info["alarmStatus"]
       alarmType      = info["alarmType"]
       envelopeMpd    = info["envelopeMpd"]
@@ -155,11 +156,53 @@ def start():
       extra1         = info["extra1"]
       extra2         = info["extra2"]
 
+   
+      print (ssid)
+      print (unitName)
+      print (mac)
+      print (phoneClient)
+      print (idUnit)
+      print (idClient)
+      print (password)
+      print (alarmStatus)
+      print (alarmType)
+      print (envelopeMpd)
+      print (thresholdOnBed)
+      print (extra1)
+      print (extra2)
+
+
+      #Checking current SSID connection name
+      ssidLocal = subprocess.check_output("iwgetid -r", shell = True)
+      if(ssidLocal[len(ssidLocal)-1]==10):
+         ssidLocal = ssidLocal[0:len(ssidLocal)-1]
+
+      print (ssidLocal)
+      
+      #Switching WiFi connection
+      if(ssid==ssidLocal):
+         print ("Same WiFi SSID!!!")
+      else:
+         print ("Different WiFi SSID!!!")
+         fn = "wpa_supplicant.conf"
+         f = open(fn, 'w')
+         f.write('network={\n    ssid="'+ssid+'"\n    scan_ssid=1\n    priority=2\n    psk="'+password+'"\n} \n\n')
+         f.write('network={\n    ssid="homedots"\n    scan_ssid=1\n    psk="beddot12"\n} \n\n')
+         #f.write('network={\n    ssid="JosePhone"\n    scan_ssid=1\n    priority=1\n     psk="Pochembe130"\n} \n\n')
+      
+         f.close()
+
+         subprocess.call("cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf", shell=True)  
+         time.sleep(5) 
+         subprocess.call("sudo reboot", shell=True)
+
+
       #For alarms parameters
       alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
 
    else:
       print("No DATA")
+
 
 if __name__ == '__main__':
    start()

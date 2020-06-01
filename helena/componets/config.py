@@ -7,7 +7,7 @@ import componets.crypto as crypto
 license_key = b'W__MSG7tzKO9Tah5-WoExXhylLEUK7UBkAPEvzZBno0='
 
 if getattr(sys, 'frozen', False):
-   dir = sys._MEIPASS
+   dir = r'/opt/helena'
 else:
    dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),'../') 
 
