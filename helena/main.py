@@ -56,7 +56,7 @@ def utcToLocalTime(time2, formatt, from_zone, to_zone):
     return timeDetected
 
 def saveResults(serie, field, value, time):
-    p1 = subprocess.Popen(['python', 'componets/saveResults.py', serie, field , value, time],
+    p1 = subprocess.Popen(['python3', 'componets/saveResults.py', serie, field , value, time],
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.STDOUT)
 
