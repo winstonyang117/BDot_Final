@@ -20,7 +20,7 @@ if __name__ == '__main__':
     if arg[1]=='-D':
         decrypt(arg[2], arg[3])
     else:
-        ecrypt(arg[2], arg[3])
+        encrypt(arg[2], arg[3])
 
 
 

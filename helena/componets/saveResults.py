@@ -45,7 +45,7 @@ http_post += "\n"+serie+",location="+unit+" "+field+"="+value+" "+str(epoch_time
 http_post += "\'  &"
 
 if(saveRemoteResult=='true'):
-   http_post2 = "curl -s -POST --insecure \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
+   http_post2 = "curl -s -POST --insecure \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
    http_post2 += "\n"+serie+",location="+unit+" "+field+"="+value+" "+str(epoch_time)+"000000000"
    http_post2 += "\'  &"
 

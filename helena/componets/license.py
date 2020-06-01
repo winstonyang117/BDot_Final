@@ -11,9 +11,15 @@ import componets.crypto as crypto
 from componets.config import Config
 
 def updateconfig(config, info, force = False):
-    if config.get('remotedb', 'rpass') != info['keyp']:
-        config.set('remotedb', 'rpass', info['keyp'])
-        config.updatedb()
+    try:
+        if config.get('remotedb', 'ruser') != info['username'] or config.get('remotedb', 'rpass') != info['password']:
+            config.set('remotedb', 'ruser', info['username'])
+            config.set('remotedb', 'rpass', info['password'])
+            config.updatedb()
+            
+    except Exception:
+        print("updateconfig exception")
+        print(e)
 
     return 1
 
@@ -21,25 +27,21 @@ def status(config):
     statusK = 0
     packSize = -1
     # word = crypto.config_key
-    word = "abc"
-    serial = subprocess.check_output('cat /proc/cpuinfo | grep Serial | awk \'{print($3)}\'', shell=True)[:-1]
     macEth        = mac_address()
-    url = 'https://www.homedots.us/beddot/public/checkStatus/'+macEth+'/'+str(serial, 'utf-8')+'/'+word
-#    print (url)
+    url = 'https://homedots.us/beddot/public/checkStatus2'
+    data = {"mac":"b8:27:eb:dc:80:5c", "version" : "2.0"}
 
     try:
-       res = requests.get(url)
+       res = requests.post(url, data)
        packSize =  len(res.text)
     except Exception:
        packSize = 0
 
     #Validating for know if we get data
-    if(packSize>5):
+    if(res.status_code ==200):
       try:
-        array = json.dumps(res.json())
-        info = json.loads(array)
-        status  = info["status"]
-        key     = info["keyp"]
+        info = res.json()['result']
+        status  = int(info["status"])
 #        print (status)
 #        print (key)
         # uncomment to update
@@ -47,26 +49,12 @@ def status(config):
             statusK = 0
         elif status ==1: # normal case, good same token 
             # update token            
-            # statusK = updateconfig(config, info, False)
-            statusK = 1
+            statusK = updateconfig(config, info, False)
         elif status ==2: # case, token changed 
-            # statusK = updateconfig(config, info, True)
-            statusK = 1
+            statusK = updateconfig(config, info, True)
         else:           # unknown case
             statusK = 0
 
-        ## todo, rm below code
-        m = hashlib.md5()
-        m.update(b"abc")
-        out = m.hexdigest()
-        x = hashlib.md5()
-        x.update(out.encode('utf-8'))
-        wordp = x.hexdigest()
-#        print wordp
-#        print key
-        if(wordp == key and int(status) == 1):
-          statusK = 1
-#          print "The Same!!!"
       except Exception:
         statusK = 0
     else:
