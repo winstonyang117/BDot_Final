@@ -57,7 +57,7 @@ def start():
    print(http_post)
    subprocess.call(http_post, shell=True)
 
-   http_post  = "curl -s --insecure POST \'http://"+ rip+":8086/write?db="+db+"\' -u "+ ruser+":"+ rpassw+" --data-binary " + addr_data
+   http_post  = "curl -s --insecure POST \'https://"+ rip+":8086/write?db="+db+"\' -u "+ ruser+":"+ rpassw+" --data-binary " + addr_data
    print(http_post)
    subprocess.call(http_post, shell=True)
 
@@ -74,7 +74,7 @@ def start():
       data.pop(0)
       timeIni = int(float(data.pop(0))*1000) * 1000000
       http_post  = "curl -s -POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
-      http_post2 = "curl -s --insecure -POST \'http://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
+      http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
 
       for f in data:
          http_post  += "\nZ,location={0} value={1} {2}".format(unit,int(f), timeIni)
