@@ -3,7 +3,7 @@ services:
    influxdb:
       image: influxdb:1.8
       container_name: influxdb
-      restart: always
+      restart: unless-stopped
       volumes:
          - ${PWD}/influxdb/data:/var/lib/influxdb
          - ${PWD}/influxdb/ssl:/etc/influxdb/ssl
@@ -14,7 +14,7 @@ services:
          - INFLUXDB_TLS_CIPHERS=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256
          - INFLUXDB_TLS_MIN_VERSION=tls1.2
          - INFLUXDB_TLS_MAX_VERSION=tls1.3
-         - INFLUXDB_HTTP_ENABLED=true
+         - INFLUXDB_HTTP_HTTPS_ENABLED=true
          - INFLUXDB_HTTP_HTTPS_CERTIFICATE=/etc/influxdb/ssl/influxdb.pem
          - INFLUXDB_HTTP_HTTPS_PRIVATE_KEY=/etc/influxdb/ssl/influxdb.key
 
@@ -23,7 +23,7 @@ services:
    grafana:
      image: grafana/grafana:6.7.3
      container_name: grafana
-     restart: always
+     restart: unless-stopped
      volumes:
         - ${PWD}/grafana/data:/var/lib/grafana
      ports:
