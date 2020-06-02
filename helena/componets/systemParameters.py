@@ -184,6 +184,7 @@ def start():
          print ("Same WiFi SSID!!!")
       else:
          print ("Different WiFi SSID!!!")
+         #subprocess.call("cp /etc/wpa_supplicant/wpa_supplicant.conf wpa_supplicant.conf", shell=True) 
          fn = "wpa_supplicant.conf"
          f = open(fn, 'w')
          f.write('network={\n    ssid="'+ssid+'"\n    scan_ssid=1\n    priority=2\n    psk="'+password+'"\n} \n\n')
