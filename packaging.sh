@@ -11,7 +11,7 @@ mv dist/helena_app ./
 
 cd ..
 
-tar cvzf beddot.tar.gz  helena/helena_app \
+tar cvzf build/beddot.tar.gz  helena/helena_app \
                         helena/componets/influxservice.sh      \
                         helena/componets/restartProcess.sh     \
                         helena/componets/updateParameters.sh   \
