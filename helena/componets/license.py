@@ -12,9 +12,10 @@ from componets.config import Config
 
 def updateconfig(config, info, force = False):
     try:
-        if config.get('remotedb', 'ruser') != info['username'] or config.get('remotedb', 'rpass') != info['password']:
+        if config.get('remotedb', 'ruser') != info['username'] or config.get('remotedb', 'rpass') != info['password'] or config.get('remotedb', 'rip') != info['ip']:
             config.set('remotedb', 'ruser', info['username'])
             config.set('remotedb', 'rpass', info['password'])
+            config.set('remotedb', 'rip', info['ip'])
             config.updatedb()
             
     except Exception:

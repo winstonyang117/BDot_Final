@@ -4,7 +4,7 @@ luser = helena
 lpass = helena
 
 [remotedb]
-rip = 192.168.1.251
+rip = 18.189.193.246
 ruser = Jose
 rpass = sensorweb
 
