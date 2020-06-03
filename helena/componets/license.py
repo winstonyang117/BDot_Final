@@ -38,7 +38,7 @@ def status(config):
        packSize = 0
 
     #Validating for know if we get data
-    if(res.status_code ==200):
+    if(packSize >5 and res.status_code ==200):
       try:
         info = res.json()['result']
         status  = int(info["status"])
