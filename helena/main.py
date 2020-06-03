@@ -28,6 +28,7 @@ import requests
 
 sys.path.insert(0, os.path.abspath('..'))
 import componets.license as license
+import componets.saveResults as SaveToDB
 from componets.config import Config
 
 
@@ -56,10 +57,8 @@ def utcToLocalTime(time2, formatt, from_zone, to_zone):
     return timeDetected
 
 def saveResults(serie, field, value, time):
-    p1 = subprocess.Popen(['python3', 'componets/saveResults.py', serie, field , value, time],
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT)
-
+    SaveToDB.saveResults(serie, field, value, time)
+    
 ########### main entrance ########
 def main():
  config = Config()
