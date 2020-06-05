@@ -50,10 +50,11 @@ def wpa_check_activate(wpa_enabled, wpa_key):
 def update_ssid(ssid_prefix, serial_last_four):
 	reboot_required = False
 	ssid_correct = False
+	ssid = ssid_prefix + ' ' + serial_last_four
 
 	with open('/etc/hostapd/hostapd.conf') as hostapd_conf:
 		for line in hostapd_conf:
-			if ssid_prefix in line:
+			if ssid in line:
 				ssid_correct = True
 
 	if ssid_correct == False:
@@ -61,7 +62,7 @@ def update_ssid(ssid_prefix, serial_last_four):
 			for line in file:
 				if 'ssid=' in line:
 					line_array = line.split('=')
-					line_array[1] = ssid_prefix + ' ' + serial_last_four
+					line_array[1] = ssid
 					print(line_array[0] + '=' + line_array[1])
 				else:
 					print(line, end = '')
