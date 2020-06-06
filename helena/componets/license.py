@@ -76,7 +76,7 @@ def mac_address():
 
 def wait_for_license(config, timeout=0):
    sec = 0
-   time.sleep(3);
+#   time.sleep(3);
    while status(config) ==0:
       time.sleep(10);
       if timeout>0:

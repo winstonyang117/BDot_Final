@@ -4,14 +4,12 @@ import netifaces
 from scipy.signal import butter, lfilter
 from scipy import signal
 from datetime import datetime, date
-from influxdb import InfluxDBClient
 from operator import attrgetter
 import numpy
 import subprocess
 import random
 import time
 import operator
-import ConfigParser
 import sys
 import logging
 #from detect_peaks import detect_peaks
@@ -22,16 +20,17 @@ import nitime.utils as nt_ut
 import numpy as np
 from numpy import array
 import scipy as sp
-import threading
 from datetime import datetime
 from dateutil import tz
 import pytz
 import smtplib
 import ast
 import statsmodels.api as sm
-#import netifaces
 import json
-import requests
+import componets.saveResults as SaveToDB
+
+def saveResults(serie, field, value, time):
+    SaveToDB.saveResults(serie, field, value, time)
 
 def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
                  kpsh=False, valley=False, show=False, ax=None):
@@ -170,7 +169,7 @@ def checkOnBed(signal, onBedThreshold, lowCut, highCut, fs, order, time):
     signalFiltered = butter_bandpass_filter(signal, lowCut, highCut, fs, order)
     maxValue = max(signalFiltered)
 #    print maxValue
-    log = "./componets/logs/onbed.log"
+    log = "/opt/helena/logs/onbed.log"
     logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
     
     if(maxValue > onBedThreshold):
@@ -203,7 +202,7 @@ def checkOnBedNF(signal, lowCut, highCut, fs, order):
 
 # Movement fuction
 def checkMovement(signal, movementThreshold, time, movementShowDelay):
-    log = "./componets/logs/movement.log"
+    log = "/opt/helena/logs/movement.log"
     logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
     signal.sort(reverse = True)
     if(signal[0]>movementThreshold and signal[1]>movementThreshold):
@@ -313,7 +312,7 @@ def calculateHBR3(signal, fm, eigs, dpss, nfft, time, mpdEnv):
     saveResults('hrate', 'hr' ,str(hbr), time)
     saveResults('rrate', 'rr' ,str(rr), time)
 
-    return hbr
+    return hbr, rr
 
 # Posture Change function
 def calculatePostureChange(previousHBSignal, currentHBSignal, time):

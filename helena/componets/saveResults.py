@@ -43,9 +43,9 @@ def saveResults(serie, field, value, time):
 
 
    #print http_post
-   #log = "save.log"
-   #logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
-   #logging.info(http_post)
+   log = "/opt/helena/logs/save.log"
+   logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+   logging.info(http_post)
       
    subprocess.call(http_post, shell=True)
 
