@@ -36,6 +36,8 @@ sudo cp helena/services/helena.service /lib/systemd/system/
 sudo systemctl enable helena.service
 sudo systemctl enable influxshake.service
 
+mkdir /opt/helena/logs
+
 # 3, setup RaspiWiFi
 
 if [ ! -e "/etc/raspiwifi" ]; then

@@ -180,7 +180,7 @@ def start():
       print (ssidLocal)
       
       #Switching WiFi connection
-      if(ssid==ssidLocal):
+      if(ssid==ssidLocal.decode('utf-8')):
          print ("Same WiFi SSID!!!")
       else:
          print ("Different WiFi SSID!!!")

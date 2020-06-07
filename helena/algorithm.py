@@ -27,10 +27,10 @@ import smtplib
 import ast
 import statsmodels.api as sm
 import json
-import componets.saveResults as SaveToDB
+#import componets.saveResults as SaveToDB
 
-def saveResults(serie, field, value, time):
-    SaveToDB.saveResults(serie, field, value, time)
+#def saveResults(serie, field, value, time):
+#    SaveToDB.saveResults(serie, field, value, time)
 
 def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
                  kpsh=False, valley=False, show=False, ax=None):
@@ -160,7 +160,7 @@ def checkOnBedCR(signal,time):
 
        peaks = detect_peaks(auto, show=False)
        correpk = len(peaks)
-       saveResults('corrStatus', 'bs10' ,str(correpk), time)
+       #saveResults('corrStatus', 'bs10' ,str(correpk), time)
 
        return correpk
 
@@ -206,12 +206,12 @@ def checkMovement(signal, movementThreshold, time, movementShowDelay):
     logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
     signal.sort(reverse = True)
     if(signal[0]>movementThreshold and signal[1]>movementThreshold):
-       saveResults('posture', 'x' ,'7', time)
+       #saveResults('posture', 'x' ,'7', time)
        logging.info(str(signal[0])+' - '+str(signal[1])+' True')
        return True
     else:
-       if(movementShowDelay==5):
-          saveResults('posture', 'x' ,'5', time)
+       #if(movementShowDelay==5):
+       #   saveResults('posture', 'x' ,'5', time)
        logging.info(str(signal[0])+' - '+str(signal[1])+' False')
        return False
 
@@ -227,8 +227,8 @@ def calculateHBR(signal, lowCut, highCut, fs, order, time):
 #    if(debug): print '----------------------------------'+str(hbr)
     div = float(random.randint(40,42)/10.0)
     rr = float(hbr/div)
-    saveResults('hrate', 'hr' ,str(hbr), time)
-    saveResults('rrate', 'rr' ,str(rr), time)
+    #saveResults('hrate', 'hr' ,str(hbr), time)
+    #saveResults('rrate', 'rr' ,str(rr), time)
     return hbr
 
 def calculateHBR2(signal, fm, eigs, dpss, nfft, time):
@@ -263,8 +263,8 @@ def calculateHBR2(signal, fm, eigs, dpss, nfft, time):
 
     #print hbr
     #print rr
-    saveResults('hrate', 'hr' ,str(hbr), time)
-    saveResults('rrate', 'rr' ,str(rr), time)
+    #saveResults('hrate', 'hr' ,str(hbr), time)
+    #saveResults('rrate', 'rr' ,str(rr), time)
     return hbr
 
 def calculateHBR3(signal, fm, eigs, dpss, nfft, time, mpdEnv):
@@ -309,8 +309,8 @@ def calculateHBR3(signal, fm, eigs, dpss, nfft, time, mpdEnv):
 
     #print hbr
     #print rr
-    saveResults('hrate', 'hr' ,str(hbr), time)
-    saveResults('rrate', 'rr' ,str(rr), time)
+    #saveResults('hrate', 'hr' ,str(hbr), time)
+    #saveResults('rrate', 'rr' ,str(rr), time)
 
     return hbr, rr
 
@@ -326,5 +326,5 @@ def calculatePostureChange(previousHBSignal, currentHBSignal, time):
 
     # print "Posture Change",percent 
 
-    saveResults('change', 'x' ,str(percent), time)
+    # saveResults('change', 'x' ,str(percent), time)
 #    return hbr

@@ -69,7 +69,7 @@ def start():
 
       num_pkt += 1
    #   multiple dataset with same timestamp 
-   #   t0 = time.monotonic()
+      #t0 = time.monotonic()
       data = data.rstrip(b'}').split(b',')
       data.pop(0)
       timeIni = int(float(data.pop(0))*1000) * 1000000
@@ -91,8 +91,8 @@ def start():
       if(saveRemoteRaw=='true'):
           subprocess.call(http_post2, shell=True)
 
-   #   t1 = time.monotonic()
-   #   print("t1-t0= " +str(t1-t0))
+      #t1 = time.monotonic()
+      #print("t1-t0= " +str(t1-t0))
 
    #  every 5 minutes
       if num_pkt %(pkt_rate*60*5) ==0:

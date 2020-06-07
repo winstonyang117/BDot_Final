@@ -9,7 +9,7 @@ import time
 import operator
 import sys, os
 import logging
-from algorithm import *
+import algorithm as alg
 from scipy.stats import kurtosis
 from scipy import stats
 import nitime.algorithms as nt_alg
@@ -23,7 +23,6 @@ from dateutil import tz
 import pytz
 import smtplib
 import ast
-import subprocess
 import requests
 
 sys.path.insert(0, os.path.abspath('..'))
@@ -196,7 +195,7 @@ def main():
     if(debug): print("*****************************************"+str(statusKey))
     stampIni = (datetime.utcfromtimestamp(epoch1).strftime('%Y-%m-%dT%H:%M:%S.000Z'))
     stampEnd = (datetime.utcfromtimestamp(epoch2).strftime('%Y-%m-%dT%H:%M:%S.000Z'))
-
+    #t0 = time.perf_counter()
     if(debug): print(stampIni)
     if(debug): print(stampEnd)
     query = 'SELECT "value" FROM Z WHERE ("location" = \''+unit+'\')  and time >= \''+stampIni+'\' and time <= \''+stampEnd+'\'   '
@@ -206,9 +205,6 @@ def main():
 
     values =  list(map(operator.itemgetter('value'), points))
     times  =  list(map(operator.itemgetter('time'),  points))
-
-    tt = str( values )
-    tt = tt.replace(' ', '')
 
     buffertime = buffertime + times
     buffer     = buffer + values
@@ -229,14 +225,21 @@ def main():
     buffLen    = len(buffer)
 
 
+    #t1 = time.perf_counter()
+    #print("t1-t0= " +str(t1-t0))
 
 # On/Off correlation
     if(statusKey):
      if(buffLen>=elementsNumberOnBed and counterTime%timeCheckingOnBed == 0 ):
+       #t2 = time.perf_counter()
+
        signalToOnBed = buffer[buffLen-elementsNumberOnBed:buffLen]
 
-       peaksCR = checkOnBedCR(signalToOnBed,buffertime[len(buffertime)-1])
+       peaksCR = alg.checkOnBedCR(signalToOnBed,buffertime[len(buffertime)-1])
        nowtime = buffertime[len(buffertime)-1]
+
+       #t3 = time.perf_counter()
+       #print("t3-t2= " +str(t3-t2))
        saveResults('corrStatus', 'bs10' ,str(peaksCR), nowtime)
        if(peaksCR > thccMean):
            prevalues.append(1)
@@ -292,7 +295,7 @@ def main():
      if((onBed or pOnBed) and buffLen>=elementsNumberMovement and counterTime%timeCheckingMovement == 0 ):
        movementShowDelay = movementShowDelay + 1
        signalToMovement = buffer[buffLen-elementsNumberMovement:buffLen]
-       movement = checkMovement(signalToMovement, movementThreshold, buffertime[len(buffertime)-1], movementShowDelay)
+       movement = alg.checkMovement(signalToMovement, movementThreshold, buffertime[len(buffertime)-1], movementShowDelay)
        nowtime = buffertime[len(buffertime)-1]
        if not (movement):
           saveResults('posture', 'x' ,'5', nowtime)
@@ -328,10 +331,10 @@ def main():
         # If we can calculate the HBR is because someone is OnBed
 #        saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-1])
         signalToHBR = buffer[buffLen-elementsNumberHR:buffLen]
-#        hbr = calculateHBR(signalToHBR, lowCut, highCut, samplingrate, order, buffertime[len(buffertime)-1])
-#        hbr = calculateHBR2(signalToHBR, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1])
-        signalFiltered = butter_bandpass_filter(signalToHBR, lowCut, highCut, samplingrate, order)
-        hbr,rr = calculateHBR3(signalFiltered, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1],mpdEnv)
+#        hbr = alg.calculateHBR(signalToHBR, lowCut, highCut, samplingrate, order, buffertime[len(buffertime)-1])
+#        hbr = alg.calculateHBR2(signalToHBR, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1])
+        signalFiltered = alg.butter_bandpass_filter(signalToHBR, lowCut, highCut, samplingrate, order)
+        hbr,rr = alg.calculateHBR3(signalFiltered, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1],mpdEnv)
         nowtime = buffertime[len(buffertime)-1]
         saveResults('hrate', 'hr' ,str(hbr), nowtime)
         saveResults('rrate', 'rr' ,str(rr), nowtime)
@@ -354,7 +357,7 @@ def main():
      if(counterStable == postureChangeTimeWindow + 5):
        counterStable = -1
        currentHBSignal = buffer[buffLen-elementsNumberPostureChange:buffLen]
-       percent = calculatePostureChange(previousHBSignal, currentHBSignal, buffertime[len(buffertime)-1])
+       percent = alg.calculatePostureChange(previousHBSignal, currentHBSignal, buffertime[len(buffertime)-1])
        nowtime = buffertime[len(buffertime)-1]
        saveResults('change', 'x' ,str(percent), nowtime)
      # previousHBSignal
