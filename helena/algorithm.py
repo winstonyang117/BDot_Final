@@ -1,32 +1,20 @@
 import chardet
-import urllib3
-import netifaces
 from scipy.signal import butter, lfilter
 from scipy import signal
 from datetime import datetime, date
-from operator import attrgetter
 import numpy
-import subprocess
 import random
 import time
-import operator
 import sys
 import logging
 #from detect_peaks import detect_peaks
 from scipy.stats import kurtosis 
-from scipy import stats 
 import nitime.algorithms as nt_alg
-import nitime.utils as nt_ut
 import numpy as np
 from numpy import array
 import scipy as sp
-from datetime import datetime
-from dateutil import tz
-import pytz
-import smtplib
 import ast
 import statsmodels.api as sm
-import json
 #import componets.saveResults as SaveToDB
 
 #def saveResults(serie, field, value, time):
