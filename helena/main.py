@@ -2,7 +2,6 @@ from scipy.signal import butter, lfilter
 from scipy import signal
 from datetime import datetime, date
 from influxdb import InfluxDBClient
-from operator import attrgetter
 import numpy
 import random
 import time
@@ -10,10 +9,8 @@ import operator
 import sys, os
 import logging
 import algorithm as alg
-from scipy.stats import kurtosis
-from scipy import stats
+#from scipy import stats
 import nitime.algorithms as nt_alg
-import nitime.utils as nt_ut
 import numpy as np
 from numpy import array
 import scipy as sp
@@ -21,7 +18,6 @@ import threading
 from datetime import datetime
 from dateutil import tz
 import pytz
-import smtplib
 import ast
 import requests
 

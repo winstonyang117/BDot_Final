@@ -14,7 +14,8 @@ import numpy as np
 from numpy import array
 import scipy as sp
 import ast
-import statsmodels.api as sm
+from statsmodels.tsa.stattools import acf
+#import statsmodels.api.tsa.stattools as stattools
 #import componets.saveResults as SaveToDB
 
 #def saveResults(serie, field, value, time):
@@ -144,7 +145,7 @@ def checkOnBedCR(signal,time):
 #       arrSignal = array( signal )
        signalFiltered = butter_bandstop_filter(signal, 17 , 22 , 100, 5)
        arrSignal = array( signalFiltered )
-       auto = sm.tsa.stattools.acf(arrSignal, unbiased=False, nlags=100, qstat=False, fft=None)
+       auto = acf(arrSignal, unbiased=False, nlags=100, qstat=False, fft=None)
 
        peaks = detect_peaks(auto, show=False)
        correpk = len(peaks)
@@ -315,4 +316,5 @@ def calculatePostureChange(previousHBSignal, currentHBSignal, time):
     # print "Posture Change",percent 
 
     # saveResults('change', 'x' ,str(percent), time)
-#    return hbr
+    return percent
+

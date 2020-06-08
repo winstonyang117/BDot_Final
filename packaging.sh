@@ -5,7 +5,11 @@ set -e
 
 cd helena 
 
-pyinstaller helena_app.py --clean --onefile \
+pyinstaller componets/influxshake.py --clean --onefile
+pyinstaller componets/systemParameters.py --clean --onefile
+pyinstaller reliability/deviceMonitor.py --clean --onefile
+
+pyinstaller main.py --clean --onefile \
                 --hidden-import=statsmodels.tsa.statespace._kalman_initialization \
                 --hidden-import=statsmodels.tsa.statespace._kalman_filter \
                 --hidden-import=statsmodels.tsa.statespace._kalman_smoother \
@@ -23,12 +27,15 @@ pyinstaller helena_app.py --clean --onefile \
                 --hidden-import=statsmodels.tsa.statespace._smoothers._univariate \
                 --hidden-import=statsmodels.tsa.statespace._smoothers._univariate_diffuse
 
+if [ ! -e "bin" ]; then
+   mkdir bin
+fi
 
-mv dist/helena_app ./
+mv dist/* bin/
 
 cd ..
 
-tar cvzf build/beddot.tar.gz  helena/helena_app \
+tar cvzf build/beddot.tar.gz  helena/bin \
                         helena/componets/influxservice.sh      \
                         helena/componets/restartProcess.sh     \
                         helena/componets/updateParameters.sh   \

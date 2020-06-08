@@ -173,7 +173,12 @@ def start():
 
 
       #Checking current SSID connection name
-      ssidLocal = subprocess.check_output("iwgetid -r", shell = True)
+      try:
+          ssidLocal = subprocess.check_output("iwgetid -r", shell = True)
+      except Exception as e:
+          print(e)
+          exit()
+
       if(ssidLocal[len(ssidLocal)-1]==10):
          ssidLocal = ssidLocal[0:len(ssidLocal)-1]
 
