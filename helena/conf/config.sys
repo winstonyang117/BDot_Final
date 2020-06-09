@@ -38,9 +38,9 @@ postureChangeTimeWindow = 5
 [messages]
 alert_url = https://homedots.us/beddot/public/sendEmail
 
-enablesmson = False
-enablesmsoff = False
-enablesmsmovement = False
+enablesmson = True
+enablesmsoff = True
+enablesmsmovement = True
 
 [general]
 debug = False

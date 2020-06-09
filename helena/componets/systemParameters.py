@@ -53,7 +53,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
    pos = 0
    for alarmt in alarmType: 
      #onBed
-     if(alarmt=='1'):
+     if(alarmt==1):
        if(enablesmson!=int(alarmStatus[pos])):
           sw = 1
           print(parseIntToBool(int(alarmStatus[pos])))
@@ -62,7 +62,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
           print("Change OnBed")
 
      #offBed
-     if(alarmt=='2'):
+     if(alarmt==2):
        if(enablesmsoff!=int(alarmStatus[pos])):
           sw = 1
           config['messages']['enablesmsoff'] = parseIntToBool(int(alarmStatus[pos]))
@@ -70,7 +70,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
           print("Change OffBed")
 
      #Movement
-     if(alarmt=='3'):
+     if(alarmt==3):
        if(enablesmsmovement!=int(alarmStatus[pos])):
           sw = 1
           config['messages']['enablesmsmovement'] = parseIntToBool(int(alarmStatus[pos]))
@@ -83,7 +83,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
    if(sw==1):
      config.write()
    
-   unit  = config.get('general', 'unitid')
+   unit  = mac_address()
    return unit
 
 
@@ -131,7 +131,7 @@ def start():
       subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
 
    #Getting parameters from Cloud
-   url = 'https://www.homedots.us/beddot/public/getClient/'+macEth+'/'+host
+   url = 'https://www.homedots.us/beddot/public/getClient/'+macEth
    #print(url)
    res = requests.get(url)
 

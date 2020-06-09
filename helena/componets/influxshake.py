@@ -32,7 +32,7 @@ def start():
 
    saveRemoteRaw= config.get('general', 'saveRemoteRaw')
    db    = config.get('general', 'dbraw')
-   unit  = config.get('general', 'unitid')
+   unit = license.mac_address()
 
    port = 8888								# Port to bind to
    hostipF = "/opt/settings/sys/ip.txt"

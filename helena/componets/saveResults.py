@@ -5,6 +5,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.abspath('..'))
 from componets.config import Config
+import componets.license as license
 
 def saveResults(serie, field, value, time):
    time = time[0:19]
@@ -28,9 +29,8 @@ def saveResults(serie, field, value, time):
    rpassw = config.get('remotedb', 'rpass')
 
    db    = config.get('general', 'dbresults')
-   unit  = config.get('general', 'unitid')
-
    saveRemoteResult = config.get('general', 'saveRemoteResult')
+   unit = license.mac_address()
 
    http_post  = "curl -s -POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
    http_post += "\n"+serie+",location="+unit+" "+field+"="+value+" "+str(epoch_time)+"000000000"  

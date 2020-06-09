@@ -6,6 +6,7 @@ import os, sys
 
 sys.path.insert(0, os.path.abspath('..'))
 from componets.config import Config
+import componets.license as license
 
 def measure_temp():
         temp = os.popen("vcgencmd measure_temp").readline()
@@ -22,7 +23,6 @@ def start():
    user  = config.get('localdb', 'luser')
    passw = config.get('localdb', 'lpass')
    db    = config.get('general', 'dbstatus')
-   unit  = config.get('general', 'unitid')
    memoryth  = config.get('system', 'memory')
    cputh     = config.get('system', 'cpu')
 
@@ -32,6 +32,7 @@ def start():
 
    saveRemoteRaw= config.get('general', 'saveRemoteRaw')
 
+   unit = license.mac_address()
    cpu = psutil.cpu_percent(interval=1)
    mem = psutil.virtual_memory().percent
    diskp= psutil.disk_usage('/').percent

@@ -74,7 +74,6 @@ def main():
  debug = parseBoolString(debug)
  
  db           = config.get('general', 'dbraw')
- unit         = config.get('general', 'unitid')
  buffersize   = config.get('general', 'buffersize')
  samplingrate = int(config.get('general', 'samplingrate'))
 
@@ -111,6 +110,7 @@ def main():
  enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
  enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
  enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
+ unit = license.mac_address()
 
 # print messmovement
  # Constant Calculations
