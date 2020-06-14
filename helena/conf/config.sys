@@ -44,7 +44,7 @@ enablesmsmovement = True
 
 [general]
 debug = False
-unitid = b8:27:eb:83:7e:87
+unitid = ""
 dbraw = shake
 dbresults = healthresult
 dbstatus = status

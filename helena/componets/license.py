@@ -30,7 +30,7 @@ def status(config):
     # word = crypto.config_key
     macEth        = mac_address()
     url = 'https://homedots.us/beddot/public/checkStatus2'
-    data = {"mac":"b8:27:eb:dc:80:5c", "version" : "2.0"}
+    data = {"mac" : macEth, "version" : "2.0"}
 
     try:
        res = requests.post(url, data)

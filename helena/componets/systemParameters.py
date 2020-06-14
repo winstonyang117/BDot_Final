@@ -128,7 +128,9 @@ def start():
       config = ConfigObj(cfg_fn)
       config['general']['unitid'] = macEth
       config.write()
-      subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
+
+      if len(currentUnitId) !=0:
+         subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
 
    #Getting parameters from Cloud
    url = 'https://www.homedots.us/beddot/public/getClient/'+macEth
@@ -187,7 +189,7 @@ def start():
       #Switching WiFi connection
       if(ssid==ssidLocal.decode('utf-8')):
          print ("Same WiFi SSID!!!")
-      else:
+      elif len(ssid) != 0:
          print ("Different WiFi SSID!!!")
          #subprocess.call("cp /etc/wpa_supplicant/wpa_supplicant.conf wpa_supplicant.conf", shell=True) 
          fn = "wpa_supplicant.conf"
@@ -198,9 +200,9 @@ def start():
       
          f.close()
 
-         subprocess.call("cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf", shell=True)  
+         subprocess.call("sudo mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf", shell=True)  
          time.sleep(5) 
-         subprocess.call("sudo reboot", shell=True)
+         #subprocess.call("sudo reboot", shell=True)
 
 
       #For alarms parameters
