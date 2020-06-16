@@ -171,8 +171,6 @@ To start/stop/restart influxshake and helena:
 ```
 sudo systemctl start influxshake.service
 sudo systemctl start helena.service
-sudo systemctl start influxshake.service
-sudo systemctl start helena.service
 sudo systemctl stop influxshake.service
 sudo systemctl stop helena.service
 ```

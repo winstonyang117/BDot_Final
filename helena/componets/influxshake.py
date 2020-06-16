@@ -35,10 +35,11 @@ def start():
    unit = license.mac_address()
 
    port = 8888								# Port to bind to
-   hostipF = "/opt/settings/sys/ip.txt"
-   file = open(hostipF, 'r')
-   host = file.read().strip()
-   file.close()
+   #hostipF = "/opt/settings/sys/ip.txt"
+   #file = open(hostipF, 'r')
+   #host = file.read().strip()
+   #file.close()
+   host = "localhost"
 
    print(saveRemoteRaw)
    HP = host + ":" + str(port)
