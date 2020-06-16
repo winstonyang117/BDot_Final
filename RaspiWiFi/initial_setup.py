@@ -15,7 +15,7 @@ print("##### RaspiWiFi Intial Setup  #####")
 print("###################################")
 print()
 print()
-entered_ssid = input("Would you like to specify an SSID you'd like to use \nfor Host/Configuration mode? [default: RaspiWiFi Setup]: ")
+entered_ssid = input("Would you like to specify an SSID you'd like to use \nfor Host/Configuration mode? [default: BedDot]: ")
 print()
 wpa_enabled_choice = "N"
 #wpa_enabled_choice = input("Would you like WPA encryption enabled on the hotspot \nwhile in Configuration Mode? [y/N]:")
