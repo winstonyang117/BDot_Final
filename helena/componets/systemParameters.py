@@ -173,6 +173,8 @@ def start():
       print (extra1)
       print (extra2)
 
+     #For alarms parameters
+      alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)
 
       #Checking current SSID connection name
       try:
@@ -204,9 +206,6 @@ def start():
          time.sleep(5) 
          #subprocess.call("sudo reboot", shell=True)
 
-
-      #For alarms parameters
-      alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)    
 
    else:
       print("No DATA")
