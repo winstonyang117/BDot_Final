@@ -8,7 +8,7 @@ import time
 import sys
 import logging
 #from detect_peaks import detect_peaks
-from scipy.stats import kurtosis 
+from scipy.stats import kurtosis
 import nitime.algorithms as nt_alg
 import numpy as np
 from numpy import array
@@ -20,6 +20,8 @@ from statsmodels.tsa.stattools import acf
 
 #def saveResults(serie, field, value, time):
 #    SaveToDB.saveResults(serie, field, value, time)
+logpath = "/opt/helena/logs/"
+#logpath = ""
 
 def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
                  kpsh=False, valley=False, show=False, ax=None):
@@ -116,7 +118,7 @@ def _plot(x, mph, mpd, threshold, edge, valley, ax, ind):
                      % (mode, str(mph), mpd, str(threshold), edge))
         # plt.grid()
         plt.show()
-        
+
 # Bandpass filter functions
 def butter_bandpass(lowcut, highcut, fs, order):
     nyq = 0.5 * fs
@@ -158,12 +160,12 @@ def checkOnBed(signal, onBedThreshold, lowCut, highCut, fs, order, time):
     signalFiltered = butter_bandpass_filter(signal, lowCut, highCut, fs, order)
     maxValue = max(signalFiltered)
 #    print maxValue
-    log = "/opt/helena/logs/onbed.log"
+    log = logpath + "onbed.log"
     logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
-    
+
     if(maxValue > onBedThreshold):
        # Save Info# Status 2 --> may on Bed
-       saveResults('bedStatus', 'bs' ,'2', time)
+       #saveResults('bedStatus', 'bs' ,'2', time)
        logging.info(str(maxValue)+' True')
        return True
     else:
@@ -191,7 +193,7 @@ def checkOnBedNF(signal, lowCut, highCut, fs, order):
 
 # Movement fuction
 def checkMovement(signal, movementThreshold, time, movementShowDelay):
-    log = "/opt/helena/logs/movement.log"
+    log = logpath +  "movement.log"
     logging.basicConfig(filename=log,level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
     signal.sort(reverse = True)
     if(signal[0]>movementThreshold and signal[1]>movementThreshold):
@@ -223,7 +225,7 @@ def calculateHBR(signal, lowCut, highCut, fs, order, time):
 def calculateHBR2(signal, fm, eigs, dpss, nfft, time):
     ss = array( signal )
     xk = nt_alg.tapered_spectra(ss, dpss, NFFT=nfft)
-       
+
     mtm_bband = np.abs( np.sum( 2 * (xk[:,fm] * np.sqrt(eigs))[:,None] * dpss, axis=0 ) )
     peaks = detect_peaks(mtm_bband, mpd=45, show=False)
     hbr = len(peaks)*2
@@ -247,7 +249,7 @@ def calculateHBR2(signal, fm, eigs, dpss, nfft, time):
     distance = 0
     for i in range (0,breCount-1):
           distance = distance + (peaks[i+1]-peaks[i])
-    
+
     rr =  600.0 / (distance / (breCount-1))
 
     #print hbr
@@ -267,7 +269,7 @@ def calculateHBR3(signal, fm, eigs, dpss, nfft, time, mpdEnv):
          cValues = cValues + 1
     values = values.ravel()
 
-       
+
     xvals = np.linspace(0, 3000, 3000)
     hri = sp.interpolate.interp1d(peaks,values, kind='cubic',bounds_error=False)(xvals)
     peaks = detect_peaks(hri, mpd=45, show=False)
@@ -293,7 +295,7 @@ def calculateHBR3(signal, fm, eigs, dpss, nfft, time, mpdEnv):
     for i in range (0,breCount-1):
           distance = distance + (peaks[i+1]-peaks[i])
 
-#    print distance    
+#    print distance
     rr =  600.0 / (distance / (breCount-1))
 
     #print hbr
@@ -313,8 +315,7 @@ def calculatePostureChange(previousHBSignal, currentHBSignal, time):
     percent = res[0][1]
 
 
-    # print "Posture Change",percent 
+    # print "Posture Change",percent
 
     # saveResults('change', 'x' ,str(percent), time)
     return percent
-
