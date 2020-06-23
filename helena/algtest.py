@@ -398,6 +398,16 @@ def main():
         nowtime = buffertime[len(buffertime)-1]
         saveResults(unit, 'hrate', 'hr' ,str(hbr), nowtime)
         saveResults(unit, 'rrate', 'rr' ,str(rr), nowtime)
+
+# add the blood pressure estimation program
+        cutoff = 4
+        fs = 100
+        nlags = 200
+        bplow, bphigh = calculateBP_v2(signalFiltered, fs, cutoff,nlags,border=1)
+        saveResults(unit, 'bpressure', 'bph' ,str(rr), nowtime)
+        saveResults(unit, 'bpressure', 'bpl' ,str(rr), nowtime)
+# end of adding
+
         if(hbr > 30):
 #            if(debug): print "HBR greater than 30 --> ",hbr
             previousHBSignal = buffer[buffLen-elementsNumberPostureChange:buffLen]
