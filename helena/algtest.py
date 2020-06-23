@@ -27,12 +27,13 @@ import componets.license as license
 #import componets.saveResults as SaveToDB
 from componets.config import Config
 
-logpath = ""  # "/opt/helena/log/"
 ip = "homedots.us" #"18.189.193.246" #"18.222.223.195"
+port = "8086"
 user = "Jose"
 passw = "sensorweb"
 db = "shake"
 rip = ip
+rport = "8086"
 ruser = user
 rpassw = passw
 rdb = "algtest"
@@ -94,7 +95,7 @@ def saveResults(unit, serie, field, value, time):
    # http_post += "\'  &"
    #
    # if(saveRemoteResult=='true'):
-   http_post2 = "curl -s -POST --insecure \'https://"+rip+":8086/write?db="+rdb+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
+   http_post2 = "curl -s -POST --insecure \'https://"+rip+":"+rport+"/write?db="+rdb+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
    http_post2 += "\n"+serie+",location="+unit+" "+field+"="+value+" "+str(epoch_time)+"000000000"
    http_post2 += "\'  &"
 
@@ -111,9 +112,11 @@ def saveResults(unit, serie, field, value, time):
 
 ########### main entrance ########
 def main():
+
  config = Config()
 
  #statusKey = license.wait_for_license(config) is 0
+ statusKey = True
 
  formatt = '%Y-%m-%dT%H:%M:%S.%fZ'
  from_zone = tz.tzutc()
@@ -184,7 +187,7 @@ def main():
  # DB Conection
 
  try:
-   client = InfluxDBClient(ip, "8086", user, passw, db, ssl=True, verify_ssl=False)
+   client = InfluxDBClient(ip, port, user, passw, db, ssl=True, verify_ssl=False)
  except Exception as e:
    print("main(), DB access error:")
    print("Error", e)
@@ -225,7 +228,7 @@ def main():
 
 # Getting the system current time
  current = datetime.utcnow()
- print("start time:", current)
+ print("Current time:", current)
 
 # Determining the starting point of the buffer using epoch time
  epoch2 = int( (current - datetime(1970,1,1)).total_seconds())
@@ -245,14 +248,15 @@ def main():
  pOnBed = False
  sumMovements = 0
 
+
  # Infinite Loop
  while True:
     if(debug): print("*****************************************"+str(statusKey))
     stampIni = (datetime.utcfromtimestamp(epoch1).strftime('%Y-%m-%dT%H:%M:%S.000Z'))
     stampEnd = (datetime.utcfromtimestamp(epoch2).strftime('%Y-%m-%dT%H:%M:%S.000Z'))
     #t0 = time.perf_counter()
-    if(debug): print(stampIni)
-    if(debug): print(stampEnd)
+    if(debug): print("stampIni time: " + stampIni)
+    if(debug): print("stampEnd time: " + stampEnd)
     query = 'SELECT "value" FROM Z WHERE ("location" = \''+unit+'\')  and time >= \''+stampIni+'\' and time <= \''+stampEnd+'\'   '
 
     result = client.query(query)
@@ -273,7 +277,7 @@ def main():
     if(buffLen>0):
        if(debug): print("Buffer Time:    " + str(buffertime[0]) + "  -   " + str(buffertime[len(buffertime)-1]))
 
-    if(debug): print(buffLen)
+    if(debug): print("buffLen: ", buffLen)
     #################################################################
     #OnBed
     #################################################################
@@ -282,9 +286,10 @@ def main():
 
     #t1 = time.perf_counter()
     #print("t1-t0= " +str(t1-t0))
+    alg.logpath = ""
 
 # On/Off correlation
-    if(True): #statusKey):
+    if(statusKey):
      if(buffLen>=elementsNumberOnBed and counterTime%timeCheckingOnBed == 0 ):
        #t2 = time.perf_counter()
 
@@ -374,13 +379,13 @@ def main():
        if (movement or movementShowDelay>100000):
           movementShowDelay = 0
           hrSignalNoNoise   = 0
-       if(debug): print('movement:',movement, ' Counter',counterTime)
+       if(debug): print("movement: ", movement, "counterTime: ", counterTime)
 
 
     #################################################################
     #Hearthbeat Rate
     #################################################################
-     if(debug): print('Counter of Not Noise ',hrSignalNoNoise)
+     if(debug): print("Counter of Not Noise: ", hrSignalNoNoise)
      if(onBed and counteroff<25 and buffLen>=elementsNumberHR and counterTime%timeCheckingHR == 0 and hrSignalNoNoise>= hrTimeWindow ):
         if(debug): print("Calculating HBR")
         # If we can calculate the HBR is because someone is OnBed
@@ -449,10 +454,10 @@ def main():
        enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
        thccMean          = float(config.get('main', 'thccMean'))
        mpdEnv            = int(config.get('main', 'mpdEnv'))
-       if(debug): print(thccMean)
-       if(debug): print(mpdEnv)
+       if(debug): print("thccMean: ", thccMean)
+       if(debug): print("mpdEnv:", mpdEnv)
 
-       statusKey = license.wait_for_license(config) is 0
+       #statusKey = license.wait_for_license(config) is 0
 
     if(counterTime > 100000):
        counterTime = counterTime - 100000
