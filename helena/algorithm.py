@@ -319,3 +319,57 @@ def calculatePostureChange(previousHBSignal, currentHBSignal, time):
 
     # saveResults('change', 'x' ,str(percent), time)
     return percent
+
+
+def butter_lowpass(cutoff, fs, order=5):
+    nyq = 0.5 * fs
+    normal_cutoff = cutoff / nyq
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    return b, a
+
+def butter_lowpass_filter(data, cutoff, fs, order=5):
+    b, a = butter_lowpass(cutoff, fs, order=order)
+    y = lfilter(b, a, data)
+    return y
+
+def calculateBP_v2(signal, fs, cutoff,nlags,order):
+
+    signalFiltered = butter_lowpass_filter(sigs, cutoff, fs, order)
+
+    arrSignal = array( signalFiltered )
+    auto = sm.tsa.stattools.acf(arrSignal, unbiased=False, nlags=nlags,qstat=False)
+    peaks = detect_peaks(auto,show=False)
+
+    bp1=(976.35,0,0,427.48,0,-1148.9,-2094.9,535.67)
+    bp11=(0,0,0,0,0,1503.6)
+    bp12=(0,0,0,0,-488.87)
+    bp13=(0,0,0,0)
+    bp14=(0,0,-100.64)
+    bp15=(2657.5,-1182.4)
+    bp16=(206.17)
+
+    bp2=(-31.933,0,0,-912.89,0,-11870,8201.5,2095.8)
+    bp21=(0,0,0,0,0,-6.9995)
+    bp22=(0,0,0,0,676.65)
+    bp23=(0,0,0,0)
+    bp24=(0,0,1130.8)
+    bp25=(3801.5,8920.9)
+    bp26=(-11246)
+
+    bptt1 = peaks[0:7]/fs
+    bptt11 = bptt1[0]*bptt1[1:7]
+    bptt12 = bptt1[1]*bptt1[2:7]
+    bptt13 = bptt1[2]*bptt1[3:7]
+    bptt14 = bptt1[3]*bptt1[4:7]
+    bptt15 = bptt1[4]*bptt1[5:7]
+    bptt16 = bptt1[5]*bptt1[6:7]
+
+    bpttlow = bp1[1:8]
+    bptthigh = bp2[1:8]
+
+
+    bplow =np.ceil(np.absolute(np.dot(bptt1,bpttlow)+np.dot(bptt11,bp11)+np.dot(bptt12,bp12)+np.dot(bptt13,bp13)+np.dot(bptt14,bp14)+np.dot(bptt15,bp15)+np.dot(bptt16,bp16)+bp1[0]))
+    bphigh=np.ceil(np.absolute(np.dot(bptt1,bptthigh)+np.dot(bptt11,bp21)+np.dot(bptt12,bp22)+np.dot(bptt13,bp23)+np.dot(bptt14,bp24)+np.dot(bptt15,bp25)+np.dot(bptt16,bp26)+bp2[0]))
+
+
+    return bplow,bphigh
