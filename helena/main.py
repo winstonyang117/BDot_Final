@@ -197,6 +197,17 @@ def main():
     query = 'SELECT "value" FROM Z WHERE ("location" = \''+unit+'\')  and time >= \''+stampIni+'\' and time <= \''+stampEnd+'\'   '
 
     result = client.query(query)
+    if result.error !=None:
+       client.close()
+       try:
+          client = InfluxDBClient(ip, "8086", user, passw, db)
+       except Exception as e:
+          print("main(), DB access error in loop:")
+          print(e)
+          license.wait_for_license(config)
+
+       continue
+
     points = list(result.get_points())
 
     values =  list(map(operator.itemgetter('value'), points))
@@ -381,7 +392,7 @@ def main():
 
 
     # Updating parameters every 5 minutes
-    if(counterTime%30 == 0):
+    if(counterTime%300 == 0):
        if(debug): print("-----------------------------------------------------------------------")
        config = Config()
 
@@ -392,7 +403,6 @@ def main():
        mpdEnv            = int(config.get('main', 'mpdEnv'))
        if(debug): print(thccMean)
        if(debug): print(mpdEnv)
-
        statusKey = license.wait_for_license(config) is 0
 
     if(counterTime > 100000):
