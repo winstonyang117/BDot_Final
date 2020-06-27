@@ -19,7 +19,7 @@ docker-compose up -d
 sleep 10
     #create default localdb user, helene:helena
 curl "http://localhost:8086/query" --data-urlencode \
-        "q=CREATE USER helena WITH PASSWORD 'helena' WITH ALL PRIVILEGES"
+        "q=CREATE USER helena WITH PASSWORD 'helena' WITH ALL PRIVILEGES" >/dev/null
 
     #create default localdb measurements
 curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE shake WITH DURATION 2d REPLICATION 1 SHARD DURATION 12h" >/dev/null
