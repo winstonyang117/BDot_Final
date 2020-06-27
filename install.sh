@@ -22,9 +22,9 @@ curl "http://localhost:8086/query" --data-urlencode \
         "q=CREATE USER helena WITH PASSWORD 'helena' WITH ALL PRIVILEGES"
 
     #create default localdb measurements
-curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE shake"
-curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE status"
-curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE healthresult"
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE shake WITH DURATION 2d REPLICATION 1 SHARD DURATION 12h" >/dev/null
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE status WITH DURATION 2d REPLICATION 1 SHARD DURATION 12h" >/dev/null
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE healthresult WITH DURATION 2d REPLICATION 1 SHARD DURATION 12h" >/dev/null
 
 # 2, install helena, could be move to python3 code
 

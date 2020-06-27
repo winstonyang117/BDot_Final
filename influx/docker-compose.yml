@@ -4,6 +4,8 @@ services:
       image: influxdb:1.8
       container_name: influxdb
       restart: always
+      logging:
+         driver: "none"
       volumes:
          - /opt/influx/influxdb/data:/var/lib/influxdb
          - /opt/influx/influxdb/ssl:/etc/influxdb/ssl
