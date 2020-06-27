@@ -3,13 +3,19 @@
 set -x
 set -e
 
+arg=" "
+
+if [ "$1" == "clean" ]; then
+   arg="--clean"
+fi
+
 cd helena 
 
-pyinstaller componets/influxshake.py --clean --onefile
-pyinstaller componets/systemParameters.py --clean --onefile
-pyinstaller reliability/deviceMonitor.py --clean --onefile
+pyinstaller componets/influxshake.py ${arg} --onefile
+pyinstaller componets/systemParameters.py ${arg} --onefile
+pyinstaller reliability/deviceMonitor.py ${arg} --onefile
 
-pyinstaller main.py --clean --onefile \
+pyinstaller main.py ${arg} --onefile \
                 --hidden-import=statsmodels.tsa.statespace._kalman_initialization \
                 --hidden-import=statsmodels.tsa.statespace._kalman_filter \
                 --hidden-import=statsmodels.tsa.statespace._kalman_smoother \
