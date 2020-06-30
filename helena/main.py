@@ -51,8 +51,8 @@ def utcToLocalTime(time2, formatt, from_zone, to_zone):
     timeDetected = central.strftime("%m-%d %I:%M %p")
     return timeDetected
 
-def saveResults(serie, field, value, time):
-    SaveToDB.saveResults(serie, field, value, time)
+def saveResults(serie, field, value, time, config):
+    SaveToDB.saveResults(serie, field, value, time, config)
     
 ########### main entrance ########
 def main():
@@ -247,7 +247,7 @@ def main():
 
        #t3 = time.perf_counter()
        #print("t3-t2= " +str(t3-t2))
-       saveResults('corrStatus', 'bs10' ,str(peaksCR), nowtime)
+       saveResults('corrStatus', 'bs10' ,str(peaksCR), nowtime, config)
        if(peaksCR > thccMean):
            prevalues.append(1)
        else:
@@ -278,7 +278,7 @@ def main():
              timeDetected = utcToLocalTime(buffertime[len(buffertime)-thon], formatt, from_zone, to_zone)
              sendEmailT = threading.Thread(target=send_alert, args=(alert_url, 1))
              sendEmailT.start()
-          saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-thon])
+          saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-thon], config)
           onBed = True
           pOnBed = True
        elif(counteroff > thoff):
@@ -287,13 +287,13 @@ def main():
              sendEmailT = threading.Thread(target=send_alert, args=(alert_url, 2))
              sendEmailT.start()
           #saveOFF
-          saveResults('bedStatus', 'bs' ,'0', buffertime[len(buffertime)-thoff])
+          saveResults('bedStatus', 'bs' ,'0', buffertime[len(buffertime)-thoff], config)
           onBed  = False
           pOnBed = False
           hrSignalNoNoise = 0
        else:
           #Calculing
-          saveResults('bedStatus', 'bs' ,'2', buffertime[len(buffertime)-1])
+          saveResults('bedStatus', 'bs' ,'2', buffertime[len(buffertime)-1], config)
           pOnBed = True
 
     #################################################################
@@ -305,11 +305,11 @@ def main():
        movement = alg.checkMovement(signalToMovement, movementThreshold, buffertime[len(buffertime)-1], movementShowDelay)
        nowtime = buffertime[len(buffertime)-1]
        if not (movement):
-          saveResults('posture', 'x' ,'5', nowtime)
+        # saveResults('posture', 'x' ,'5', nowtime, config)
           hrSignalNoNoise = hrSignalNoNoise + timeCheckingMovement
           preMovements.append(0)
        else:
-          saveResults('posture', 'x' ,'7', nowtime)
+          saveResults('posture', 'x' ,'7', nowtime, config)
 
           preMovements.append(1)
           sumMovements = sum(preMovements)
@@ -343,8 +343,8 @@ def main():
         signalFiltered = alg.butter_bandpass_filter(signalToHBR, lowCut, highCut, samplingrate, order)
         hbr,rr = alg.calculateHBR3(signalFiltered, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1],mpdEnv)
         nowtime = buffertime[len(buffertime)-1]
-        saveResults('hrate', 'hr' ,str(hbr), nowtime)
-        saveResults('rrate', 'rr' ,str(rr), nowtime)
+        saveResults('hrate', 'hr' ,str(hbr), nowtime, config)
+        saveResults('rrate', 'rr' ,str(rr), nowtime, config)
         if(hbr > 30):
 #            if(debug): print "HBR greater than 30 --> ",hbr
             previousHBSignal = buffer[buffLen-elementsNumberPostureChange:buffLen]
@@ -366,7 +366,7 @@ def main():
        currentHBSignal = buffer[buffLen-elementsNumberPostureChange:buffLen]
        percent = alg.calculatePostureChange(previousHBSignal, currentHBSignal, buffertime[len(buffertime)-1])
        nowtime = buffertime[len(buffertime)-1]
-       saveResults('change', 'x' ,str(percent), nowtime)
+       saveResults('change', 'x' ,str(percent), nowtime, config)
      # previousHBSignal
        previousHBSignal = currentHBSignal
     #################################################################
@@ -401,6 +401,9 @@ def main():
        enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
        thccMean          = float(config.get('main', 'thccMean'))
        mpdEnv            = int(config.get('main', 'mpdEnv'))
+       debug = config.get('general', 'debug')
+       debug = parseBoolString(debug)
+
        if(debug): print(thccMean)
        if(debug): print(mpdEnv)
        statusKey = license.wait_for_license(config) is 0

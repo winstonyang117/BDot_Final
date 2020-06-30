@@ -52,6 +52,7 @@ dbstatus = status
 # true or false no capitals
 saveRemoteRaw = true
 saveRemoteResult = true
+saveLocalResult = false
 
 #seconds
 buffersize = 30
