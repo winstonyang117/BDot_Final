@@ -47,7 +47,10 @@ There are two way to prepare a ready-to-go microSD card for deployment:
 ```
 wget https://gitlab.com/raspberryShake-public/raspshake-sd-img/-/blob/master/raspishake-release.zip
 ```
-- Follow instructions from [here](https://gitlab.com/raspberryShake-public/raspshake-sd-img/-/tree/master) to extract the zip file to a properly formated (FAT32) microSD card.
+- Follow instructions from [here](https://gitlab.com/raspberryShake-public/raspshake-sd-img/-/tree/master) to extract the zip file to a properly formated (FAT32) microSD card. Assume you have formatted the SD card with name BEDDOT with DiskUtilities in Mac OS, then run the following command to extract zip file to SD card:
+```
+unzip raspishake-release.zip /Volumes/BEDDOT
+```
 - Insert the SD card to the device and power up. 
 - Enable the network access by either plugin Ethernet cable or configure wifi by raspi-config.
 - SCP the tar file to the /opt/ folder and ssh to the target.
