@@ -1,9 +1,12 @@
-============== 06/09/2020
+============== 06/09/2020 ====
+# Only the following 4 lines are needed and can use this command to auto setup:  "crontab -l -u user | cat - filename | crontab -u user -". See details at https://stackoverflow.com/questions/4880290/how-do-i-create-a-crontab-through-a-script
 
 MAILTO=""
 0 7 * * * /opt/helena/reliability/cleanlogs.sh
 * * * * * /opt/helena/reliability/saveMonitorStatus.sh
 */5 * * * * /opt/helena/componets/updateParameters.sh
+
+# the folows are done by the raspberry shake
 
 @daily /usr/local/bin/myShake
 @hourly /usr/local/bin/clean-logs
