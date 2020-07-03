@@ -40,12 +40,12 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
 
    config = ConfigObj(cfg_fn)
    
-   if(envelopeMpd !=None  and float(envelopeMpd)!=envelopeMpdFile):
+   if(envelopeMpd !=None and len(envelopeMpd)>0 and float(envelopeMpd)!=envelopeMpdFile):
       sw = 1
       config['main']['mpdEnv'] = envelopeMpd
       print("Change MDP Envelope")
 
-   if(thresholdOnBed != None and float(thresholdOnBed)!= thresholdOnBedFlie):
+   if(thresholdOnBed != None and len(thresholdOnBed)>0 and float(thresholdOnBed)!= thresholdOnBedFlie):
       sw = 1
       config['main']['thccMean'] = thresholdOnBed
       print("On/Off th")

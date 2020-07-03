@@ -41,6 +41,10 @@ mv dist/* bin/
 
 cd ..
 
+if [ ! -e "build" ]; then
+   mkdir build
+fi
+
 tar cvzf build/beddot.tar.gz  helena/bin \
                         helena/componets/influxservice.sh      \
                         helena/componets/restartProcess.sh     \
