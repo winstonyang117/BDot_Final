@@ -107,9 +107,9 @@ def main():
 
  # Messages
  alert_url    = config.get('messages', 'alert_url')
- enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
- enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
- enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
+ enablesmson       = True #parseBoolString(config.get('messages', 'enablesmson'))
+ enablesmsoff      = True #parseBoolString(config.get('messages', 'enablesmsoff'))
+ enablesmsmovement = True #parseBoolString(config.get('messages', 'enablesmsmovement'))
  unit = license.mac_address()
 
 # print messmovement
@@ -396,9 +396,9 @@ def main():
        if(debug): print("-----------------------------------------------------------------------")
        config = Config()
 
-       enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
-       enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
-       enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
+       enablesmson       = True #parseBoolString(config.get('messages', 'enablesmson'))
+       enablesmsoff      = True #parseBoolString(config.get('messages', 'enablesmsoff'))
+       enablesmsmovement = True #parseBoolString(config.get('messages', 'enablesmsmovement'))
        thccMean          = float(config.get('main', 'thccMean'))
        mpdEnv            = int(config.get('main', 'mpdEnv'))
        debug = config.get('general', 'debug')
