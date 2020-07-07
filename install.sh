@@ -36,6 +36,8 @@ sudo cp helena/services/helena.service /lib/systemd/system/
 sudo systemctl enable helena.service
 sudo systemctl enable influxshake.service
 
+sudo crontab < helena/cronjobs
+
 if [ ! -e "/opt/helena/logs" ]; then
    mkdir /opt/helena/logs
 fi
