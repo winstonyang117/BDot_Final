@@ -54,6 +54,7 @@ tar cvzf build/beddot.tar.gz  helena/bin \
                         helena/reliability/saveMonitorStatus.sh \
                         helena/services    \
                         helena/helenaservice.sh \
+                        helena/cronjobs \
                         influx      \
                         RaspiWiFi   \
                         install.sh
