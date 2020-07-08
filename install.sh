@@ -37,7 +37,7 @@ sudo systemctl enable helena.service
 sudo systemctl enable influxshake.service
 
 # stop and disable rsh-data-consumer to avoid memory leakage
-#in any case, if you're not using the swarm program as part of your processing, it would be probably be a good idea to just turn it off.  this can be done with the following command:
+# in any case, if you're not using the swarm program as part of your processing, it would be probably be a good idea to just turn it off.  this can be done with the following command:
 # > sudo systemctl stop rsh-data-consumer
 # and / or disable the service completely to prevent it from starting up in the first place.  the postboot.rshake program will fail this step (i'm pretty sure), but other than that should not cause any ill effects elsewhere in the system.
 
