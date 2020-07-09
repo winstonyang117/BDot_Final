@@ -13,7 +13,7 @@ docker image ls influxdb:1.8 |grep influxdb >/dev/null || docker pull influxdb:1
 
     # start local influxdb
 
-cd influx
+cd /opt/influx
 docker-compose up -d
 
 sleep 10
@@ -28,10 +28,10 @@ curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DAT
 
 # 2, install helena, could be move to python3 code
 
-cd ..
+#cd ..
 
-sudo cp helena/services/influxshake.service /lib/systemd/system/
-sudo cp helena/services/helena.service /lib/systemd/system/
+sudo cp /opt/helena/services/influxshake.service /lib/systemd/system/
+sudo cp /opt/helena/services/helena.service /lib/systemd/system/
 
 sudo systemctl enable helena.service
 sudo systemctl enable influxshake.service
@@ -47,7 +47,7 @@ sudo systemctl mask rsh-data-consumer.service
 
 # setup cronjob
 
-sudo crontab < helena/cronjobs
+crontab < /opt/helena/cronjobs
 
 if [ ! -e "/opt/helena/logs" ]; then
    mkdir /opt/helena/logs
@@ -56,6 +56,6 @@ fi
 # 3, setup RaspiWiFi
 
 if [ ! -e "/etc/raspiwifi" ]; then
-   cd RaspiWiFi
+   cd /opt/RaspiWiFi
    sudo python3 initial_setup.py
 fi
