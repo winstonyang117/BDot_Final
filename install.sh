@@ -40,9 +40,10 @@ sudo systemctl enable influxshake.service
 # in any case, if you're not using the swarm program as part of your processing, it would be probably be a good idea to just turn it off.  this can be done with the following command:
 # > sudo systemctl stop rsh-data-consumer
 # and / or disable the service completely to prevent it from starting up in the first place.  the postboot.rshake program will fail this step (i'm pretty sure), but other than that should not cause any ill effects elsewhere in the system.
+# 7/8/2020: stop is insufficient, use mask instead
 
 sudo systemctl stop rsh-data-consumer.service
-sudo systemctl disable rsh-data-consumer.service 
+sudo systemctl mask rsh-data-consumer.service 
 
 # setup cronjob
 
