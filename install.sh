@@ -22,9 +22,13 @@ curl "http://localhost:8086/query" --data-urlencode \
         "q=CREATE USER helena WITH PASSWORD 'helena' WITH ALL PRIVILEGES" >/dev/null
 
     #create default localdb measurements
-curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE shake WITH DURATION 2d REPLICATION 1 SHARD DURATION 12h" >/dev/null
-curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE status WITH DURATION 2d REPLICATION 1 SHARD DURATION 12h" >/dev/null
-curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE healthresult WITH DURATION 2d REPLICATION 1 SHARD DURATION 12h" >/dev/null
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE shake" >/dev/null
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE status" >/dev/null
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=CREATE DATABASE healthresult" >/dev/null
+
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=ALTER RETENTION POLICY autogen ON shake DURATION 1d REPLICATION 1 SHARD DURATION 8h" >/dev/null
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=ALTER RETENTION POLICY autogen ON status DURATION 1d REPLICATION 1 SHARD DURATION 8h" >/dev/null
+curl http://localhost:8086/query -u helena:helena --data-urlencode "q=ALTER RETENTION POLICY autogen ON healthresult DURATION 1d REPLICATION 1 SHARD DURATION 8h" >/dev/null
 
 # 2, install helena, could be move to python3 code
 

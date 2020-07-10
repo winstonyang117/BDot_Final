@@ -53,7 +53,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
    pos = 0
    for alarmt in alarmType: 
      #onBed
-     if(alarmt==1):
+     if(int(alarmt)==1):
        if(enablesmson!=int(alarmStatus[pos])):
           sw = 1
           print(parseIntToBool(int(alarmStatus[pos])))
@@ -62,7 +62,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
           print("Change OnBed")
 
      #offBed
-     if(alarmt==2):
+     if(int(alarmt)==2):
        if(enablesmsoff!=int(alarmStatus[pos])):
           sw = 1
           config['messages']['enablesmsoff'] = parseIntToBool(int(alarmStatus[pos]))
@@ -70,7 +70,7 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
           print("Change OffBed")
 
      #Movement
-     if(alarmt==3):
+     if(int(alarmt)==3):
        if(enablesmsmovement!=int(alarmStatus[pos])):
           sw = 1
           config['messages']['enablesmsmovement'] = parseIntToBool(int(alarmStatus[pos]))
