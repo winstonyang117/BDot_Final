@@ -63,3 +63,8 @@ if [ ! -e "/etc/raspiwifi" ]; then
    cd /opt/RaspiWiFi
    sudo python3 initial_setup.py
 fi
+
+# 4, Clean up spaces
+
+sudo apt autoremove
+/opt/helena/reliability/cleanlogs.sh
