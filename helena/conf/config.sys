@@ -60,6 +60,6 @@ samplingrate = 100
 
 [system]
 memory = 85
-cpu = 250
+cpu = 200
 disk = 90
 daystoremove = 0.1
