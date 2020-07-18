@@ -3,6 +3,7 @@ import psutil
 import subprocess
 import time
 import os, sys
+import syslog 
 
 sys.path.insert(0, os.path.abspath('..'))
 from componets.config import Config
@@ -70,11 +71,12 @@ def start():
          cpu = psutil.cpu_percent(interval=1)
          print("system for cpu")
       
-      if(tries == 2):
+      if(tries == 4):
          print("RESTARTING")
+         syslog.syslog('Restarting due to overrun, cpu percentage: ' + str(cpu) + ', mem: ' + str(mem))
          os.system("sudo systemctl reboot");
    
-      time.sleep (5)
+      time.sleep (3)
       
 
 if __name__ == '__main__':

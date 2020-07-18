@@ -49,6 +49,9 @@ sudo systemctl enable influxshake.service
 sudo systemctl stop rsh-data-consumer.service
 sudo systemctl mask rsh-data-consumer.service 
 
+# remove  unused packages
+sudo apt remove avahi-daemon
+
 # setup cronjob
 
 crontab < /opt/helena/cronjobs

@@ -59,7 +59,7 @@ buffersize = 30
 samplingrate = 100
 
 [system]
-memory = 150
-cpu = 150
+memory = 85
+cpu = 250
 disk = 90
 daystoremove = 0.1
