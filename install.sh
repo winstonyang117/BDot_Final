@@ -50,7 +50,7 @@ sudo systemctl stop rsh-data-consumer.service
 sudo systemctl mask rsh-data-consumer.service 
 
 # remove  unused packages
-sudo apt remove avahi-daemon
+sudo apt remove avahi-daemon -y
 
 # setup cronjob
 
@@ -69,5 +69,5 @@ fi
 
 # 4, Clean up spaces
 
-sudo apt autoremove
+sudo apt autoremove -y
 /opt/helena/reliability/cleanlogs.sh
