@@ -57,5 +57,6 @@ tar cvzf build/beddot.tar.gz  helena/bin \
                         helena/cronjobs \
                         influx      \
                         RaspiWiFi   \
-                        install.sh
+                        install.sh  \
+                        changedate.txt
                         

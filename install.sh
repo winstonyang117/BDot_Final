@@ -2,8 +2,14 @@
 set -x
 set -e
 
-# install general pre-reqs
 
+# remove  unused packages
+sudo apt remove avahi-daemon -y
+sudo apt remove avahi-autoipd -y
+
+# install general pre-reqs
+sudo apt update
+sudo apt upgrade -y
 
 # 1, install influx, could be move to python3 code
 dpkg -s docker-compose >/dev/null || sudo apt install docker-compose -y
@@ -48,9 +54,6 @@ sudo systemctl enable influxshake.service
 
 sudo systemctl stop rsh-data-consumer.service
 sudo systemctl mask rsh-data-consumer.service 
-
-# remove  unused packages
-sudo apt remove avahi-daemon -y
 
 # setup cronjob
 
