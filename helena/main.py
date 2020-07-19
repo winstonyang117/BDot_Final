@@ -186,6 +186,8 @@ def main():
  pOnBed = False
  sumMovements = 0
 
+ num_failures = 0
+
  # Infinite Loop
  while True:
     if(debug): print("*****************************************"+str(statusKey))
@@ -195,10 +197,27 @@ def main():
     if(debug): print(stampIni)
     if(debug): print(stampEnd)
     query = 'SELECT "value" FROM Z WHERE ("location" = \''+unit+'\')  and time >= \''+stampIni+'\' and time <= \''+stampEnd+'\'   '
+    
+    try:
+       result = client.query(query)
+       if result.error ==None:
+          num_failures = 0
+       else:
+          num_failures = num_failures +1
+          syslog.syslog('Failure in influxDB query: {0}'.format(result.error))
 
-    result = client.query(query)
-    if result.error !=None:
+    except Exception as e:
+       num_failures = num_failures +1
+       syslog.syslog('Exception in influxDB query: {0}'.format(e))
+
+    if num_failures != 0:       
+       if num_failures > 3:
+          syslog.syslog('Rebooting due to helena unable to connect to influxDB')
+          os.system("sudo systemctl reboot");
+
        client.close()
+       time.sleep(2)
+
        try:
           client = InfluxDBClient(ip, "8086", user, passw, db)
        except Exception as e:
