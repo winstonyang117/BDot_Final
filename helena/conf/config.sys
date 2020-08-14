@@ -53,6 +53,7 @@ dbstatus = status
 saveRemoteRaw = true
 saveRemoteResult = true
 saveLocalResult = false
+debug_level = 0
 
 #seconds
 buffersize = 30

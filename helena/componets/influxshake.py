@@ -74,7 +74,8 @@ def start():
       data.pop(0)
       timeIni = int(float(data.pop(0))*1000) * 1000000
       http_post  = "curl -s -POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
-      http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
+      if(saveRemoteRaw=='true'):
+         http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
 
       for f in data:
          http_post  += "\nZ,location={0} value={1} {2}".format(unit,int(f), timeIni)
@@ -85,7 +86,8 @@ def start():
          timeIni = timeIni + 10000000
 
       http_post += "\'  &"
-      http_post2 += "\'  &"
+      if(saveRemoteRaw=='true'):
+         http_post2 += "\'  &"
 
       subprocess.call(http_post, shell=True)
       if(saveRemoteRaw=='true'):
@@ -97,6 +99,10 @@ def start():
    #  every 5 minutes
       if num_pkt %(pkt_rate*60*5) ==0:
          license.wait_for_license(config)
+         rip    = config.get('remotedb', 'rip')
+         ruser  = config.get('remotedb', 'ruser')
+         rpassw = config.get('remotedb', 'rpass')
+         saveRemoteRaw= config.get('general', 'saveRemoteRaw')
 
 
 if __name__ == '__main__':
