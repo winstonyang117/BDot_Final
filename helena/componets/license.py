@@ -28,7 +28,7 @@ def updateconfig(config, info, force = False):
                 config.set('general', 'saveRemoteResult', 'true')
 
             if len(info['logLevel']) >0:
-                config.set('general', 'debug_level', int(info['logLevel']))
+                config.set('general', 'debug_level', info['logLevel'])
 
             config.updatedb()
             
