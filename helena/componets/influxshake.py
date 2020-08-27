@@ -35,10 +35,17 @@ def start():
    unit = license.mac_address()
 
    port = 8888								# Port to bind to
-   hostipF = "/opt/settings/sys/ip.txt"
-   file = open(hostipF, 'r')
-   host = file.read().strip()
-   file.close()
+   host = ""
+   num_tries = 3
+   while len(host) <8:
+     hostipF = "/opt/settings/sys/ip.txt"
+     file = open(hostipF, 'r')
+     host = file.read().strip()
+     file.close()
+     num_tries = num_tries -1
+
+     if num_tries <=0:
+        subprocess.call("sudo reboot", shell=True)
 
    print(saveRemoteRaw)
    HP = host + ":" + str(port)
