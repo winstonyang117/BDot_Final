@@ -46,6 +46,8 @@ def start():
 
      if num_tries <=0:
         subprocess.call("sudo reboot", shell=True)
+     if len(host) <8:
+        time.sleep(5);
 
    print(saveRemoteRaw)
    HP = host + ":" + str(port)
