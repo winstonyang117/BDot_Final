@@ -55,6 +55,7 @@ def start():
 
    sock = s.socket(s.AF_INET, s.SOCK_DGRAM | s.SO_REUSEADDR)
    sock.bind((host, port))
+   sock.settimeout(60)
 
    print("Waiting for data on (HOST:PORT) ", HP)
 
@@ -74,7 +75,10 @@ def start():
    num_pkt = 0
 
    while 1:		# loop forever
-      data = sock.recv(1024)	# wait to receive data
+      try:
+         data = sock.recv(1024)	# wait to receive data
+      exception socket.timeout:
+         subprocess.call("sudo reboot", shell=True)
 
       num_pkt += 1
    #   multiple dataset with same timestamp 
