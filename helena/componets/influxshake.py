@@ -1,4 +1,4 @@
-import socket as s
+import socket
 import configparser
 import time
 import urllib3
@@ -36,24 +36,28 @@ def start():
 
    port = 8888								# Port to bind to
    host = ""
-   num_tries = 3
-   while len(host) <8:
+   num_tries = 10
+   while host is None or len(host) <8:
      hostipF = "/opt/settings/sys/ip.txt"
-     file = open(hostipF, 'r')
-     host = file.read().strip()
-     file.close()
+     try:
+        with open(hostipF, 'r') as file:
+           host = file.read().strip()
+     except Exception:
+        print("open file exception")
+
      num_tries = num_tries -1
 
      if num_tries <=0:
+        print("No valid IP address found")
         subprocess.call("sudo reboot", shell=True)
-     if len(host) <8:
+     if host is None or len(host) <8:
         time.sleep(5);
 
    print(saveRemoteRaw)
    HP = host + ":" + str(port)
    print("  Opening socket on (HOST:PORT)", HP)
 
-   sock = s.socket(s.AF_INET, s.SOCK_DGRAM | s.SO_REUSEADDR)
+   sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM | socket.SO_REUSEADDR)
    sock.bind((host, port))
    sock.settimeout(60)
 
@@ -77,7 +81,8 @@ def start():
    while 1:		# loop forever
       try:
          data = sock.recv(1024)	# wait to receive data
-      exception socket.timeout:
+      except socket.timeout:
+         print("Waiting for data timeout")
          subprocess.call("sudo reboot", shell=True)
 
       num_pkt += 1
