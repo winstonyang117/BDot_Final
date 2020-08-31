@@ -36,8 +36,8 @@ def start():
 
    port = 8888								# Port to bind to
    host = ""
-   num_tries = 10
-   while host is None or len(host) <8:
+   num_tries = 61
+   while host is None or len(host) <7:
      hostipF = "/opt/settings/sys/ip.txt"
      try:
         with open(hostipF, 'r') as file:
@@ -50,7 +50,7 @@ def start():
      if num_tries <=0:
         print("No valid IP address found")
         subprocess.call("sudo reboot", shell=True)
-     if host is None or len(host) <8:
+     if host is None or len(host) <7:
         time.sleep(5);
 
    print(saveRemoteRaw)
@@ -59,7 +59,7 @@ def start():
 
    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM | socket.SO_REUSEADDR)
    sock.bind((host, port))
-   sock.settimeout(600)
+   sock.settimeout(300)
 
    print("Waiting for data on (HOST:PORT) ", HP)
 
