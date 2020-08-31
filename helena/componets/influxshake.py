@@ -59,7 +59,7 @@ def start():
 
    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM | socket.SO_REUSEADDR)
    sock.bind((host, port))
-   sock.settimeout(60)
+   sock.settimeout(600)
 
    print("Waiting for data on (HOST:PORT) ", HP)
 
