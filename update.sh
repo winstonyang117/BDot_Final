@@ -44,3 +44,5 @@ fi
 # 4, Clean up spaces
 
 /opt/helena/reliability/cleanlogs.sh
+
+sudo reboot
