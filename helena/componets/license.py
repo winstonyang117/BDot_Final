@@ -5,6 +5,7 @@ import netifaces
 import json
 import sys,os
 import time
+import datetime
 
 sys.path.insert(0, os.path.abspath('..'))
 import componets.crypto as crypto
@@ -47,7 +48,8 @@ def status(config):
     # data = {"mac" : macEth, "version" : "2.0"}
 
     # add version by Song 9/6/2020
-    version = time.ctime(os.path.getmtime("/opt/helena/bin/main"))
+    timestamp = os.path.getmtime("/opt/helena/bin/main")
+    version = datetime.datetime.fromtimestamp(timestamp).strftime('%Y/%m/%d %H:%M:%S')
     data = {"mac" : macEth, "version" : version}
     print(data)
     # end add by Song
