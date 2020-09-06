@@ -45,7 +45,7 @@ if [ ! -e "build" ]; then
    mkdir build
 fi
 
-date -r bin/main > version.txt
+date -r helena/bin/main > version.txt
 
 tar cvzf build/beddot.tar.gz  helena/bin \
                         helena/componets/influxservice.sh      \
