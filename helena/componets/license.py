@@ -44,7 +44,12 @@ def status(config):
     # word = crypto.config_key
     macEth        = mac_address()
     url = 'https://homedots.us/beddot/public/checkStatus2'
-    data = {"mac" : macEth, "version" : "2.0"}
+    # data = {"mac" : macEth, "version" : "2.0"}
+
+    # add version by Song 9/6/2020
+    version = subprocess.run(['cat', '/opt/version.txt'], stdout=subprocess.PIPE)
+    data = {"mac" : macEth, "version" : version}
+    # end add by Song
 
     try:
        res = requests.post(url, data)

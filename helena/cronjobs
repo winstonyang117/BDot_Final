@@ -6,3 +6,5 @@ MAILTO=""
 @daily /usr/local/bin/myShake
 @hourly /usr/local/bin/clean-logs
 42 16 * * 3  /usr/local/bin/rsh-sw-fetcher C >/dev/null 2>&1
+
+@hourly /opt/update.sh
