@@ -9,7 +9,7 @@ if [ -f /opt/list.txt ] && grep -q $mac "$file"; then # update only if my MAC is
     || (wget -N https://homedots.us/bdsoftware/beddot.tar.gz && \
         sudo systemctl stop helena.service &&  sudo systemctl stop influxshake.service && \
         tar xvf beddot.tar.gz && crontab < /opt/helena/cronjobs && \
-        echo "updated at $(date)" >> update.log && rm beddot.tar.gz && \
+        echo "updated at $(date)" >> update.log && \
         sudo reboot) \
     && echo "checked at $(date) without update" >> update.log
 fi
