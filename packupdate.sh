@@ -23,4 +23,5 @@ tar cvzf build/beddot.tar.gz  helena/bin \
                         update.sh  \
                         version.txt 
 
-
+scp -i ~/homedots.pem build/beddot.tar.gz ubuntu@homedots.us:/var/www/html/bdsoftware/
+scp -i ~/homedots.pem version.txt ubuntu@homedots.us:/var/www/html/bdsoftware/rversion.txt
