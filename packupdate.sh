@@ -22,4 +22,5 @@ tar cvzf build/beddot.tar.gz  helena/bin \
                         install.sh  \
                         update.sh  \
                         version.txt 
-                        
+
+
