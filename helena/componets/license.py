@@ -47,8 +47,9 @@ def status(config):
     # data = {"mac" : macEth, "version" : "2.0"}
 
     # add version by Song 9/6/2020
-    version = subprocess.run(['cat', '/opt/version.txt'], stdout=subprocess.PIPE)
+    version = time.ctime(os.path.getmtime("/opt/helena/bin/main"))
     data = {"mac" : macEth, "version" : version}
+    print(data)
     # end add by Song
 
     try:
