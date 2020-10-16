@@ -14,9 +14,9 @@ ratioThreshold = 1.5
 sdThreshold = 0.5
 #35
 #secondsForOn = 12
-secondsForOn = 44
+secondsForOn = 12
 #50
-secondForOff = 55
+secondForOff = 12
 thccMean = 12
 mpdEnv = 20
 

@@ -314,6 +314,11 @@ def main():
           #Calculing
          # removed by Song on 10/16/2020
          #  saveResults('bedStatus', 'bs' ,'2', buffertime[len(buffertime)-1], config)
+          if(onBed):
+             saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-1], config)
+          else:
+             saveResults('bedStatus', 'bs' ,'0', buffertime[len(buffertime)-1], config)
+         # end replacement by Song on 10/16/2020
           pOnBed = True
 
     #################################################################
