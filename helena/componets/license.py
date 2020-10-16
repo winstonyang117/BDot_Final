@@ -13,25 +13,27 @@ from componets.config import Config
 
 def updateconfig(config, info, force = False):
     try:
-        if config.get('remotedb', 'ruser') != info['username'] or config.get('remotedb', 'rpass') != info['password'] or config.get('remotedb', 'rip') != info['ip']:
-            config.set('remotedb', 'ruser', info['username'])
-            config.set('remotedb', 'rpass', info['password'])
-            config.set('remotedb', 'rip', info['ip'])
+        # Song 10/16/2020
+        # if config.get('remotedb', 'ruser') != info['username'] or config.get('remotedb', 'rpass') != info['password'] or config.get('remotedb', 'rip') != info['ip']:
+        # end Song
+        config.set('remotedb', 'ruser', info['username'])
+        config.set('remotedb', 'rpass', info['password'])
+        config.set('remotedb', 'rip', info['ip'])
 
-            if info['collectRaw']=='0':
-                config.set('general', 'saveRemoteRaw', 'false')
-            else:
-                config.set('general', 'saveRemoteRaw', 'true')
+        if info['collectRaw']=='0':
+            config.set('general', 'saveRemoteRaw', 'false')
+        else:
+            config.set('general', 'saveRemoteRaw', 'true')
 
-            if info['collectQc']=='0':
-                config.set('general', 'saveRemoteResult', 'false')
-            else:
-                config.set('general', 'saveRemoteResult', 'true')
+        if info['collectQc']=='0':
+            config.set('general', 'saveRemoteResult', 'false')
+        else:
+            config.set('general', 'saveRemoteResult', 'true')
 
-            if len(info['logLevel']) >0:
-                config.set('general', 'debug_level', info['logLevel'])
+        if len(info['logLevel']) >0:
+            config.set('general', 'debug_level', info['logLevel'])
 
-            config.updatedb()
+        config.updatedb()
             
     except Exception:
         print("updateconfig exception")
