@@ -312,7 +312,8 @@ def main():
           hrSignalNoNoise = 0
        else:
           #Calculing
-          saveResults('bedStatus', 'bs' ,'2', buffertime[len(buffertime)-1], config)
+         # removed by Song on 10/16/2020
+         #  saveResults('bedStatus', 'bs' ,'2', buffertime[len(buffertime)-1], config)
           pOnBed = True
 
     #################################################################
