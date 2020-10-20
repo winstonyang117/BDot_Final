@@ -20,6 +20,10 @@ secondForOff = 12
 thccMean = 12
 mpdEnv = 20
 
+# Check a large events with energyWindow = thon and thoff seconds
+energyWindow = 12 
+energyThreshold = 100000
+
 #Parameters for Movement
 #seconds
 movementTimeWindow = 1

@@ -91,6 +91,14 @@ def main():
  thccMean          = float(config.get('main', 'thccMean'))
  mpdEnv            = int(config.get('main', 'mpdEnv'))
 
+ # Added by Song on check max energy in the past energyWindow seconds
+ # check large energy events
+ indexEnergy = 0
+ maxEnergy = 0
+ energyWindow = int(config.get('main', 'energyWindow')) # 12 # a large events with energyWindow seconds
+ energyThreshold = int(config.get('main', 'energyThreshold')) #100000
+ energyList = np.zeros(energyWindow)
+ # end add 10/20/2020
 
  # Parameters for Component 2 --> Movement
  movementTimeWindow   = int(config.get('main', 'movementTimeWindow'))
@@ -264,6 +272,12 @@ def main():
        peaksCR = alg.checkOnBedCR(signalToOnBed,buffertime[len(buffertime)-1])
        nowtime = buffertime[len(buffertime)-1]
 
+       # Added by Song on check max energy in the past energyWindow seconds
+       energyList[indexEnergy] = np.std(np.asarray(signalToOnBed))
+       indexEnergy = (indexEnergy + 1)%energyWindow
+       maxEnergy = max(energyList)
+       # end add on 10/20/2020
+       
        #t3 = time.perf_counter()
        #print("t3-t2= " +str(t3-t2))
        saveResults('corrStatus', 'bs10' ,str(peaksCR), nowtime, config)
@@ -291,7 +305,11 @@ def main():
           counteron = 0
        if(debug):
          if(debug): print(" Peaks:", peaksCR, " Mean:", ccMean, " On:", counteron, " Off:", counteroff)
-       if(counteron > thon):
+     
+      # edited by Song on 10/20/2020 to add check of maxEnergy
+       if(counteron > thon and maxEnergy > energyThreshold):
+      #if(counteron > thon):
+      # end edit by Song on 10/20/2020
           #saveON
           if(enablesmson and onBed == False):
              timeDetected = utcToLocalTime(buffertime[len(buffertime)-thon], formatt, from_zone, to_zone)
@@ -300,7 +318,10 @@ def main():
           saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-thon], config)
           onBed = True
           pOnBed = True
-       elif(counteroff > thoff):
+      # edited by Song on 10/20/2020 to add check of maxEnergy
+       elif(counteroff > thoff and maxEnergy > energyThreshold):
+      #elif(counteroff > thoff):
+      # end edit by Song on 10/20/2020
           if(enablesmsoff and onBed == True):
              timeDetected = utcToLocalTime(buffertime[len(buffertime)-thoff], formatt, from_zone, to_zone)
              sendEmailT = threading.Thread(target=send_alert, args=(alert_url, 2))
