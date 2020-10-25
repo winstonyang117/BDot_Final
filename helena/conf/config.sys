@@ -14,15 +14,15 @@ ratioThreshold = 1.5
 sdThreshold = 0.5
 #35
 #secondsForOn = 12
-secondsForOn = 12
+secondsForOn = 30
 #50
-secondForOff = 12
+secondForOff = 30
 thccMean = 12
 mpdEnv = 20
 
 # Check a large events with energyWindow = thon and thoff seconds
 energyWindow = 12 
-energyThreshold = 100000
+energyThreshold = 10000
 
 #Parameters for Movement
 #seconds
