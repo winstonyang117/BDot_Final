@@ -93,11 +93,11 @@ def main():
 
  # Added by Song on check max energy in the past energyWindow seconds
  # check large energy events
- indexEnergy = 0
- maxEnergy = 0
- energyWindow = int(config.get('main', 'energyWindow')) # 12 # a large events with energyWindow seconds
- energyThreshold = int(config.get('main', 'energyThreshold')) #100000
- energyList = np.zeros(energyWindow)
+#  indexEnergy = 0
+#  maxEnergy = 0
+#  energyWindow = int(config.get('main', 'energyWindow')) # 12 # a large events with energyWindow seconds
+#  energyThreshold = int(config.get('main', 'energyThreshold')) #100000
+#  energyList = np.zeros(energyWindow)
  # end add 10/20/2020
 
  # Parameters for Component 2 --> Movement
@@ -138,7 +138,9 @@ def main():
  except Exception as e:
    print("main(), DB access error:")
    print(e)
-   license.wait_for_license(config)
+   # syslog.syslog('Rebooting due to helena unable to connect to influxDB')
+   # remove license for now by Song 10/22/2020
+   #license.wait_for_license(config)
 
  # Buffers for time and
  buffer      = []
@@ -231,7 +233,8 @@ def main():
        except Exception as e:
           print("main(), DB access error in loop:")
           print(e)
-          license.wait_for_license(config)
+         # remove license for now by Song 10/22/2020
+         #license.wait_for_license(config)
 
        continue
 
@@ -273,9 +276,9 @@ def main():
        nowtime = buffertime[len(buffertime)-1]
 
        # Added by Song on check max energy in the past energyWindow seconds
-       energyList[indexEnergy] = np.std(np.asarray(signalToOnBed))
-       indexEnergy = (indexEnergy + 1)%energyWindow
-       maxEnergy = max(energyList)
+      #  energyList[indexEnergy] = np.std(np.asarray(signalToOnBed))
+      #  indexEnergy = (indexEnergy + 1)%energyWindow
+      #  maxEnergy = max(energyList)
        # end add on 10/20/2020
        
        #t3 = time.perf_counter()
@@ -307,8 +310,8 @@ def main():
          if(debug): print(" Peaks:", peaksCR, " Mean:", ccMean, " On:", counteron, " Off:", counteroff)
      
       # edited by Song on 10/20/2020 to add check of maxEnergy
-       if(counteron > thon and maxEnergy > energyThreshold):
-      #if(counteron > thon):
+       #if(counteron > thon and maxEnergy > energyThreshold):
+       if(counteron > thon):
       # end edit by Song on 10/20/2020
           #saveON
           if(enablesmson and onBed == False):
@@ -319,8 +322,8 @@ def main():
           onBed = True
           pOnBed = True
       # edited by Song on 10/20/2020 to add check of maxEnergy
-       elif(counteroff > thoff and maxEnergy > energyThreshold):
-      #elif(counteroff > thoff):
+      #  elif(counteroff > thoff and maxEnergy > energyThreshold):
+       elif(counteroff > thoff):
       # end edit by Song on 10/20/2020
           if(enablesmsoff and onBed == True):
              timeDetected = utcToLocalTime(buffertime[len(buffertime)-thoff], formatt, from_zone, to_zone)
@@ -452,7 +455,10 @@ def main():
 
        if(debug): print(thccMean)
        if(debug): print(mpdEnv)
-       statusKey = license.wait_for_license(config) is 0
+    
+      # remove license for now by Song 10/22/2020
+      #  statusKey = license.wait_for_license(config) is 0
+      license.status(config)
 
     if(counterTime > 100000):
        counterTime = counterTime - 100000

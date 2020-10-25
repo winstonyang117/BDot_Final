@@ -116,7 +116,9 @@ def start():
 
    #  every 5 minutes
       if num_pkt %(pkt_rate*60*5) ==0:
-         license.wait_for_license(config)
+         # remove license for now by Song 10/22/2020
+         license.status(config)
+      #   license.wait_for_license(config)
          rip    = config.get('remotedb', 'rip')
          ruser  = config.get('remotedb', 'ruser')
          rpassw = config.get('remotedb', 'rpass')
