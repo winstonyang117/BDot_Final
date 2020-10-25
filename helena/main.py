@@ -458,7 +458,7 @@ def main():
     
       # remove license for now by Song 10/22/2020
       #  statusKey = license.wait_for_license(config) is 0
-      license.status(config)
+       license.status(config)
 
     if(counterTime > 100000):
        counterTime = counterTime - 100000
