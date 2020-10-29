@@ -32,7 +32,10 @@ def saveResults(serie, field, value, time, config):
       subprocess.call(http_post, shell=True)
 
    saveRemoteResult = config.get('general', 'saveRemoteResult')
-   if(saveRemoteResult=='true'):
+   
+   # Song 10/28/2020 turn on/off QC based on collectQC
+   if(saveRemoteResult=='true' or serie != 'corrStatus'):
+   # if(saveRemoteResult=='true'):
       rip    = config.get('remotedb', 'rip')
       ruser  = config.get('remotedb', 'ruser')
       rpassw = config.get('remotedb', 'rpass')
