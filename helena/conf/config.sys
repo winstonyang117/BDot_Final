@@ -54,7 +54,7 @@ dbresults = healthresult
 dbstatus = status
 
 # true or false no capitals
-saveRemoteRaw = true
+saveRemoteRaw = false
 # saveRemoteResult turns on/off QC data only
 saveRemoteResult = false
 saveLocalResult = false
