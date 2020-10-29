@@ -55,7 +55,8 @@ dbstatus = status
 
 # true or false no capitals
 saveRemoteRaw = true
-saveRemoteResult = true
+# saveRemoteResult turns on/off QC data only
+saveRemoteResult = false
 saveLocalResult = false
 debug_level = 0
 
