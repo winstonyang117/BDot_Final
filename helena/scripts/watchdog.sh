@@ -12,5 +12,5 @@ exit
 #fi
 
 sudo systemctl enable watchdog
-# sudo systemctl start watchdog
-# sudo systemctl status watchdog
+sudo systemctl start watchdog
+sudo systemctl status watchdog
