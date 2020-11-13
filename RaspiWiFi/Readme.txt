@@ -130,6 +130,9 @@ or if incorrect connection information is ever entered. Just press and hold for
 == You can also reset the device by running the manual_reset.py in the
 /usr/lib/raspiwifi/reset_device directory as root or with sudo.
 
+```
+cd /opt/RaspiWiFi/libs/reset_device && sudo python3 manual_reset.py
+```
 
 UNINSTALLATION:
 
