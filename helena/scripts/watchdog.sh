@@ -7,7 +7,7 @@ echo 'dtparam=watchdog=on' >> /boot/config.txt
 echo 'watchdog-device = /dev/watchdog' >> /etc/watchdog.conf
 echo 'watchdog-timeout = 15' >> /etc/watchdog.conf
 echo 'max-load-1 = 24' >> /etc/watchdog.conf
-echo 'interface = wlan0' >> /etc/watchdog.conf
+# echo 'interface = wlan0' >> /etc/watchdog.conf # enable this will cause RaspWifi does not fall back to AP mode
 exit
 #fi
 
