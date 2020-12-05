@@ -7,8 +7,8 @@ if [ ! -f "/etc/watchdog.conf" ]; then
  echo 'watchdog-timeout = 15' | sudo tee -a /etc/watchdog.conf
  echo 'max-load-1 = 24' | sudo tee -a /etc/watchdog.conf
  # echo 'interface = wlan0' >> /etc/watchdog.conf # enable this will cause RaspWifi does not fall back to AP mode
+ sudo systemctl enable watchdog
+ sudo systemctl start watchdog
+ # sudo systemctl status watchdog
 fi
 
-sudo systemctl enable watchdog
-sudo systemctl start watchdog
-# sudo systemctl status watchdog
