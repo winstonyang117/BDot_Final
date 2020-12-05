@@ -1,4 +1,6 @@
-# Cite from https://diode.io/raspberry%20pi/running-forever-with-the-raspberry-pi-hardware-watchdog-20202/
+# Kernel reinstall to remove "Newer kernel available" annoying message whenever apt run: https://www.raspberrypi.org/forums/viewtopic.php?t=264051 
+# sudo apt install --reinstall raspberrypi-kernel raspberrypi-bootloader -y
+# Watchdog: cited from https://diode.io/raspberry%20pi/running-forever-with-the-raspberry-pi-hardware-watchdog-20202/
 # sudo apt-get update
 if [ ! -f "/etc/watchdog.conf" ]; then
  sudo apt-get install watchdog -y
