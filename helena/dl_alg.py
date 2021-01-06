@@ -7,6 +7,7 @@ import os
 import sys
 import numpy as np
 from torch import nn
+import torch
 import copy
 from random import sample
 from math import isnan
