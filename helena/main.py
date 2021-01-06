@@ -26,6 +26,7 @@ import componets.license as license
 import componets.saveResults as SaveToDB
 from componets.config import Config
 
+from dl_alg import DL_Model
 
 ######################################### Functions #################################################################
 
@@ -197,6 +198,9 @@ def main():
  sumMovements = 0
 
  num_failures = 0
+
+ dl_alg = DL_Model()
+ dl_alg.load_model('../models/DL_net_model/')
 
  # Infinite Loop
  while True:
@@ -387,11 +391,16 @@ def main():
         # If we can calculate the HBR is because someone is OnBed
 #        saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-1])
         signalToHBR = buffer[buffLen-elementsNumberHR:buffLen]
+        nowtime = buffertime[len(buffertime)-1]
+        [bph, bpl] = alg.predict(np.asarray(data))
+
+        saveResults('vitalsigns', 'systolic', str(bph), nowtime, config)
+        saveResults('vitalsigns', 'diastolic', str(rr), nowtime, config)
 #        hbr = alg.calculateHBR(signalToHBR, lowCut, highCut, samplingrate, order, buffertime[len(buffertime)-1])
 #        hbr = alg.calculateHBR2(signalToHBR, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1])
         signalFiltered = alg.butter_bandpass_filter(signalToHBR, lowCut, highCut, samplingrate, order)
         hbr,rr = alg.calculateHBR3(signalFiltered, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1],mpdEnv)
-        nowtime = buffertime[len(buffertime)-1]
+
         saveResults('hrate', 'hr' ,str(hbr), nowtime, config)
         saveResults('rrate', 'rr' ,str(rr), nowtime, config)
         if(hbr > 30):
