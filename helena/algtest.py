@@ -487,7 +487,7 @@ def main():
                         timeDetected = utcToLocalTime(buffertime[len(buffertime)-1], formatt, from_zone, to_zone)
                         # sendEmailT = threading.Thread(target=send_alert, args=(alert_url, 3))
                         #sendEmailT = threading.Thread(target=send_email, args=(companyemail,mailpass,recipients,subject,messmovement))
-                        sendEmailT.start()
+                        # sendEmailT.start()
                         preMovements = []
 
                 if(len(preMovements)>60):
