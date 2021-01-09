@@ -1,7 +1,7 @@
 #caihong
 nohup ./algtest.py  b8:27:eb:dc:80:5c & #QiaoXF
 # nohup ./algtest.py  b8:27:eb:76:15:20 & #HuangPH
-nohup ./algtest.py  b8:27:eb:a1:89:49 & #JiangXL
+nohup ./algtest.py  b8:27:eb:a1:89:49 & #JiaXL
 # nohup ./algtest.py  b8:27:eb:97:a6:73 &
 nohup ./algtest.py  b8:27:eb:b2:ab:05 &
 # nohup ./algtest.py  b8:27:eb:ca:2a:5f &
