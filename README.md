@@ -18,6 +18,8 @@ cd ~/BedDotV3/helena/scripts
 ```
 This may take a while. In particular, statsmodels package take a long time.
 
+To install pytorch on Raspberry Pi, follow https://github.com/bomerzz/Pytorch-ARM-builds-for-Raspberry-Pi to pip3 install.
+
 Now you can work on the python coding.
 
 ## 1.3 Build binaries
