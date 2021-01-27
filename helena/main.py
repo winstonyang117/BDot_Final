@@ -59,7 +59,11 @@ def saveResults(serie, field, value, time, config):
 def main():
  config = Config()
 
- statusKey = license.wait_for_license(config) is 0
+ # Song 1/26/2021 diable check forever to allow local deployment
+#  statusKey = license.wait_for_license(config) is 0
+ license.status(config)
+ statusKey = True
+
  
  formatt = '%Y-%m-%dT%H:%M:%S.%fZ'
  from_zone = tz.tzutc()
@@ -395,7 +399,7 @@ def main():
         [bph, bpl] = alg.predict(np.asarray(data))
 
         saveResults('vitalsigns', 'systolic', str(bph), nowtime, config)
-        saveResults('vitalsigns', 'diastolic', str(rr), nowtime, config)
+        saveResults('vitalsigns', 'diastolic', str(bpl), nowtime, config)
 #        hbr = alg.calculateHBR(signalToHBR, lowCut, highCut, samplingrate, order, buffertime[len(buffertime)-1])
 #        hbr = alg.calculateHBR2(signalToHBR, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1])
         signalFiltered = alg.butter_bandpass_filter(signalToHBR, lowCut, highCut, samplingrate, order)

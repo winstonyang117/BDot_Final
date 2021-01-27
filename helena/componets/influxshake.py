@@ -17,8 +17,9 @@ def start():
    config = Config()
 
    ################################
-
-   license.wait_for_license(config)
+   # Song 1/26/2021 diable check forever to allow local deployment
+   # license.wait_for_license(config)
+   license.status(config)
 
    # Parameter from configuation Files
 
