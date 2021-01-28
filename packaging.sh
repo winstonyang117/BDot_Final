@@ -52,6 +52,7 @@ tar cvzf build/beddot.tar.gz  helena/bin \
                         helena/componets/restartProcess.sh     \
                         helena/componets/updateParameters.sh   \
                         helena/conf                            \
+                        helena/models                           \ 
                         helena/reliability/cleanlogs.sh        \
                         helena/reliability/saveMonitorStatus.sh \
                         helena/services    \
