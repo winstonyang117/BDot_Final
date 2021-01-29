@@ -16,6 +16,7 @@ pyinstaller componets/systemParameters.py ${arg} --onefile
 pyinstaller reliability/deviceMonitor.py ${arg} --onefile
 
 pyinstaller main.py ${arg} --onefile \
+                --hidden-import=sklearn \
                 --hidden-import=statsmodels.tsa.statespace._kalman_initialization \
                 --hidden-import=statsmodels.tsa.statespace._kalman_filter \
                 --hidden-import=statsmodels.tsa.statespace._kalman_smoother \
