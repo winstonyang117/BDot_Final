@@ -26,7 +26,7 @@ import componets.license as license
 import componets.saveResults as SaveToDB
 from componets.config import Config
 
-# from dl_alg import DL_Model
+from dl_alg import DL_Model
 
 ######################################### Functions #################################################################
 
@@ -203,8 +203,8 @@ def main():
 
  num_failures = 0
 
-#  alg = DL_Model()
-#  alg.load_model('../models/DL_net_model/')
+ alg = DL_Model()
+ alg.load_model('/opt/helena/models/DL_net_model/')
 
  # Infinite Loop
  while True:
@@ -397,9 +397,9 @@ def main():
         signalToHBR = buffer[buffLen-elementsNumberHR:buffLen]
         nowtime = buffertime[len(buffertime)-1]
 
-      #   [bph, bpl] = alg.predict(np.asarray(signalToHBR))
-      #   saveResults('vitalsigns', 'systolic', str(bph), nowtime, config)
-      #   saveResults('vitalsigns', 'diastolic', str(bpl), nowtime, config)
+        [bph, bpl] = alg.predict(np.asarray(signalToHBR))
+        saveResults('vitalsigns', 'systolic', str(bph), nowtime, config)
+        saveResults('vitalsigns', 'diastolic', str(bpl), nowtime, config)
 
 #        hbr = dsp.calculateHBR(signalToHBR, lowCut, highCut, samplingrate, order, buffertime[len(buffertime)-1])
 #        hbr = dsp.calculateHBR2(signalToHBR, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1])
