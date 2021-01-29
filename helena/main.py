@@ -8,7 +8,7 @@ import time
 import operator
 import sys, os
 import logging
-import algorithm as alg
+import algorithm as dsp
 #from scipy import stats
 import nitime.algorithms as nt_alg
 import numpy as np
@@ -26,7 +26,7 @@ import componets.license as license
 import componets.saveResults as SaveToDB
 from componets.config import Config
 
-from dl_alg import DL_Model
+# from dl_alg import DL_Model
 
 ######################################### Functions #################################################################
 
@@ -203,8 +203,8 @@ def main():
 
  num_failures = 0
 
- dl_alg = DL_Model()
- dl_alg.load_model('../models/DL_net_model/')
+#  alg = DL_Model()
+#  alg.load_model('../models/DL_net_model/')
 
  # Infinite Loop
  while True:
@@ -280,7 +280,7 @@ def main():
 
        signalToOnBed = buffer[buffLen-elementsNumberOnBed:buffLen]
 
-       peaksCR = alg.checkOnBedCR(signalToOnBed,buffertime[len(buffertime)-1])
+       peaksCR = dsp.checkOnBedCR(signalToOnBed,buffertime[len(buffertime)-1])
        nowtime = buffertime[len(buffertime)-1]
 
        # Added by Song on check max energy in the past energyWindow seconds
@@ -359,7 +359,7 @@ def main():
      if((onBed or pOnBed) and buffLen>=elementsNumberMovement and counterTime%timeCheckingMovement == 0 ):
        movementShowDelay = movementShowDelay + 1
        signalToMovement = buffer[buffLen-elementsNumberMovement:buffLen]
-       movement = alg.checkMovement(signalToMovement, movementThreshold, buffertime[len(buffertime)-1], movementShowDelay)
+       movement = dsp.checkMovement(signalToMovement, movementThreshold, buffertime[len(buffertime)-1], movementShowDelay)
        nowtime = buffertime[len(buffertime)-1]
        if not (movement):
         # saveResults('posture', 'x' ,'5', nowtime, config)
@@ -396,14 +396,15 @@ def main():
 #        saveResults('bedStatus', 'bs' ,'1', buffertime[len(buffertime)-1])
         signalToHBR = buffer[buffLen-elementsNumberHR:buffLen]
         nowtime = buffertime[len(buffertime)-1]
-        [bph, bpl] = alg.predict(np.asarray(data))
 
-        saveResults('vitalsigns', 'systolic', str(bph), nowtime, config)
-        saveResults('vitalsigns', 'diastolic', str(bpl), nowtime, config)
-#        hbr = alg.calculateHBR(signalToHBR, lowCut, highCut, samplingrate, order, buffertime[len(buffertime)-1])
-#        hbr = alg.calculateHBR2(signalToHBR, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1])
-        signalFiltered = alg.butter_bandpass_filter(signalToHBR, lowCut, highCut, samplingrate, order)
-        hbr,rr = alg.calculateHBR3(signalFiltered, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1],mpdEnv)
+      #   [bph, bpl] = alg.predict(np.asarray(signalToHBR))
+      #   saveResults('vitalsigns', 'systolic', str(bph), nowtime, config)
+      #   saveResults('vitalsigns', 'diastolic', str(bpl), nowtime, config)
+
+#        hbr = dsp.calculateHBR(signalToHBR, lowCut, highCut, samplingrate, order, buffertime[len(buffertime)-1])
+#        hbr = dsp.calculateHBR2(signalToHBR, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1])
+        signalFiltered = dsp.butter_bandpass_filter(signalToHBR, lowCut, highCut, samplingrate, order)
+        hbr,rr = dsp.calculateHBR3(signalFiltered, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1],mpdEnv)
 
         saveResults('hrate', 'hr' ,str(hbr), nowtime, config)
         saveResults('rrate', 'rr' ,str(rr), nowtime, config)
@@ -426,7 +427,7 @@ def main():
      if(counterStable == postureChangeTimeWindow + 5):
        counterStable = -1
        currentHBSignal = buffer[buffLen-elementsNumberPostureChange:buffLen]
-       percent = alg.calculatePostureChange(previousHBSignal, currentHBSignal, buffertime[len(buffertime)-1])
+       percent = dsp.calculatePostureChange(previousHBSignal, currentHBSignal, buffertime[len(buffertime)-1])
        nowtime = buffertime[len(buffertime)-1]
        saveResults('change', 'x' ,str(percent), nowtime, config)
      # previousHBSignal
