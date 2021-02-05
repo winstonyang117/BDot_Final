@@ -112,10 +112,10 @@ def start():
    macEth        = mac_address()
    currentUnitId = current_unitid()
 
-   hostipF = "/opt/settings/sys/ip.txt"
-   file = open(hostipF, 'r')
-   host = file.read().strip()
-   file.close()
+   # hostipF = "/opt/settings/sys/ip.txt"
+   # file = open(hostipF, 'r')
+   # host = file.read().strip()
+   # file.close()
 
    #print(host)
 
@@ -135,9 +135,11 @@ def start():
    #Getting parameters from Cloud
    url = 'https://www.homedots.us/beddot/public/getClient/'+macEth
    #print(url)
-   res = requests.get(url)
-
-   packSize =  len(res.text)
+   try:
+      res = requests.get(url)
+      packSize =  len(res.text)
+   except Exception:
+       packSize = 0
 
    #Validating for know if we get data
    if(packSize>5):
@@ -176,34 +178,34 @@ def start():
      #For alarms parameters
       alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)
 
-      #Checking current SSID connection name
-      try:
-          ssidLocal = subprocess.check_output("iwgetid -r", shell = True)
-      except Exception as e:
-          print(e)
+      # #Checking current SSID connection name
+      # try:
+      #     ssidLocal = subprocess.check_output("iwgetid -r", shell = True)
+      # except Exception as e:
+      #     print(e)
 
-      if(ssidLocal[len(ssidLocal)-1]==10):
-         ssidLocal = ssidLocal[0:len(ssidLocal)-1]
+      # if(ssidLocal[len(ssidLocal)-1]==10):
+      #    ssidLocal = ssidLocal[0:len(ssidLocal)-1]
 
-      print (ssidLocal)
+      # print (ssidLocal)
       
-      #Switching WiFi connection
-      if(ssid==ssidLocal.decode('utf-8')):
-         print ("Same WiFi SSID!!!")
-      elif len(ssid) != 0:
-         print ("Different WiFi SSID!!!")
-         #subprocess.call("cp /etc/wpa_supplicant/wpa_supplicant.conf wpa_supplicant.conf", shell=True) 
-         fn = "wpa_supplicant.conf"
-         f = open(fn, 'w')
-         f.write('network={\n    ssid="'+ssid+'"\n    scan_ssid=1\n    priority=2\n    psk="'+password+'"\n} \n\n')
-         f.write('network={\n    ssid="homedots"\n    scan_ssid=1\n    psk="beddot12"\n} \n\n')
-         #f.write('network={\n    ssid="JosePhone"\n    scan_ssid=1\n    priority=1\n     psk="Pochembe130"\n} \n\n')
+      # #Switching WiFi connection
+      # if(ssid==ssidLocal.decode('utf-8')):
+      #    print ("Same WiFi SSID!!!")
+      # elif len(ssid) != 0:
+      #    print ("Different WiFi SSID!!!")
+      #    #subprocess.call("cp /etc/wpa_supplicant/wpa_supplicant.conf wpa_supplicant.conf", shell=True) 
+      #    fn = "wpa_supplicant.conf"
+      #    f = open(fn, 'w')
+      #    f.write('network={\n    ssid="'+ssid+'"\n    scan_ssid=1\n    priority=2\n    psk="'+password+'"\n} \n\n')
+      #    f.write('network={\n    ssid="homedots"\n    scan_ssid=1\n    psk="beddot12"\n} \n\n')
+      #    #f.write('network={\n    ssid="JosePhone"\n    scan_ssid=1\n    priority=1\n     psk="Pochembe130"\n} \n\n')
       
-         f.close()
+      #    f.close()
 
-         subprocess.call("sudo mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf", shell=True)  
-         time.sleep(5) 
-         #subprocess.call("sudo reboot", shell=True)
+      #    subprocess.call("sudo mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf", shell=True)  
+      #    time.sleep(5) 
+      #    #subprocess.call("sudo reboot", shell=True)
 
 
    else:

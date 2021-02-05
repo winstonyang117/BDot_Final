@@ -69,3 +69,13 @@ memory = 85
 cpu = 200
 disk = 90
 daystoremove = 0.1
+
+[localdb]
+lip = 127.0.0.1
+luser = helena
+lpass = helena
+
+[remotedb]
+rip = sensorweb.local
+ruser = test
+rpass = sensorweb
