@@ -1,7 +1,5 @@
 #!/bin/bash
-
 systemctl is-active --quiet influxshake && echo "influxshake is live" || (echo "influxshake is dead" && sudo systemctl restart influxshake)
-
 systemctl is-active --quiet helena && echo "helena is live" || (echo "helena is dead" && sudo systemctl restart helena)
 
 cd /home/myshake/BedDotV3/helena/componets

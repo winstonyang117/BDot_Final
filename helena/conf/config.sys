@@ -1,66 +1,41 @@
 [main]
-
-#Parameters for OnBed Component
-#seconds
-onBedTimeWindow = 3
-lowCut = 0.7
-highCut = 8
+onbedtimewindow = 3
+lowcut = 0.7
+highcut = 8
 order = 4
-onBedThreshold = 9000
-timeCheckingOnBed = 1
-# 1.5
-ratioThreshold = 1.5
-#0.5   
-sdThreshold = 0.5
-#35
-#secondsForOn = 12
-secondsForOn = 30
-#50
-secondForOff = 30
-thccMean = 12
-mpdEnv = 20
-
-# Check a large events with energyWindow = thon and thoff seconds
-energyWindow = 12 
-energyThreshold = 10000
-
-#Parameters for Movement
-#seconds
-movementTimeWindow = 1
-timeCheckingMovement = 1
-movementThreshold = 400000
-
-#Parameters Hearth Rate
-#seconds
-hrTimeWindow = 30
-timeCheckingHR = 3
-
-#Parameters for Posture Change
-#seconds
-postureChangeTimeWindow = 5
+onbedthreshold = 9000
+timecheckingonbed = 1
+ratiothreshold = 1.5
+sdthreshold = 0.5
+secondsforon = 30
+secondforoff = 30
+thccmean = 12
+mpdenv = 20
+energywindow = 12
+energythreshold = 10000
+movementtimewindow = 1
+timecheckingmovement = 1
+movementthreshold = 400000
+hrtimewindow = 30
+timecheckinghr = 3
+posturechangetimewindow = 5
 
 [messages]
 alert_url = https://homedots.us/beddot/public/sendEmail
-
 enablesmson = True
 enablesmsoff = True
-enablesmsmovement = True
+enablesmsmovement = False
 
 [general]
 debug = False
-unitid = ""
+unitid = b8:27:eb:fa:ca:df
 dbraw = shake
 dbresults = healthresult
 dbstatus = status
-
-# true or false no capitals
-saveRemoteRaw = false
-# saveRemoteResult turns on/off QC data only
-saveRemoteResult = false
-saveLocalResult = false
+saveremoteraw = true
+saveremoteresult = true
+savelocalresult = false
 debug_level = 0
-
-#seconds
 buffersize = 30
 samplingrate = 100
 
@@ -76,6 +51,7 @@ luser = helena
 lpass = helena
 
 [remotedb]
-rip = sensorweb.local
+rip = 10.0.0.137
 ruser = test
 rpass = sensorweb
+

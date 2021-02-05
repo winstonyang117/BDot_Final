@@ -4,3 +4,5 @@ systemctl is-active --quiet helena && echo "helena is live" || (echo "helena is 
 
 cd /opt/helena/
 ./bin/systemParameters
+
+echo "updateParameters.sh is called at $(date)" > /opt/log/updateParameters.log  
