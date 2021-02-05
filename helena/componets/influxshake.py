@@ -17,6 +17,30 @@ def start():
 
    config = Config()
 
+   # add NTP local server configuration
+   ntpstatus = str(subprocess.check_output(["ntpq", "-p"]))
+   print(ntpstatus)
+   if (ntpstatus.find('*') == -1):
+      print("NTP is not synchornized a server, add rip as NTP server to /etc/ntp.conf")
+      rip    = config.get('remotedb', 'rip')
+      #read input file
+      fin = open("/opt/helena/conf/ntp.conf", "rt")
+      #read file contents to string
+      data = fin.read()
+      #replace all occurrences of the required string
+      data = data.replace('sensorweb.local', rip)
+      #close the input file
+      fin.close()
+      #open the input file in write mode
+      fin = open("/opt/helena/conf/ntp.tmp", "wt")
+      #overrite the input file with the resulting data
+      fin.write(data)
+      #close the file
+      fin.close()
+      subprocess.call("sudo cp /opt/helena/conf/ntp.tmp /etc/ntp.conf && sudo systemctl stop ntpd &&  sudo systemctl start ntpd", shell=True)
+   else:
+      print("NTP is already synchronized!")
+      
    ################################
    # Song 1/26/2021 diable check forever to allow local deployment
    # license.wait_for_license(config)
