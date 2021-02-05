@@ -8,6 +8,7 @@ import componets.crypto as crypto
 import componets.license as license
 from componets.config import Config
 import subprocess
+from datetime import datetime
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -92,6 +93,9 @@ def start():
       data = data.rstrip(b'}').split(b',')
       data.pop(0)
       timeIni = int(float(data.pop(0))*1000) * 1000000
+      # change to use local clock time to synchronize with saveResult and main, in case inconsistent timestamp
+      # timeIni = int(float(datetime.now().timestamp())*1000) * 1000000
+
       http_post  = "curl -s -POST \'http://"+ ip+":8086/write?db="+db+"\' -u "+ user+":"+ passw+" --data-binary \' "
       if(saveRemoteRaw=='true'):
          http_post2 = "curl -s --insecure -POST \'https://"+rip+":8086/write?db="+db+"\' -u "+ruser+":"+rpassw+" --data-binary \' "
@@ -118,7 +122,7 @@ def start():
    #  every 5 minutes
       if num_pkt %(pkt_rate*60*5) ==0:
          # remove license for now by Song 10/22/2020
-         license.status(config)
+         # license.status(config)
       #   license.wait_for_license(config)
          rip    = config.get('remotedb', 'rip')
          ruser  = config.get('remotedb', 'ruser')

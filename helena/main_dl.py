@@ -120,9 +120,9 @@ def main():
 
  # Messages
  alert_url    = config.get('messages', 'alert_url')
- enablesmson       = True #parseBoolString(config.get('messages', 'enablesmson'))
- enablesmsoff      = True #parseBoolString(config.get('messages', 'enablesmsoff'))
- enablesmsmovement = True #parseBoolString(config.get('messages', 'enablesmsmovement'))
+ enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
+ enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
+ enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
  unit = license.mac_address()
 
 # print messmovement
@@ -458,11 +458,14 @@ def main():
     # Updating parameters every 5 minutes
     if(counterTime%300 == 0):
        if(debug): print("-----------------------------------------------------------------------")
-       config = Config()
+      #  config = Config()
+      # # remove license for now by Song 10/22/2020
+      # #  statusKey = license.wait_for_license(config) is 0
+      #  license.status(config)
 
-       enablesmson       = True #parseBoolString(config.get('messages', 'enablesmson'))
-       enablesmsoff      = True #parseBoolString(config.get('messages', 'enablesmsoff'))
-       enablesmsmovement = True #parseBoolString(config.get('messages', 'enablesmsmovement'))
+       enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
+       enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
+       enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
        thccMean          = float(config.get('main', 'thccMean'))
        mpdEnv            = int(config.get('main', 'mpdEnv'))
        debug = config.get('general', 'debug')
@@ -471,9 +474,7 @@ def main():
        if(debug): print(thccMean)
        if(debug): print(mpdEnv)
     
-      # remove license for now by Song 10/22/2020
-      #  statusKey = license.wait_for_license(config) is 0
-       license.status(config)
+
 
     if(counterTime > 100000):
        counterTime = counterTime - 100000

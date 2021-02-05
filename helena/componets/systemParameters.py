@@ -7,6 +7,13 @@ import configparser
 import ast
 import sys, os
 from configobj import ConfigObj
+sys.path.insert(0, os.path.abspath('..'))
+
+import componets.license as license
+from componets.config import Config
+
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 if getattr(sys, 'frozen', False):
    cfg_fn = r'/opt/helena/conf/config.sys'
@@ -129,8 +136,39 @@ def start():
       config['general']['unitid'] = macEth
       config.write()
 
-      if len(currentUnitId) !=0:
-         subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
+      # if len(currentUnitId) !=0:
+      #    subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
+
+   # add the license check here
+   config = Config()
+
+   # add NTP local server configuration
+   ntpstatus = str(subprocess.check_output(["ntpq", "-p"]))
+   print(ntpstatus)
+   if (ntpstatus.find('*') == -1):
+      print("NTP is not synchornized a server, add rip as NTP server to /etc/ntp.conf")
+      rip    = config.get('remotedb', 'rip')
+      #read input file
+      fin = open("/opt/helena/conf/ntp.conf", "rt")
+      #read file contents to string
+      data = fin.read()
+      #replace all occurrences of the required string
+      data = data.replace('sensorweb.local', rip)
+      #close the input file
+      fin.close()
+      #open the input file in write mode
+      fin = open("/opt/helena/conf/ntp.tmp", "wt")
+      #overrite the input file with the resulting data
+      fin.write(data)
+      #close the file
+      fin.close()
+      subprocess.call("sudo cp /opt/helena/conf/ntp.tmp /etc/ntp.conf && sudo systemctl stop ntpd &&  sudo systemctl start ntpd", shell=True)
+   else:
+      print("NTP is already synchronized!")
+
+
+   # update config.sys if there is an update from homedots
+   license.status(config)
 
    #Getting parameters from Cloud
    url = 'https://www.homedots.us/beddot/public/getClient/'+macEth
@@ -206,7 +244,6 @@ def start():
       #    subprocess.call("sudo mv wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf", shell=True)  
       #    time.sleep(5) 
       #    #subprocess.call("sudo reboot", shell=True)
-
 
    else:
       print("No DATA")

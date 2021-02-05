@@ -50,7 +50,10 @@ mv helena/bin/main_dl helena/bin/main
 
 date -r helena/bin/main > version.txt
 
-tar cvzf build/beddot.tar.gz  helena/bin \
+tar cvzf build/beddot.tar.gz  helena/bin/main \
+                        helena/bin/influxshake \
+                        helena/bin/deviceMonitor \
+                        helena/bin/systemParameters \
                         helena/componets/influxservice.sh      \
                         helena/componets/restartProcess.sh     \
                         helena/componets/updateParameters.sh   \
