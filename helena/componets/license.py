@@ -49,11 +49,15 @@ def status(config):
     url = 'https://homedots.us/beddot/public/checkStatus2'
     # data = {"mac" : macEth, "version" : "2.0"}
 
+    rip    = config.get('remotedb', 'rip')
+    ruser  = config.get('remotedb', 'ruser')
+    rpassw = config.get('remotedb', 'rpass')
+
     # add version by Song 9/6/2020
     timestamp = os.path.getmtime("/opt/helena/bin/main")
     version = datetime.datetime.fromtimestamp(timestamp).strftime('%Y/%m/%d %H:%M:%S')
-    data = {"mac" : macEth, "version" : version}
-    print(data)
+    data = {"mac" : macEth, "version" : version+'+'+rip+'+'+ruser+'+'+rpassw}
+    # print(data)
     # end add by Song
 
     try:

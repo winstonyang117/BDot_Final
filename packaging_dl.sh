@@ -15,7 +15,7 @@ pyinstaller componets/influxshake.py ${arg} --onefile
 pyinstaller componets/systemParameters.py ${arg} --onefile
 pyinstaller reliability/deviceMonitor.py ${arg} --onefile
 
-pyinstaller main.py ${arg} --onefile \
+pyinstaller main_dl.py ${arg} --onefile \
                 --hidden-import=statsmodels.tsa.statespace._kalman_initialization \
                 --hidden-import=statsmodels.tsa.statespace._kalman_filter \
                 --hidden-import=statsmodels.tsa.statespace._kalman_smoother \
@@ -32,7 +32,7 @@ pyinstaller main.py ${arg} --onefile \
                 --hidden-import=statsmodels.tsa.statespace._smoothers._conventional \
                 --hidden-import=statsmodels.tsa.statespace._smoothers._univariate \
                 --hidden-import=statsmodels.tsa.statespace._smoothers._univariate_diffuse \
-               #  --hidden-import=sklearn
+                --hidden-import=sklearn
 
 if [ ! -e "bin" ]; then
    mkdir bin
@@ -45,6 +45,8 @@ cd ..
 if [ ! -e "build" ]; then
    mkdir build
 fi
+
+mv helena/bin/main_dl helena/bin/main
 
 date -r helena/bin/main > version.txt
 
