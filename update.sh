@@ -6,10 +6,6 @@ file="/opt/list.txt"
 if [ -f /opt/list.txt ] && grep -q $mac "$file"; then # update only if my MAC is in the update list
     # echo "update will start" && exit
     cd /opt/ && wget -N https://homedots.us/bdsoftware/rversion.txt && cmp --silent rversion.txt version.txt \
-    || (wget -N https://homedots.us/bdsoftware/beddot.tar.gz && \
-        sudo systemctl stop helena.service &&  sudo systemctl stop influxshake.service && \
-        tar xvf beddot.tar.gz && crontab < /opt/helena/cronjobs && \
-        echo "updated at $(date)" > update.log && \
-        sudo reboot) \
+    || (wget -N https://homedots.us/bdsoftware/beddot.tar.gz && ./unpack.sh) \
     && echo "checked at $(date) without update" > update.log
 fi
