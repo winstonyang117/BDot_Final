@@ -68,5 +68,6 @@ tar cvzf build/beddot.tar.gz  helena/bin/main \
                         RaspiWiFi   \
                         install.sh  \
                         update.sh  \
+                        unpack.sh  \
                         version.txt 
                         
