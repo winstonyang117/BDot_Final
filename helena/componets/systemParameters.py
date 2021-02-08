@@ -141,13 +141,20 @@ def start():
 
    # add the license check here
    config = Config()
+   # update config.sys if there is an update from homedots
+   license.status(config)
 
    # add NTP local server configuration
-   ntpstatus = str(subprocess.check_output(["ntpq", "-p"]))
-   print(ntpstatus)
-   if (ntpstatus.find('*') == -1):
-      print("NTP is not synchornized a server, add rip as NTP server to /etc/ntp.conf")
-      rip    = config.get('remotedb', 'rip')
+   # ntpstatus = str(subprocess.check_output(["ntpq", "-p"]))
+   # print(ntpstatus)
+   # if (ntpstatus.find('*') == -1):
+   fin = open("/etc/ntp.conf", "rt")
+   rip    = config.get('remotedb', 'rip')
+   #read file contents to string
+   data = fin.read()
+   fin.close()
+   if (data.find(rip) == -1):
+      print(f"NTP is not synchornized a server, thus we add {rip} as a local NTP server to /etc/ntp.conf!")
       #read input file
       fin = open("/opt/helena/conf/ntp.conf", "rt")
       #read file contents to string
@@ -162,13 +169,11 @@ def start():
       fin.write(data)
       #close the file
       fin.close()
-      subprocess.call("sudo cp /opt/helena/conf/ntp.tmp /etc/ntp.conf && sudo systemctl stop ntpd &&  sudo systemctl start ntpd", shell=True)
+      subprocess.call("sudo cp /opt/helena/conf/ntp.tmp /etc/ntp.conf && sudo systemctl restart ntpd", shell=True)
    else:
-      print("NTP is already synchronized!")
-
-
-   # update config.sys if there is an update from homedots
-   license.status(config)
+      print(f"NTP is already configured by including {rip} as a local NTP local server in /etc/ntp.conf!")
+      # ntpstatus = str(subprocess.check_output(["ntpq", "-p"]))
+      # print(ntpstatus)
 
    #Getting parameters from Cloud
    url = 'https://www.homedots.us/beddot/public/getClient/'+macEth
@@ -199,19 +204,19 @@ def start():
       extra2         = info["extra2"]
 
    
-      print (ssid)
-      print (unitName)
-      print (mac)
-      print (phoneClient)
-      print (idUnit)
-      print (idClient)
-      print (password)
-      print (alarmStatus)
-      print (alarmType)
-      print (envelopeMpd)
-      print (thresholdOnBed)
-      print (extra1)
-      print (extra2)
+      # print (ssid)
+      # print (unitName)
+      # print (mac)
+      # print (phoneClient)
+      # print (idUnit)
+      # print (idClient)
+      # print (password)
+      # print (alarmStatus)
+      # print (alarmType)
+      # print (envelopeMpd)
+      # print (thresholdOnBed)
+      # print (extra1)
+      # print (extra2)
 
      #For alarms parameters
       alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)
@@ -246,7 +251,7 @@ def start():
       #    #subprocess.call("sudo reboot", shell=True)
 
    else:
-      print("No DATA")
+      print("No DATA from the web endpoint")
 
 
 if __name__ == '__main__':

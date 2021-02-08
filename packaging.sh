@@ -32,7 +32,7 @@ pyinstaller main.py ${arg} --onefile \
                 --hidden-import=statsmodels.tsa.statespace._smoothers._conventional \
                 --hidden-import=statsmodels.tsa.statespace._smoothers._univariate \
                 --hidden-import=statsmodels.tsa.statespace._smoothers._univariate_diffuse \
-               #  --hidden-import=sklearn
+                --hidden-import=sklearn
 
 if [ ! -e "bin" ]; then
    mkdir bin
@@ -48,7 +48,10 @@ fi
 
 date -r helena/bin/main > version.txt
 
-tar cvzf build/beddot.tar.gz  helena/bin \
+tar cvzf build/beddot.tar.gz  helena/bin/main \
+                        helena/bin/influxshake \
+                        helena/bin/deviceMonitor \
+                        helena/bin/systemParameters \
                         helena/componets/influxservice.sh      \
                         helena/componets/restartProcess.sh     \
                         helena/componets/updateParameters.sh   \
@@ -59,9 +62,9 @@ tar cvzf build/beddot.tar.gz  helena/bin \
                         helena/services    \
                         helena/helenaservice.sh \
                         helena/cronjobs \
-                        influx      \
-                        RaspiWiFi   \
                         install.sh  \
                         update.sh  \
-                        version.txt 
-                        
+                        unpack.sh  \
+                        version.txt
+                        # influx      \
+                        # RaspiWiFi                   

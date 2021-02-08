@@ -26,7 +26,7 @@ import componets.license as license
 import componets.saveResults as SaveToDB
 from componets.config import Config
 
-# from dl_alg import DL_Model
+from dl_alg import DL_Model
 
 ######################################### Functions #################################################################
 
@@ -120,9 +120,9 @@ def main():
 
  # Messages
  alert_url    = config.get('messages', 'alert_url')
- enablesmson       = True #parseBoolString(config.get('messages', 'enablesmson'))
- enablesmsoff      = True #parseBoolString(config.get('messages', 'enablesmsoff'))
- enablesmsmovement = True #parseBoolString(config.get('messages', 'enablesmsmovement'))
+ enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
+ enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
+ enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
  unit = license.mac_address()
 
 # print messmovement
@@ -203,8 +203,8 @@ def main():
 
  num_failures = 0
 
-#  alg = DL_Model()
-#  alg.load_model('/opt/helena/models/DL_net_model/')
+ alg = DL_Model()
+ alg.load_model('/opt/helena/models/DL_net_model/')
 
  # Infinite Loop
  while True:
@@ -397,10 +397,10 @@ def main():
         signalToHBR = buffer[buffLen-elementsNumberHR:buffLen]
         nowtime = buffertime[len(buffertime)-1]
 
-      #   [bph, bpl] = alg.predict(np.asarray(signalToHBR))
-      #   saveResults('vitalsigns', 'systolic', str(bph), nowtime, config)
-      #   saveResults('vitalsigns', 'diastolic', str(bpl), nowtime, config)
-      # #   if(debug): print(bph, bpl)
+        [bph, bpl] = alg.predict(np.asarray(signalToHBR))
+        saveResults('vitalsigns', 'systolic', str(bph), nowtime, config)
+        saveResults('vitalsigns', 'diastolic', str(bpl), nowtime, config)
+      #   if(debug): print(bph, bpl)
 
 #        hbr = dsp.calculateHBR(signalToHBR, lowCut, highCut, samplingrate, order, buffertime[len(buffertime)-1])
 #        hbr = dsp.calculateHBR2(signalToHBR, fm, eigs, dpss, nfft, buffertime[len(buffertime)-1])
@@ -455,14 +455,17 @@ def main():
     counterTime = counterTime + 1
 
 
-    # Updating parameters every 5 minutes
-    if(counterTime%300 == 0):
-       if(debug): print("-----------------------------------------------------------------------")
+    # Updating parameters every 1 minutes # change from 5 to 1
+    if(counterTime%60 == 0): #if(counterTime%300 == 0):
+       if(debug): print("check updates of system parameters in main!")
        config = Config()
+      # # remove license for now by Song 10/22/2020
+      # #  statusKey = license.wait_for_license(config) is 0
+      #  license.status(config)
 
-       enablesmson       = True #parseBoolString(config.get('messages', 'enablesmson'))
-       enablesmsoff      = True #parseBoolString(config.get('messages', 'enablesmsoff'))
-       enablesmsmovement = True #parseBoolString(config.get('messages', 'enablesmsmovement'))
+       enablesmson       = parseBoolString(config.get('messages', 'enablesmson'))
+       enablesmsoff      = parseBoolString(config.get('messages', 'enablesmsoff'))
+       enablesmsmovement = parseBoolString(config.get('messages', 'enablesmsmovement'))
        thccMean          = float(config.get('main', 'thccMean'))
        mpdEnv            = int(config.get('main', 'mpdEnv'))
        debug = config.get('general', 'debug')
@@ -471,9 +474,7 @@ def main():
        if(debug): print(thccMean)
        if(debug): print(mpdEnv)
     
-      # remove license for now by Song 10/22/2020
-      #  statusKey = license.wait_for_license(config) is 0
-       license.status(config)
+
 
     if(counterTime > 100000):
        counterTime = counterTime - 100000

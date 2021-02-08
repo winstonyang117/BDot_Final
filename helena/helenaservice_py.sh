@@ -2,5 +2,5 @@
 
 cd /home/myshake/BedDotV3/helena
 #cd /opt/helena/
-python3 main_dl.py
+python3 main.py
 #./bin/main

@@ -119,8 +119,9 @@ def start():
       #t1 = time.monotonic()
       #print("t1-t0= " +str(t1-t0))
 
-   #  every 5 minutes
-      if num_pkt %(pkt_rate*60*5) ==0:
+   #  every 1 minute # change from 5 to 1 minute
+      if num_pkt %(pkt_rate*60*1) ==0:
+         config = Config()
          # remove license for now by Song 10/22/2020
          # license.status(config)
       #   license.wait_for_license(config)

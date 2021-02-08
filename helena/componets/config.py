@@ -2,14 +2,15 @@ import configparser
 import sys, os
 import shutil
 sys.path.insert(0, os.path.abspath('..'))
-import componets.crypto as crypto
+# import componets.crypto as crypto
 
 license_key = b'W__MSG7tzKO9Tah5-WoExXhylLEUK7UBkAPEvzZBno0='
 
-if getattr(sys, 'frozen', False):
-   dir = r'/opt/helena'
-else:
-   dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),'../') 
+# if getattr(sys, 'frozen', False):
+#    dir = r'/opt/helena'
+# else:
+#    dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),'../') 
+dir = r'/opt/helena'
 
 cfg_fn =  os.path.join(dir, 'conf/config.sys')
 # sec_cfg_fn = os.path.join(dir, 'conf/config.sec')

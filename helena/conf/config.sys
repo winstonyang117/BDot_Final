@@ -34,7 +34,7 @@ dbresults = healthresult
 dbstatus = status
 saveremoteraw = true
 saveremoteresult = true
-savelocalresult = false
+savelocalresult = true
 debug_level = 0
 buffersize = 30
 samplingrate = 100
@@ -51,7 +51,7 @@ luser = helena
 lpass = helena
 
 [remotedb]
-rip = 10.0.0.137
+rip = sensorweb.local
 ruser = test
 rpass = sensorweb
 

@@ -30,8 +30,13 @@ def updateconfig(config, info, force = False):
         else:
             config.set('general', 'saveRemoteResult', 'true')
 
-        if len(info['logLevel']) >0:
-            config.set('general', 'debug_level', info['logLevel'])
+        # if len(info['logLevel']) >0:
+        #     config.set('general', 'debug_level', info['logLevel'])
+
+        if info['logLevel']=='0':
+            config.set('general', 'saveLocalResult', 'false')
+        else:
+            config.set('general', 'saveLocalResult', 'true')
 
         config.updatedb()
             
