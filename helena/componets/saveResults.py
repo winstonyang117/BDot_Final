@@ -34,7 +34,7 @@ def saveResults(serie, field, value, time, config):
    saveRemoteResult = config.get('general', 'saveRemoteResult')
    
    # Song 10/28/2020 turn on/off QC based on collectQC
-   if(saveRemoteResult=='true' or serie != 'corrStatus'):
+   if(saveRemoteResult=='true'): # or serie != 'corrStatus'):
    # if(saveRemoteResult=='true'):
       rip    = config.get('remotedb', 'rip')
       ruser  = config.get('remotedb', 'ruser')
