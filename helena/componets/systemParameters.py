@@ -15,10 +15,11 @@ from componets.config import Config
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-if getattr(sys, 'frozen', False):
-   cfg_fn = r'/opt/helena/conf/config.sys'
-else:
-   cfg_fn = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../', 'conf/config.sys')
+cfg_fn = r'/opt/helena/conf/config.sys'
+# if getattr(sys, 'frozen', False):
+#    cfg_fn = r'/opt/helena/conf/config.sys'
+# else:
+#    cfg_fn = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../', 'conf/config.sys')
 
 def parseBoolStringToInt(theString):
   if(theString[0].upper()=='T'):
@@ -33,29 +34,33 @@ def parseIntToBool(theInt):
     return 'False'
 
 
-def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
+def alarmParameters(config, alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
    sw = 0
-   config = configparser.ConfigParser()
-   config.read_file(open(cfg_fn))
+   # config = configparser.ConfigParser()
+   # config.read_file(open(cfg_fn))
 
    enablesmson           = parseBoolStringToInt(config.get('messages', 'enablesmson'))
    enablesmsoff          = parseBoolStringToInt(config.get('messages', 'enablesmsoff'))
    enablesmsmovement     = parseBoolStringToInt(config.get('messages', 'enablesmsmovement'))
    envelopeMpdFile       = float(config.get('main', 'mpdEnv')) 
-   thresholdOnBedFlie    = float(config.get('main', 'thccMean'))
+   thresholdOnBedFile    = float(config.get('main', 'thccMean'))
 
 
-   config = ConfigObj(cfg_fn)
+   # config = ConfigObj(cfg_fn)
    
    if(envelopeMpd !=None and len(envelopeMpd)>0 and float(envelopeMpd)!=envelopeMpdFile):
       sw = 1
-      config['main']['mpdEnv'] = envelopeMpd
+      # config['main']['mpdEnv'] = envelopeMpd
+      config.set('main', 'mpdEnv', envelopeMpd)
       print("Change MDP Envelope")
 
-   if(thresholdOnBed != None and len(thresholdOnBed)>0 and float(thresholdOnBed)!= thresholdOnBedFlie):
+   if(thresholdOnBed != None and len(thresholdOnBed)>0 and float(thresholdOnBed)!= thresholdOnBedFile):
       sw = 1
-      config['main']['thccMean'] = thresholdOnBed
-      print("On/Off th")
+      # config['main']['thccMean'] = thresholdOnBed
+      config.set('main', 'thccMean', thresholdOnBed)
+      print("Change thccMean - thresholdOnBed")
+   
+   # print("thresholdOnBedFile: ", thresholdOnBedFile, "thresholdOnBed:", thresholdOnBed)
 
    pos = 0
    for alarmt in alarmType: 
@@ -64,7 +69,8 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
        if(enablesmson!=int(alarmStatus[pos])):
           sw = 1
           print(parseIntToBool(int(alarmStatus[pos])))
-          config['messages']['enablesmson'] = parseIntToBool(int(alarmStatus[pos])) 
+         #  config['messages']['enablesmson'] = parseIntToBool(int(alarmStatus[pos])) 
+          config.set('messages', 'enablesmson', parseIntToBool(int(alarmStatus[pos])))
 #          print str(enablesmson)+"  ---  "+alarmStatus[pos]
           print("Change OnBed")
 
@@ -72,7 +78,9 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
      if(int(alarmt)==2):
        if(enablesmsoff!=int(alarmStatus[pos])):
           sw = 1
-          config['messages']['enablesmsoff'] = parseIntToBool(int(alarmStatus[pos]))
+         #  config['messages']['enablesmsoff'] = parseIntToBool(int(alarmStatus[pos]))
+          config.set('messages', 'enablesmsoff', parseIntToBool(int(alarmStatus[pos])))
+
 #          print str(enablesmsoff)+"  ---  "+alarmStatus[pos]
           print("Change OffBed")
 
@@ -80,7 +88,8 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
      if(int(alarmt)==3):
        if(enablesmsmovement!=int(alarmStatus[pos])):
           sw = 1
-          config['messages']['enablesmsmovement'] = parseIntToBool(int(alarmStatus[pos]))
+         #  config['messages']['enablesmsmovement'] = parseIntToBool(int(alarmStatus[pos]))
+          config.set('messages', 'enablesmsmovement', parseIntToBool(int(alarmStatus[pos])))
 #          print str(enablesmsmovement)+"  ---  "+alarmStatus[pos]
           print("Change Movement")
 
@@ -88,19 +97,19 @@ def alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed):
 
 
    if(sw==1):
-     config.write()
+     config.updatedb()
    
-   unit  = mac_address()
-   return unit
+   # unit  = mac_address()
+   # return unit
 
+   return
 
+# def current_unitid(config):
+#    # config = configparser.ConfigParser()
+#    # config.read_file(open(cfg_fn))
 
-def current_unitid():
-   config = configparser.ConfigParser()
-   config.read_file(open(cfg_fn))
-
-   unit  = config.get('general', 'unitid')
-   return unit
+#    unit  = config.get('general', 'unitid')
+#    return unit
 
 
 def mac_address():
@@ -114,36 +123,7 @@ def mac_address():
             macEth = interface[netifaces.AF_LINK][0]["addr"]
     return macEth
 
-def start():
-
-   macEth        = mac_address()
-   currentUnitId = current_unitid()
-
-   # hostipF = "/opt/settings/sys/ip.txt"
-   # file = open(hostipF, 'r')
-   # host = file.read().strip()
-   # file.close()
-
-   #print(host)
-
-   #print(currentUnitId)  
-
-
-   # Checking the current UnitId for the MacAddr if these are differnt
-   if(currentUnitId!=macEth):
-      print("Changing UnitId")
-      config = ConfigObj(cfg_fn)
-      config['general']['unitid'] = macEth
-      config.write()
-
-      # if len(currentUnitId) !=0:
-      #    subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
-
-   # add the license check here
-   config = Config()
-   # update config.sys if there is an update from homedots
-   license.status(config)
-
+def set_local_ntp(config):
    # add NTP local server configuration
    # ntpstatus = str(subprocess.check_output(["ntpq", "-p"]))
    # print(ntpstatus)
@@ -175,7 +155,8 @@ def start():
       # ntpstatus = str(subprocess.check_output(["ntpq", "-p"]))
       # print(ntpstatus)
 
-   #Getting parameters from Cloud
+def update_alg_parameter(config, macEth):
+    #Getting parameters from Cloud
    url = 'https://www.homedots.us/beddot/public/getClient/'+macEth
    #print(url)
    try:
@@ -189,19 +170,21 @@ def start():
       array = json.dumps(res.json())
       info = json.loads(array)
 
-      ssid           = info["ssid"]
-      unitName       = info["unitName"]
-      mac            = info["mac"]
-      phoneClient    = info["phoneClient"]
-      idUnit         = info["idUnit"]
-      idClient       = info["idClient"]
-      password       = info["password"]
+      # print(info)
+
+      # ssid           = info["ssid"]
+      # unitName       = info["unitName"]
+      # mac            = info["mac"]
+      # phoneClient    = info["phoneClient"]
+      # idUnit         = info["idUnit"]
+      # idClient       = info["idClient"]
+      # password       = info["password"]
       alarmStatus    = info["alarmStatus"]
       alarmType      = info["alarmType"]
       envelopeMpd    = info["envelopeMpd"]
       thresholdOnBed = info["thresholdOnBed"]
-      extra1         = info["extra1"]
-      extra2         = info["extra2"]
+      # extra1         = info["extra1"]
+      # extra2         = info["extra2"]
 
    
       # print (ssid)
@@ -219,7 +202,7 @@ def start():
       # print (extra2)
 
      #For alarms parameters
-      alarmParameters(alarmStatus,alarmType,envelopeMpd,thresholdOnBed)
+      alarmParameters(config, alarmStatus,alarmType,envelopeMpd,thresholdOnBed)
 
       # #Checking current SSID connection name
       # try:
@@ -253,6 +236,46 @@ def start():
    else:
       print("No DATA from the web endpoint")
 
+   
+
+def start():
+
+   # add the license check here
+   config = Config()
+ 
+   macEth        = mac_address()
+   currentUnitId = config.get('general', 'unitid')
+   
+   if(currentUnitId!=macEth):
+      config.set('general', 'unitid', macEth)
+      config.updatedb()
+
+  # update config.sys if there is an update from homedots on remoteDB usr/pass
+   license.status(config)
+
+   set_local_ntp(config)
+
+   update_alg_parameter(config, macEth)
+
+
+
+   # hostipF = "/opt/settings/sys/ip.txt"
+   # file = open(hostipF, 'r')
+   # host = file.read().strip()
+   # file.close()
+
+   #print(host)
+   #print(currentUnitId)  
+   # Checking the current UnitId for the MacAddr if these are differnt
+   # if(currentUnitId!=macEth):
+   #    print("Changing UnitId")
+   #    config = ConfigObj(cfg_fn)
+   #    config['general']['unitid'] = macEth
+   #    config.write()
+      
+      # if len(currentUnitId) !=0:
+      #    subprocess.call("/opt/helena/componets/restartProcess.sh", shell=True)   
+   
 
 if __name__ == '__main__':
    start()
