@@ -25,6 +25,8 @@ pip3 install torch-1.6.0a0+b31f58d-cp37-cp37m-linux_armv7l.whl
 pip3 install torchvision-0.7.0a0+78ed10c-cp37-cp37m-linux_armv7l.wh
 ```
 
+The latest AI algorithm of BedDot needs pytorch 1.9.1 or higher version.
+
 Note: if you want to run them as a service in Raspberry Pi, then use ```sudo pip3 install xxxx```
 
 
