@@ -1,0 +1,24 @@
+version: "2"
+services:
+   influxdb:
+      image: influxdb:1.8
+      container_name: influxdb
+      restart: always
+      logging:
+         driver: "none"
+      volumes:
+         - /opt/influx/influxdb/data:/var/lib/influxdb
+         - /opt/influx/influxdb/ssl:/etc/influxdb/ssl
+         - /opt/influx/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      ports:
+         - 8086:8086
+      environment:
+         - INFLUXDB_TLS_CIPHERS=TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256
+         - INFLUXDB_TLS_MIN_VERSION=tls1.2
+         - INFLUXDB_TLS_MAX_VERSION=tls1.3
+         - INFLUXDB_HTTP_HTTPS_ENABLED=false
+         - INFLUXDB_HTTP_HTTPS_CERTIFICATE=/etc/influxdb/ssl/influxdb.pem
+         - INFLUXDB_HTTP_HTTPS_PRIVATE_KEY=/etc/influxdb/ssl/influxdb.key
+
+      command: -config /etc/influxdb/influxdb.conf
+

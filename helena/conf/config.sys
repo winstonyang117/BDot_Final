@@ -1,0 +1,57 @@
+[main]
+onbedtimewindow = 3
+lowcut = 0.7
+highcut = 8
+order = 4
+onbedthreshold = 9000
+timecheckingonbed = 1
+ratiothreshold = 1.5
+sdthreshold = 0.5
+secondsforon = 30
+secondforoff = 30
+thccmean = 12
+mpdenv = 20
+energywindow = 12
+energythreshold = 10000
+movementtimewindow = 1
+timecheckingmovement = 1
+movementthreshold = 400000
+hrtimewindow = 30
+timecheckinghr = 3
+posturechangetimewindow = 5
+
+[messages]
+alert_url = https://homedots.us/beddot/public/sendEmail
+enablesmson = True
+enablesmsoff = True
+enablesmsmovement = False
+
+[general]
+debug = False
+unitid = b8:27:eb:fa:ca:df
+dbraw = shake
+dbresults = healthresult
+dbstatus = status
+saveremoteraw = true
+saveremoteresult = true
+savelocalresult = true
+debug_level = 0
+buffersize = 30
+samplingrate = 100
+
+[system]
+memory = 85
+cpu = 200
+disk = 90
+daystoremove = 0.1
+
+[localdb]
+lip = 127.0.0.1
+luser = helena
+lpass = helena
+
+[remotedb]
+rip = sensorweb.local
+ruser = test
+rpass = sensorweb
+
